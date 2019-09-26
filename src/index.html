@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[NAME] Helper</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="js/Main.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header-wrapper">
+            <header>
+                <h1>[NAME] Helper </h1>
+            </header>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Compiler</a></li>
+                    <li><a href="#">SomeTool</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id="tool">
+            <h2>Compiler</h2>
+            <form method="post" enctype="multipart/form-data">
+                <div class="input-field">
+                    <label for="fileInput">Input</label>
+                    <input type="file" name="fileInput" id="fileInput" webkitdirectory multiple> <!-- @FIX webkitdirectory -->
+                </div>
+                <div class="input-field">
+                    <label for="fileOutput">Output</label>
+                    <input type="file" name="fileOutput" id="fileOutput">
+                </div>
+            </form>
+
+            <div id="fileIndex">
+                <h3>Files</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Include</th> <!-- Är det bättre att vända på det? Ignore? -->
+                            <th>File path</th>
+                            <th>Name</th>
+                            <th>File size</th>
+                            <th>...</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <tr id="1" class="error">
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/img/texture.gif</td>
+                            <td><input type="text" value="texture"></td>
+                            <td>10kB</td>
+                            <td><img src="img/error.png" alt="Error" width="18"> </td>
+                        </tr>
+                        <tr id="2" class="warning">
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/img/texture2.png</td>
+                            <td><input type="text" value="texture2"></td>
+                            <td>10MB</td>
+                            <td> <img src="img/warning.png" alt="Warning" width="18"></td>
+                        </tr>
+                        <tr id="3">
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/mp3/music.mp3</td>
+                            <td><input type="text" value="music"></td>
+                            <td>340kB</td>
+                            <td></td>
+                        </tr>
+                        <tr id="4">
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/mp3/jump.mp3</td>
+                            <td><input type="text" value="jump"></td>
+                            <td>44kB</td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/mp3/jump.mp3</td>
+                            <td><input type="text" value="jump"></td>
+                            <td>44kB</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/mp3/jump.mp3</td>
+                            <td><input type="text" value="jump"></td>
+                            <td>44kB</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/mp3/jump.mp3</td>
+                            <td><input type="text" value="jump"></td>
+                            <td>44kB</td>
+                            <td></td>
+                        </tr>
+                       <!--
+                        <tr>
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/mp3/jump.mp3</td>
+                            <td><input type="text" value="jump"></td>
+                            <td>44kB</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/mp3/jump.mp3</td>
+                            <td><input type="text" value="jump"></td>
+                            <td>44kB</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/mp3/jump.mp3</td>
+                            <td><input type="text" value="jump"></td>
+                            <td>44kB</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/mp3/jump.mp3</td>
+                            <td><input type="text" value="jump"></td>
+                            <td>44kB</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="check-container">
+                                    <input type="checkbox" class="checkbox" checked="checked">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>game/asset/mp3/jump.mp3</td>
+                            <td><input type="text" value="jump"></td>
+                            <td>44kB</td>
+                            <td></td>
+                        </tr>
+                        -->
+
+                    </tbody>
+                </table>
+            </div>
+            <div id="footer">
+                <div>
+                    <img src="img/error.png" alt="Error"><span>1 error(s),</span> <img src="img/warning.png" alt="Warning"><span>1 warning(s)</span>
+                </div>
+                <input type="submit" value="Compile" id="compileBtn">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
