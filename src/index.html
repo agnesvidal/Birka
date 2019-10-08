@@ -4,41 +4,76 @@
     <meta charset="UTF-8">
     <title>[NAME] Helper</title>
     <link rel="stylesheet" href="./css/style.css">
-    <script src="js/Main.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <script src="js/scope/Manifest.js"></script>
+
+    <script src="js/compiler/Table.js"></script>
+    <script src="js/compiler/Form.js"></script>
+    <script src="js/compiler/Footer.js"></script>
+    <script src="js/compiler/TableRow.js"></script>
+
+
+    <script src="js/Tool.js"></script>
+    <script src="js/compiler/Compiler.js"></script>
+    <script src="js/ui/Elem.js"></script>
+    <!--<script src="js/temp.js"></script>-->
+
+    <script src="js/system/Main.js"></script>
+    <script src="js/scope/Alias.js"></script>
 </head>
 <body>
     <div id="wrapper">
-        <div id="header-wrapper">
-            <header>
-                <h1>[NAME] Helper </h1>
-            </header>
+        <div id="nav-wrapper">
+            <div></div>
             <nav>
                 <ul>
-                    <li><a href="#" class="active">Compiler</a></li>
-                    <li><a href="#">SomeTool</a></li>
+                    <li><a href="#" id="tool-1"> <!--class="active">-->Compiler</a></li>
+                    <li><a href="#" id="tool-2">SomeTool</a></li>
                 </ul>
             </nav>
         </div>
 
-        <div id="tool">
+        <div id="tool-wrapper">
+
+                        <div id="home">
+                            <div id="home-header">
+                                <h2>Let's get started!</h2>
+                                <div>
+                                    <input type="button" value="Compiler">
+                                    <input type="button" value="SomeTool">
+                                </div>
+                            </div>
+                        </div>
+<!--
+            <div class="tool-header">
             <h2>Compiler</h2>
             <form method="post" enctype="multipart/form-data">
+                <label for="selectInputBtn">Select input folder</label>
+
                 <div class="input-field">
-                    <label for="fileInput">Input</label>
-                    <input type="file" name="fileInput" id="fileInput" webkitdirectory multiple> <!-- @FIX webkitdirectory -->
+                    <input type="button" id="selectInputBtn" value="Browse..." />
+                    <div class="filepath"></div>
                 </div>
+
+                <label for="selectOutputBtn">Select output file</label>
                 <div class="input-field">
-                    <label for="fileOutput">Output</label>
-                    <input type="file" name="fileOutput" id="fileOutput">
+                    <input type="button" id="selectOutputBtn" value="Browse..." />
+                    <div class="filepath"></div>
+                </div>
+
+                <div class="input-field">
+                    <label for="gamePath">Write ...</label>
+                    <input type="text" id="gamePath" placeholder="gamepath/assets">
                 </div>
             </form>
+            </div>
 
-            <div id="fileIndex">
+            <div class="fileIndex">
                 <h3>Files</h3>
                 <table>
                     <thead>
                         <tr>
-                            <th>Include</th> <!-- Är det bättre att vända på det? Ignore? -->
+                            <th>Include</th>
                             <th>File path</th>
                             <th>Name</th>
                             <th>File size</th>
@@ -46,7 +81,7 @@
                         </tr>
                     </thead>
                     <tbody id="tbody">
-                        <tr id="1" class="error">
+                        <tr id="1" class="error hidden">
                             <td>
                                 <label class="check-container">
                                     <input type="checkbox" class="checkbox" checked="checked">
@@ -56,9 +91,12 @@
                             <td>game/asset/img/texture.gif</td>
                             <td><input type="text" value="texture"></td>
                             <td>10kB</td>
-                            <td><img src="img/error.png" alt="Error" width="18"> </td>
+                            <td class="coll-cell"></td>
                         </tr>
-                        <tr id="2" class="warning">
+                        <tr class="msg error">
+                            <td colspan="5">Invalid file type.</td>
+                        </tr>
+                        <tr id="2" class="warning hidden">
                             <td>
                                 <label class="check-container">
                                     <input type="checkbox" class="checkbox" checked="checked">
@@ -68,7 +106,10 @@
                             <td>game/asset/img/texture2.png</td>
                             <td><input type="text" value="texture2"></td>
                             <td>10MB</td>
-                            <td> <img src="img/warning.png" alt="Warning" width="18"></td>
+                            <td class="coll-cell"></td>
+                        </tr>
+                        <tr class="msg warning">
+                            <td colspan="5">File size exceeds 1MB.</td>
                         </tr>
                         <tr id="3">
                             <td>
@@ -131,79 +172,19 @@
                             <td>44kB</td>
                             <td></td>
                         </tr>
-                       <!--
-                        <tr>
-                            <td>
-                                <label class="check-container">
-                                    <input type="checkbox" class="checkbox" checked="checked">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </td>
-                            <td>game/asset/mp3/jump.mp3</td>
-                            <td><input type="text" value="jump"></td>
-                            <td>44kB</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label class="check-container">
-                                    <input type="checkbox" class="checkbox" checked="checked">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </td>
-                            <td>game/asset/mp3/jump.mp3</td>
-                            <td><input type="text" value="jump"></td>
-                            <td>44kB</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label class="check-container">
-                                    <input type="checkbox" class="checkbox" checked="checked">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </td>
-                            <td>game/asset/mp3/jump.mp3</td>
-                            <td><input type="text" value="jump"></td>
-                            <td>44kB</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label class="check-container">
-                                    <input type="checkbox" class="checkbox" checked="checked">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </td>
-                            <td>game/asset/mp3/jump.mp3</td>
-                            <td><input type="text" value="jump"></td>
-                            <td>44kB</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label class="check-container">
-                                    <input type="checkbox" class="checkbox" checked="checked">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </td>
-                            <td>game/asset/mp3/jump.mp3</td>
-                            <td><input type="text" value="jump"></td>
-                            <td>44kB</td>
-                            <td></td>
-                        </tr>
-                        -->
 
                     </tbody>
                 </table>
             </div>
-            <div id="footer">
-                <div>
-                    <img src="img/error.png" alt="Error"><span>1 error(s),</span> <img src="img/warning.png" alt="Warning"><span>1 warning(s)</span>
+            <div class="footer">
+                <div class="msg">
+                    <div class="msg-error">1 error(s), </div>
+                    <div class="msg-warning">1 warning(s)</div>
                 </div>
                 <input type="submit" value="Compile" id="compileBtn">
             </div>
         </div>
+        -->
     </div>
 </body>
 </html>

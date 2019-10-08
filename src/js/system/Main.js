@@ -1,0 +1,91 @@
+//--------------------------------------------------------------------------
+// PUBLIC STATIC CLASS
+//--------------------------------------------------------------------------
+/**
+ * @class Main
+ * @classdesc Manages the app's basic functionality.
+ */
+birka.system.Main = {
+    //----------------------------------------------------------------------
+    // PUBLIC properties
+    //----------------------------------------------------------------------
+    /**
+     *
+     * @property {HTMLElement} toolWrapper - Reference to wrapper containing tool.
+     * @default null
+     * @public
+     */
+    toolWrapper: null,
+
+    /**
+     * @type {NodeListOf<HTMLElementTagNameMap[string]>}
+     * @default null
+     * @public
+     */
+    tabs: null,
+
+    /**
+     * @type {Compiler} | {...}
+     * @default null
+     * @public
+     */
+    activeTool: null,
+
+    //----------------------------------------------------------------------
+    // PUBLIC methods
+    //----------------------------------------------------------------------
+    /**
+     * Initializes UI.
+     */
+    init : function() {
+        birka.system.Main.initUI();
+    },
+
+    initUI : function() {
+        birka.system.Main.toolWrapper = document.getElementById('tool-wrapper');
+        //Main.toolWrapper.classList.add('start');
+        birka.system.Main.tabs = document.querySelectorAll('a');
+        for (var i = 0; i < birka.system.Main.tabs.length; i++) {
+            birka.system.Main.tabs[i].addEventListener('click', birka.system.Main.changeTool);
+        }
+    },
+
+    changeTool : function(e) {
+        if (this.classList.contains('active')) {
+            return;
+        } else {
+            for (var i = 0; i < birka.system.Main.tabs.length; i++) {
+                birka.system.Main.tabs[i].classList.remove('active');
+            }
+            this.classList.toggle("active");
+            birka.system.Main.startTool(e.target.id);
+        }
+    },
+
+    startTool : function(toolId) {
+        switch (toolId) {
+            case 'tool-1' :
+                birka.system.Main.removeTool();
+                birka.system.Main.activeTool = new birka.compiler.Compiler();
+                //Main.activeTool = new Tool('Compiler');
+                //Main.activeTool.initHeader();
+                console.log(birka.system.Main.activeTool);
+                birka.system.Main.activeTool.init();
+                break;
+            case 'tool-2' :
+                console.log('Start tool 2');
+                break;
+        }
+    },
+
+    removeTool : function(){
+        //Main.toolWrapper.parentNode.removeChild(Main.toolWrapper);
+        while (birka.system.Main.toolWrapper.hasChildNodes()) {
+            birka.system.Main.toolWrapper.removeChild(birka.system.Main.toolWrapper.firstChild);
+        }
+        //Main.allApps.splice(app, 1);
+        birka.system.Main.activeTool = null;
+    }
+};
+
+window.addEventListener('load', birka.system.Main.init);
