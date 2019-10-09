@@ -168,7 +168,7 @@ birka.compiler.TableRow.prototype.m_createMessage = function(status) {
                 td.innerHTML = 'Invalid file type.';
                 break;
         case 2: row.classList.add('warning');
-                td.innerHTML = 'File size exceeds 1MB.';
+                td.innerHTML = 'File size exceeds [...].';
                 break;
         case 3: row.classList.add('error');
                 td.innerHTML = 'Duplicate name.';

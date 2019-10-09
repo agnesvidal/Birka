@@ -170,8 +170,7 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
         }
     }
 
-    console.log(m_this.outputPath);
-    console.log('For compilation:', temp);
+    console.log('For compilation:', temp, m_this.outputPath);
 
     // @TODO Skicka array (temp) till ...
 };
@@ -188,7 +187,6 @@ birka.compiler.Compiler.prototype.m_chooseOutput = function(e) {
         title: "Select a folder",
         properties: ['openFile']
     }, function(path) {
-        console.log(path);
         if(path === undefined || path.length === 0){
             //console.log("No destination folder selected");
             return;
@@ -274,8 +272,8 @@ birka.compiler.Compiler.prototype.m_getData = function(result) {
     var row = new birka.compiler.TableRow(this.table.tBody);
     row.create(result);
 
-    row.textInput.addEventListener('input',function(){m_this.m_changeName(event, row)}); //@TODO
-    this.m_checkForDuplicates(result.name, row); //@TODO
+    //row.textInput.addEventListener('input',function(){m_this.m_changeName(event, row)}); //@TODO
+    //this.m_checkForDuplicates(result.name, row); //@TODO
 
     this.files.push({result: result, row: row});
 };
