@@ -5,6 +5,9 @@
  * @class Main
  * @classdesc Manages the app's basic functionality.
  */
+
+// @TODO Change to birka.system.Main = (function ... ?
+
 birka.system.Main = {
     //----------------------------------------------------------------------
     // PUBLIC properties
@@ -36,20 +39,31 @@ birka.system.Main = {
     //----------------------------------------------------------------------
     /**
      * Initializes UI.
+     *
+     * @returns {undefined}
      */
     init : function() {
         birka.system.Main.initUI();
     },
 
+    /**
+     * ...
+     *
+     * @returns {undefined}
+     */
     initUI : function() {
         birka.system.Main.toolWrapper = document.getElementById('tool-wrapper');
-        //Main.toolWrapper.classList.add('start');
         birka.system.Main.tabs = document.querySelectorAll('a');
         for (var i = 0; i < birka.system.Main.tabs.length; i++) {
             birka.system.Main.tabs[i].addEventListener('click', birka.system.Main.changeTool);
         }
     },
 
+    /**
+     * ...
+     *
+     * @returns {undefined}
+     */
     changeTool : function(e) {
         if (this.classList.contains('active')) {
             return;
@@ -62,14 +76,17 @@ birka.system.Main = {
         }
     },
 
+    /**
+     * ...
+     *
+     * @param toolId
+     * @returns {undefined}
+     */
     startTool : function(toolId) {
         switch (toolId) {
             case 'tool-1' :
                 birka.system.Main.removeTool();
                 birka.system.Main.activeTool = new birka.compiler.Compiler();
-                //Main.activeTool = new Tool('Compiler');
-                //Main.activeTool.initHeader();
-                console.log(birka.system.Main.activeTool);
                 birka.system.Main.activeTool.init();
                 break;
             case 'tool-2' :
@@ -78,8 +95,12 @@ birka.system.Main = {
         }
     },
 
+    /**
+     * ...
+     *
+     * @returns {undefined}
+     */
     removeTool : function(){
-        //Main.toolWrapper.parentNode.removeChild(Main.toolWrapper);
         while (birka.system.Main.toolWrapper.hasChildNodes()) {
             birka.system.Main.toolWrapper.removeChild(birka.system.Main.toolWrapper.firstChild);
         }
