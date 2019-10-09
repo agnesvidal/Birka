@@ -31,6 +31,14 @@ birka.manifest.Manifest = function() {
     /**
      * ...
      *
+     * @type {string}
+     * @ignore
+     */
+    this.m_outputPath = "";
+
+    /**
+     * ...
+     *
      * @type {array}
      * @ignore
      */
@@ -81,9 +89,11 @@ birka.manifest.Manifest.fs = require('fs');
  *
  * @return {undefined} //TODO: boolean?
  */
-birka.manifest.Manifest.prototype.compile = function(files, projectName) {
-    //console.log(files.length);
+birka.manifest.Manifest.prototype.compile = function(files, projectName, outputPath) {
+    console.log(outputPath);
     this.m_projectName = projectName;
+    this.m_outputPath = (outputPath !== "") ? projectName : '/Users/lisa/Desktop'; //TODO: !!
+
     if (files.length > 0) {
         this.m_resquestQueue = files;
         this.m_processRequestQueue();
@@ -114,12 +124,12 @@ birka.manifest.Manifest.prototype.compile = function(files, projectName) {
  */
 birka.manifest.Manifest.prototype.m_processRequestQueue = function() {
     //console.log(this.m_resquestQueue.length);
-    console.log("processQueue");
+    //console.log("processQueue");
     if (this.m_resquestQueue.length > 0) {
         this.m_request = this.m_resquestQueue.shift();
         this.m_processRequest();
     } else {
-        console.log("requestQueue empty")
+        //console.log("requestQueue empty")
         this.m_writeFile();
     }
 };
@@ -169,10 +179,8 @@ birka.manifest.Manifest.prototype.m_generateResponse = function(name, data) {
     //console.log(name);
     //console.log(data);
 
-    var str = "this.create('" + name + "', '" + data + ",<data>');";
-    this.m_tempArr.push(str);
-    console.log(this.m_tempArr);
-    
+    var str = "this.create(\"" + name + "\", \"" + data + "\",\"<data>\");";
+    this.m_tempArr.push(str);    
 };
 
 /**
@@ -186,7 +194,7 @@ birka.manifest.Manifest.prototype.m_writeFile = function() {
     var regex = /%APP%/g;
     var a = structure.replace("%RESOURCES%", resources);
     var b = a.replace(regex, this.m_projectName)
-    console.log(b);
+
     this.m_saveFile(b);
 };
 
@@ -196,7 +204,7 @@ birka.manifest.Manifest.prototype.m_writeFile = function() {
  * @private
  */
 birka.manifest.Manifest.prototype.m_saveFile = function(data) {
-    birka.manifest.Manifest.fs.writeFile('Resources.js', data, (err) => {
+    birka.manifest.Manifest.fs.writeFile(this.m_outputPath + '/Resources.js', data, (err) => {
         if (err) throw err;
         console.log('The file has been saved!');
       });

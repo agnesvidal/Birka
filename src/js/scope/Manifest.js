@@ -49,6 +49,15 @@ var birka = (function(){
      */
     m_this.ui = {};
 
+    /**
+     * ...
+     *
+     * @namespace manifest
+     * @memberof vectorpanic.birka
+     * @since 1.0
+     */
+    m_this.manifest = {};
+
 
     //--------------------------------------------------------------------------
     // Return public scope object

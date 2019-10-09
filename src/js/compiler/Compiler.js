@@ -73,6 +73,13 @@ birka.compiler.Compiler = function() {
      */
     this.warnings = 0;
 
+    /**
+     * ...  //TODO: Vet inte om 
+     *
+     * @type {birka.manifest.Manifest}
+     */
+    this.manifest = null;
+
 
     this.app = require('electron').remote;
     this.dialog = this.app.dialog;
@@ -96,11 +103,21 @@ birka.compiler.Compiler.prototype.constructor = birka.compiler.Compiler;
  */
 birka.compiler.Compiler.prototype.init = function(){
     this.m_initUI(this.m_initModules);
+    this.m_initManifest();
 };
 
 //----------------------------------------------------------------------
 // Private methods
 //----------------------------------------------------------------------
+/**
+ * Initializes manifest complier. //TODO: kan den heta manifest? den eviga frågan.
+ *
+ * @returns {undefined}
+ */
+birka.compiler.Compiler.prototype.m_initManifest = function(){
+    this.manifest = new birka.manifest.Manifest();
+};
+
 /**
  * Initializes user interface.
  *
@@ -173,6 +190,7 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
     console.log('For compilation:', temp, m_this.outputPath);
 
     // @TODO Skicka array (temp) till ...
+    m_this.manifest.compile(temp, "AppOne", m_this.outputPath);
 };
 
 /**
@@ -213,6 +231,7 @@ birka.compiler.Compiler.prototype.m_uploadFiles = function(e){
             //console.log("No destination folder selected");
             return;
         } else {
+            console.log(folderPaths);
             m_this.form.inputPath.innerHTML = folderPaths[0];
             m_this.m_walkDir(folderPaths[0]);
         }
