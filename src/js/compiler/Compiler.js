@@ -74,7 +74,7 @@ birka.compiler.Compiler = function() {
     this.warnings = 0;
 
     /**
-     * ...  //TODO: Vet inte om 
+     * ...  //TODO: ska manifest vara en publik egenskap?
      *
      * @type {birka.manifest.Manifest}
      */
@@ -231,7 +231,6 @@ birka.compiler.Compiler.prototype.m_uploadFiles = function(e){
             //console.log("No destination folder selected");
             return;
         } else {
-            console.log(folderPaths);
             m_this.form.inputPath.innerHTML = folderPaths[0];
             m_this.m_walkDir(folderPaths[0]);
         }
