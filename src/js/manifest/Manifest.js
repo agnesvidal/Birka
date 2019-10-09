@@ -14,9 +14,46 @@
  * 
  * CLASS DESCRIPTION
  */
-var Manifest = function() {
+birka.manifest.Manifest = function() {
+
+    //--------------------------------------------------------------------------
+    // Protected properties
+    //--------------------------------------------------------------------------
+
+    /**
+     * ...
+     *
+     * @type {string}
+     * @ignore
+     */
+    this.m_projectName = "";
+
+    /**
+     * ...
+     *
+     * @type {array}
+     * @ignore
+     */
+    this.m_resquestQueue = [];
+
+    /**
+     * ...
+     *
+     * @type {object}
+     * @ignore
+     */
+    this.m_request = {};
+
+    /**
+     * ...
+     *
+     * @type {array}
+     * @ignore
+     */
+    this.m_tempArr = [];
 
 };
+
 
 //--------------------------------------------------------------------------
 // Public Static constants
@@ -29,7 +66,7 @@ var Manifest = function() {
  * @constant
  * @default
  */
-Manifest.fs = require('fs');
+birka.manifest.Manifest.fs = require('fs');
 
 
 //------------------------------------------------------------------------------
@@ -39,75 +76,131 @@ Manifest.fs = require('fs');
 /**
  * Compile files to manifest.
  *
- * @param {array} filepaths Array with filepaths.
- * @param {string} gamepath Path to game resource folder.
+ * @param {array} files Array with file objects, each object contains blob and filename.
+ * @param {string} projectname Path to project resource folder.
  *
  * @return {undefined} //TODO: boolean?
  */
-Manifest.prototype.compile = function(filepaths, gamepath) {
+birka.manifest.Manifest.prototype.compile = function(files, projectName) {
+    //console.log(files.length);
+    this.m_projectName = projectName;
+    if (files.length > 0) {
+        this.m_resquestQueue = files;
+        this.m_processRequestQueue();
+    } else {
+        console.log("files empty")
+        //TODO...
+    };
+
+    /*
     if (filepaths.length > 0) {
         this.m_addResources(filepaths, gamepath);
-    } /*else {
+    } else {
         this.m_removeMarker(gamepath);
-    };*/
+    };
+    */
 };
 
 //------------------------------------------------------------------------------
 // Internal prototype methods
 //------------------------------------------------------------------------------
 
+
 /**
- * Adds Base64 resources to manifest.
+ * ...
  *
- * @param {array} filepaths Array with filepaths.
- * @param {string} gamepath Path to game resource folder.
  *
  * @private
  */
-Manifest.prototype.m_addResources = function(filepaths, gamepath) {
-    for (var i = 0; filepaths.length > i; i++) {
-        this.m_getBase64(filepaths[i], this.m_writeToFile);
+birka.manifest.Manifest.prototype.m_processRequestQueue = function() {
+    //console.log(this.m_resquestQueue.length);
+    console.log("processQueue");
+    if (this.m_resquestQueue.length > 0) {
+        this.m_request = this.m_resquestQueue.shift();
+        this.m_processRequest();
+    } else {
+        console.log("requestQueue empty")
+        this.m_writeFile();
     }
-}
+};
 
 /**
- * Reads content of file and forwards data URL (base64) to callback.
+ * ...
  *
- * @param filepath Path to file.
- * @param callback Callback function.
  *
  * @private
  */
-Manifest.prototype.m_getBase64 = function(filepath, callback) {
-    var xhr = new XMLHttpRequest();       
-    xhr.open("GET", filepath, true); 
-    xhr.responseType = "blob";
+birka.manifest.Manifest.prototype.m_processRequest = function() {
+    //console.log(this.m_request);
+    this.m_generateBase64(this.m_request.blob, this.m_request.name);
+};
 
-    xhr.onload = function (e) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            var result = event.target.result;
-            callback(result);
-        }
-        var file = this.response;
-        reader.readAsDataURL(file)
-    };
-    xhr.send();
-}
+/**
+ * ...
+ *
+ * @param {blob} blob ...
+ * @param {string} name ...
+ *
+ * @private
+ */
+birka.manifest.Manifest.prototype.m_generateBase64 = function(blob, name) {
+    //console.log(blob);
+    var m_this = this;
+    var reader = new FileReader();
+    reader.onload = function(event) {
+        m_this.m_generateResponse(name, reader.result);
+        m_this.m_resquest = null;
+        m_this.m_processRequestQueue();
+    }
+    reader.readAsDataURL(blob);
+};
 
 /**
  * Write resource to manifest file.
  *
- * @param data A base64 encoded string.
+ * @param {string} name ...
+ * @param {string} data A base64 encoded string.
  *
- * @return {undefined}
  * @private
  */
-Manifest.prototype.m_writeToFile = function(data) {
-    console.log(data);
-    //TODO: ... this.create("player_texture_32x32", "data:[<mediatype>][;base64],<data>");
+birka.manifest.Manifest.prototype.m_generateResponse = function(name, data) {
+    //TODO: ... this.create('player_texture_32x32', 'data:[<mediatype>][;base64],<data>');
     //Fnuttar? ska <data> vara "egen" sträng
-}
+    //console.log(name);
+    //console.log(data);
+
+    var str = "this.create('" + name + "', '" + data + ",<data>');";
+    this.m_tempArr.push(str);
+    console.log(this.m_tempArr);
+    
+};
+
+/**
+ * ...
+ *
+ * @private
+ */
+birka.manifest.Manifest.prototype.m_writeFile = function() {
+    var resources = this.m_tempArr.join('\n\t');
+    var structure = this.m_readStructure();
+    var regex = /%APP%/g;
+    var a = structure.replace("%RESOURCES%", resources);
+    var b = a.replace(regex, this.m_projectName)
+    console.log(b);
+    this.m_saveFile(b);
+};
+
+/**
+ * ...
+ *
+ * @private
+ */
+birka.manifest.Manifest.prototype.m_saveFile = function(data) {
+    birka.manifest.Manifest.fs.writeFile('Resources.js', data, (err) => {
+        if (err) throw err;
+        console.log('The file has been saved!');
+      });
+};
 
 /**
  * Reads manifest structure from source file.
@@ -115,7 +208,7 @@ Manifest.prototype.m_writeToFile = function(data) {
  * @return {String}
  * @private
  */
-Manifest.prototype.m_readStructure = function() {
-    var structure = Manifest.fs.readFileSync('src/js/manifest/Resources.txt').toString()
+birka.manifest.Manifest.prototype.m_readStructure = function() {
+    var structure = birka.manifest.Manifest.fs.readFileSync('src/js/manifest/Resources.txt').toString();
     return structure;
-}
+};

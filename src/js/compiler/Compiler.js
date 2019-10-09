@@ -45,6 +45,7 @@ birka.compiler.Compiler.prototype.constructor = birka.compiler.Compiler;
 //----------------------------------------------------------------------
 // PUBLIC methods
 //----------------------------------------------------------------------
+
 birka.compiler.Compiler.prototype.init = function(){
     console.log("Compiler init");
     this.m_initUI(this.fooFunc);

@@ -51,6 +51,15 @@ var birka = (function(){
     m_this.ui = {};
 
     /**
+     * ...
+     *
+     * @namespace manifest
+     * @memberof vectorpanic.birka
+     * @since 1.0
+     */
+    m_this.manifest = {};
+
+    /**
      * The system package containing the project's core classes.
      *
      * @namespace system

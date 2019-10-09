@@ -12,7 +12,7 @@
  * 
  * ...
  */
-app.data.Resources = function() {
+%APP%.data.Resources = function() {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -28,8 +28,8 @@ app.data.Resources = function() {
 // Inheritance
 //------------------------------------------------------------------------------
 
-app.data.Resources.prototype = Object.create(rune.resource.Manifest.prototype);
-app.data.Resources.prototype.constructor = app.data.Resources;
+%APP%.data.Resources.prototype = Object.create(rune.resource.Manifest.prototype);
+%APP%.data.Resources.prototype.constructor = app.data.Resources;
 
 //------------------------------------------------------------------------------
 // Override public methods
@@ -38,6 +38,6 @@ app.data.Resources.prototype.constructor = app.data.Resources;
 /**
  * @inheritDoc
  */
-app.data.Resources.prototype.m_construct = function() {
-    %MARKER%
+%APP%.data.Resources.prototype.m_construct = function() {
+    %RESOURCES%
 };
