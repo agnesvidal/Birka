@@ -22,16 +22,6 @@ var birka = (function(){
     //--------------------------------------------------------------------------
     // Package structure
     //--------------------------------------------------------------------------
-
-    /**
-     * ...
-     *
-     * @namespace device
-     * @memberof vectorpanic.birka
-     * @since 1.0
-     */
-    m_this.device = {};
-
     /**
      * ...
      *
@@ -42,6 +32,15 @@ var birka = (function(){
     m_this.compiler = {};
 
     /**
+     * The system package containing the project's core classes.
+     *
+     * @namespace system
+     * @memberof vectorpanic.birka
+     * @since 1.0
+     */
+    m_this.system = {};
+
+    /**
      * ...
      *
      * @namespace ui
@@ -50,14 +49,6 @@ var birka = (function(){
      */
     m_this.ui = {};
 
-    /**
-     * The system package containing the project's core classes.
-     *
-     * @namespace system
-     * @memberof vectorpanic.birka
-     * @since 1.0
-     */
-    m_this.system = {};
 
     //--------------------------------------------------------------------------
     // Return public scope object
