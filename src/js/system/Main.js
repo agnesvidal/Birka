@@ -6,9 +6,7 @@
  * @classdesc Manages the app's basic functionality.
  */
 
-// @TODO Change to birka.system.Main = (function ... ?
-
-birka.system.Main = {
+birka.system.Main = function() {
     //----------------------------------------------------------------------
     // PUBLIC properties
     //----------------------------------------------------------------------
@@ -18,95 +16,111 @@ birka.system.Main = {
      * @default null
      * @public
      */
-    toolWrapper: null,
+    this.m_toolWrapper = null;
 
     /**
      * @type {NodeListOf<HTMLElementTagNameMap[string]>}
      * @default null
      * @public
      */
-    tabs: null,
+    this.m_tabs =  null;
 
     /**
      * @type {Compiler} | {...}
      * @default null
      * @public
      */
-    activeTool: null,
+    this.m_activeTool = null;
+};
 
-    //----------------------------------------------------------------------
-    // PUBLIC methods
-    //----------------------------------------------------------------------
-    /**
-     * Initializes UI.
-     *
-     * @returns {undefined}
-     */
-    init : function() {
-        birka.system.Main.initUI();
-    },
+//----------------------------------------------------------------------
+// PUBLIC methods
+//----------------------------------------------------------------------
+/**
+ * Initializes UI.
+ *
+ * @returns {undefined}
+ */
+birka.system.Main.init = function() {
+    birka.system.Main.initUI();
+};
 
-    /**
-     * ...
-     *
-     * @returns {undefined}
-     */
-    initUI : function() {
-        birka.system.Main.toolWrapper = document.getElementById('tool-wrapper');
-        birka.system.Main.tabs = document.querySelectorAll('a');
-        for (var i = 0; i < birka.system.Main.tabs.length; i++) {
-            birka.system.Main.tabs[i].addEventListener('click', birka.system.Main.changeTool);
-        }
-    },
-
-    /**
-     * ...
-     *
-     * @returns {undefined}
-     */
-    changeTool : function(e) {
-        if (this.classList.contains('active')) {
-            return;
-        } else {
-            for (var i = 0; i < birka.system.Main.tabs.length; i++) {
-                birka.system.Main.tabs[i].classList.remove('active');
-            }
-            this.classList.toggle("active");
-            birka.system.Main.startTool(e.target.id);
-        }
-    },
-
-    /**
-     * ...
-     *
-     * @param toolId
-     * @returns {undefined}
-     */
-    startTool : function(toolId) {
-        switch (toolId) {
-            case 'tool-1' :
-                birka.system.Main.removeTool();
-                birka.system.Main.activeTool = new birka.compiler.Compiler();
-                birka.system.Main.activeTool.init();
-                break;
-            case 'tool-2' :
-                console.log('Start tool 2');
-                break;
-        }
-    },
-
-    /**
-     * ...
-     *
-     * @returns {undefined}
-     */
-    removeTool : function(){
-        while (birka.system.Main.toolWrapper.hasChildNodes()) {
-            birka.system.Main.toolWrapper.removeChild(birka.system.Main.toolWrapper.firstChild);
-        }
-        //Main.allApps.splice(app, 1);
-        birka.system.Main.activeTool = null;
+/**
+ * ...
+ *
+ * @returns {undefined}
+ */
+birka.system.Main.initUI = function() {
+    var m_this = this;
+    this.m_toolWrapper = document.getElementById('tool-wrapper');
+    this.m_tabs = document.querySelectorAll('a');
+    for (var i = 0; i < this.m_tabs.length; i++) {
+        this.m_tabs[i].addEventListener('click',function(){m_this.changeTool(event, this)});
     }
+
+    this.removeTool();
+    this.m_activeTool = new birka.project.Project();
+    this.m_activeTool.init();
+};
+
+/**
+ * ...
+ *
+ * @returns {undefined}
+ */
+birka.system.Main.changeTool = function(e, elem) {
+    if (elem.classList.contains('active')) {
+        return;
+    } else {
+        for (var i = 0; i < this.m_tabs.length; i++) {
+            this.m_tabs[i].classList.remove('active');
+        }
+        elem.classList.toggle("active");
+        this.startTool(e.target.id);
+    }
+};
+
+/**
+ * ...
+ *
+ * @param toolId
+ * @returns {undefined}
+ */
+birka.system.Main.startTool = function(toolId) {
+    switch (toolId) {
+        case 'tool-0' :
+            this.removeTool();
+            this.m_activeTool = new birka.project.Project();
+            this.m_activeTool.init();
+            break;
+        case 'tool-1' :
+            if(sessionStorage.loaded === undefined) {
+                alert('Select a project first.');
+                this.m_tabs[1].classList.remove('active');
+                this.m_tabs[0].classList.add('active');
+            } else {
+                this.removeTool();
+                this.m_activeTool = new birka.compiler.Compiler();
+                this.m_activeTool.init();
+            }
+            break;
+        case 'tool-2' :
+            console.log('Start tool 2');
+            break;
+    }
+};
+
+/**
+ * ...
+ *
+ * @returns {undefined}
+ */
+birka.system.Main.removeTool = function(){
+    while (this.m_toolWrapper.hasChildNodes()) {
+        this.m_toolWrapper.removeChild(this.m_toolWrapper.firstChild);
+    }
+    //Main.allApps.splice(app, 1);
+    this.m_activeTool = null;
 };
 
 window.addEventListener('load', birka.system.Main.init);

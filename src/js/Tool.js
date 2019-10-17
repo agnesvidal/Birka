@@ -8,7 +8,7 @@
  * @class
  * @classdesc
  */
-birka.compiler.Tool = function(name) {
+birka.Tool = function(name) {
     /**
      * Name of the tool.
      *
@@ -33,7 +33,7 @@ birka.compiler.Tool = function(name) {
  *
  * @returns undefined
  */
-birka.compiler.Tool.prototype.initHeader = function(){
+birka.Tool.prototype.initHeader = function(){
     this.toolWrapper = document.getElementById('tool-wrapper');
     this.toolHeader = Elem.appendNewClassElem(this.toolWrapper, 'div', 'tool-header');
     var toolName = Elem.appendNewElem(this.toolHeader,'h2');
@@ -50,6 +50,6 @@ birka.compiler.Tool.prototype.initHeader = function(){
  *
  * @returns undefined
  */
-birka.compiler.Tool.prototype.m_initTitle = function(){
+birka.Tool.prototype.m_initTitle = function(){
     document.title = 'Birka ' + this.name;
 };
