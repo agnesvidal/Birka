@@ -26,16 +26,25 @@ var birka = (function(){
      * ...
      *
      * @namespace compiler
-     * @memberof vectorpanic.birka
+     * @memberof birka
      * @since 1.0
      */
     m_this.compiler = {};
 
     /**
+     * ...
+     *
+     * @namespace project
+     * @memberof birka
+     * @since 1.0
+     */
+    m_this.project = {};
+
+    /**
      * The system package containing the project's core classes.
      *
      * @namespace system
-     * @memberof vectorpanic.birka
+     * @memberof birka
      * @since 1.0
      */
     m_this.system = {};
@@ -44,7 +53,7 @@ var birka = (function(){
      * ...
      *
      * @namespace ui
-     * @memberof vectorpanic.birka
+     * @memberof birka
      * @since 1.0
      */
     m_this.ui = {};
