@@ -47,6 +47,13 @@ birka.compiler.Form = function(toolHeader) {
      * @type {HTMLElement}
      */
     this.outputPath = null;
+
+    /**
+     * Reference to the refresh button.
+     *
+     * @type {HTMLElement}
+     */
+    this.refreshBtn = null;
 };
 
 /**
@@ -61,22 +68,25 @@ birka.compiler.Form.prototype.init = function(){
     // Input
     var labels = [];
     var inputFields = [];
-    for(var i=0; i<3; i++){ //@TODO 3?
-        labels.push(Elem.appendNewElem(this.element, 'label'));
+    var divs = [];
+    for(var i=0; i<2; i++){ //@TODO 3?
         inputFields.push(Elem.appendNewClassElem(this.element, 'div', 'input-field'));
     }
-    labels[0].setAttribute('for', 'selectInputBtn');
-    labels[0].innerText = 'Select input folder';
-    labels[1].setAttribute('for', 'selectOutputBtn');
-    labels[1].innerText = 'Select output file';
 
     // BrowserBtns
     var inputBtns = [];
     for(i=0; i<2; i++){
-        inputBtns.push(Elem.appendNewElem(inputFields[i], 'input'));
+        inputBtns.push(Elem.appendNewClassElem(inputFields[i], 'input', 'browse'));
         inputBtns[i].setAttribute('type', 'button');
-        inputBtns[i].setAttribute('value', 'Browse...')
+        inputBtns[i].setAttribute('value', 'Browse...');
+        divs.push(Elem.appendNewClassElem(inputFields[i], 'div', 'output-row'));
+        labels.push(Elem.appendNewElem(divs[i], 'label'));
+
     }
+    labels[0].setAttribute('for', 'selectInputBtn');
+    labels[0].innerText = 'Select input folder';
+    labels[1].setAttribute('for', 'selectOutputBtn');
+    labels[1].innerText = 'Select output folder';
 
     inputBtns[0].id = 'selectInputBtn';
     this.inputBtn = inputBtns[0];
@@ -87,10 +97,19 @@ birka.compiler.Form.prototype.init = function(){
     // Filepath
     var filepathBoxes = [];
     for(i=0; i<2; i++){
-        filepathBoxes.push(Elem.appendNewElem(inputFields[i], 'div'));
+        filepathBoxes.push(Elem.appendNewElem(divs[i], 'div'));
         filepathBoxes[i].setAttribute('class', 'filepath');
     }
+    this.refreshBtn = Elem.appendNewClassElem(inputFields[0], 'input', 'refresh');
+    this.refreshBtn.setAttribute('type', 'button');
 
     this.inputPath = filepathBoxes[0];
     this.outputPath = filepathBoxes[1];
+
+    this.inputPath.innerHTML = 'No folder chosen.';
+    if(sessionStorage.projectLocation === undefined || sessionStorage.projectLocation === "") {
+        this.outputPath.innerHTML = 'No folder chosen.';
+    } else {
+        this.outputPath.innerHTML = sessionStorage.projectLocation;
+    }
 };

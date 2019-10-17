@@ -12,7 +12,7 @@ birka.compiler.Compiler = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    birka.compiler.Tool.call(this, 'Compiler');
+    birka.Tool.call(this, 'Compiler');
 
     //--------------------------------------------------------------------------
     // Public properties
@@ -80,35 +80,39 @@ birka.compiler.Compiler = function() {
      */
     this.manifest = null;
 
-
     this.app = require('electron').remote;
     this.dialog = this.app.dialog;
     this.fs = require('fs');
     this.path = require('path');
 };
 
+birka.compiler.Compiler.ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "audio/ogg", "audio/mpeg", "text/xml", "application/json"];
+
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
-birka.compiler.Compiler.prototype = Object.create(birka.compiler.Tool.prototype);
+birka.compiler.Compiler.prototype = Object.create(birka.Tool.prototype);
 birka.compiler.Compiler.prototype.constructor = birka.compiler.Compiler;
 
-//----------------------------------------------------------------------
-// PUBLIC methods
-//----------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Public methods
+//------------------------------------------------------------------------------
 /**
  * ...
  *
  * @returns {undefined}
  */
 birka.compiler.Compiler.prototype.init = function(){
+    console.log(localStorage.projectName);
+    console.log(localStorage.projectLocation);
+
     this.m_initUI(this.m_initModules);
     this.m_initManifest();
 };
 
-//----------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Private methods
-//----------------------------------------------------------------------
+//------------------------------------------------------------------------------
 /**
  * Initializes manifest complier. //TODO: kan den heta manifest? den eviga frågan.
  *
@@ -134,7 +138,6 @@ birka.compiler.Compiler.prototype.m_initUI = function(callback){
     this.footer.init();
     this.m_addListeners();
     callback();
-    //console.log(this.toolWrapper)
 };
 
 /**
@@ -155,9 +158,9 @@ birka.compiler.Compiler.prototype.m_initModules = function(){
 birka.compiler.Compiler.prototype.m_addListeners = function(){
     var m_this = this;
     this.form.inputBtn.addEventListener('click',function(){m_this.m_uploadFiles(this)});
+    this.form.refreshBtn.addEventListener('click',function(){m_this.m_refresh(this)});
     this.form.outputBtn.addEventListener('click',function(){m_this.m_chooseOutput(this)});
     this.footer.compileBtn.addEventListener('click',function(){m_this.m_compile(this)});
-
 };
 
 /**
@@ -175,18 +178,24 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
     // Checks what files should be included...
     for(var i=0; i< m_this.files.length; i++) {
         if( m_this.files[i].row.include === true) {
-            temp.push( m_this.files[i].result);
+            temp.push( m_this.files[i].file);
         }
     }
     //@TODO
     // Checks whether there are any errors...
     for(var i=0; i<temp.length; i++) {
-        if(temp[i].status === 1) {
-            console.log("Error. Can't compile.");
-            return;
+        console.log(temp[i].status.length);
+        if(temp[i].status.length > 0) {
+            for(var j=0; j< temp[i].status.length; j++){
+                if((temp[i].status[j] === 1) || (temp[i].status[j] === 2)){
+                    console.log(temp);
+                    console.log("Error. Can't compile.");
+                    return;
+                }
+            }
         }
     }
-
+    console.log('sessionStorage projectPath', sessionStorage.projectLocation);
     console.log('For compilation:', temp, m_this.outputPath);
 
     // @TODO Skicka array (temp) till ...
@@ -203,14 +212,15 @@ birka.compiler.Compiler.prototype.m_chooseOutput = function(e) {
     var m_this = this;
     this.dialog.showOpenDialog({
         title: "Select a folder",
-        properties: ['openFile']
-    }, function(path) {
-        if(path === undefined || path.length === 0){
+        properties: ['openDirectory']
+    }, function(folderPaths) {
+        if(folderPaths === undefined || folderPaths.length === 0){
             //console.log("No destination folder selected");
             return;
         } else {
-            m_this.outputPath = path[0];
-            m_this.form.outputPath.innerHTML = path[0];
+            m_this.outputPath = folderPaths[0];
+            m_this.form.outputPath.innerHTML = folderPaths[0];
+
         }
     });
 };
@@ -231,10 +241,46 @@ birka.compiler.Compiler.prototype.m_uploadFiles = function(e){
             //console.log("No destination folder selected");
             return;
         } else {
+            m_this.m_emptyTable();
             m_this.form.inputPath.innerHTML = folderPaths[0];
             m_this.m_walkDir(folderPaths[0]);
         }
     });
+};
+
+
+/**
+ * ...
+ *
+ * @param   {Event} e
+ * @returns {undefined}
+ */
+birka.compiler.Compiler.prototype.m_refresh = function(e){
+    var m_this = this;
+    if(m_this.form.inputPath.innerHTML !== ""){
+        m_this.m_emptyTable();
+        m_this.m_walkDir(m_this.form.inputPath.innerHTML);
+    }
+};
+
+/**
+ * ...
+ *
+ * @param   {Event} e
+ * @returns {undefined}
+ */
+birka.compiler.Compiler.prototype.m_emptyTable = function(){
+    var m_this = this;
+    this.warnings = 0;
+    this.footer.setWarnings = this.warnings;
+    this.errors = 0;
+    this.footer.setErrors = this.errors;
+
+    while (m_this.table.tableElem.childNodes.length > 1) {
+        m_this.table.tableElem.removeChild(m_this.table.tableElem.lastChild);
+    }
+
+    this.files = [];
 };
 
 /**
@@ -271,7 +317,9 @@ birka.compiler.Compiler.prototype.m_requestFile = function(path) {
     req.onreadystatechange = function () {
         if (req.readyState === 4)
             if (req.status === 200) {
-                m_this.m_getData(m_this.m_createFile(this.response, path));
+                //m_this.m_getData(m_this.m_createFile(this.response, path));
+                m_this.m_getData(new birka.compiler.File(this.response, path));
+
             } else {
                 console.log("Error...");  //TODO
             }
@@ -282,85 +330,85 @@ birka.compiler.Compiler.prototype.m_requestFile = function(path) {
 /**
  * ...
  *
- * @param   {Object}    result
+ * @param   {birka.compiler.File}    file
  * @returns {undefined}
  */
-birka.compiler.Compiler.prototype.m_getData = function(result) {
+//@TODO Clean
+birka.compiler.Compiler.prototype.m_getData = function(file) {
     var m_this = this;
-    var row = new birka.compiler.TableRow(this.table.tBody);
-    row.create(result);
 
-    //row.textInput.addEventListener('input',function(){m_this.m_changeName(event, row)}); //@TODO
-    //this.m_checkForDuplicates(result.name, row); //@TODO
+    file.m_checkStatus();
+    if(this.files.length > 0){
+        // Check for duplicates
+        if(m_this.m_checkIfDuplicate(file.name)){
+            file.setStatus = 2;
+            this.m_checkForNewDuplicates(file.name);
+        }
+    }
 
-    this.files.push({result: result, row: row});
+    //create row and add listener to textinput
+    var row = new birka.compiler.TableRow(this.table.tableElem);
+    row.create(file);
+    row.textInput.addEventListener('input',function(){m_this.m_changeName(event, row)});
+
+    // if error/warning -> add message and increment error/warning
+    if(file.status.length > 0) {
+        var message = new birka.compiler.Message(this.table.tableElem);
+        message.create(this.table.tableElem, this.table.tableElem.childNodes);
+        message.addMessage(file.status);
+        for(var i=0; i<file.status.length; i++) {
+            this.m_incrementException(file.status[i]);
+        }
+    }
+
+    //add file, row and message to array for easy access.
+    this.files.push({file: file, row: row, message: message});
 };
 
 /**
- * ...
  *
- * @param   {Blob}      blob
- * @param   {string}    path
- * @returns {Object}    file
+ * @param fileStatus
  */
-birka.compiler.Compiler.prototype.m_createFile = function(blob, path) {
-    var file = {};
-    file.blob = blob;
-    file.name = this.m_getFileName(path);
-    file.path = path;
-    file.status = this.m_checkStatus(file.blob.size, file.blob.type);
-    file.size = this.m_bytesToSize(file.blob.size);
-    return file;
-};
-
-/**
- * ...
- *
- * @param   {string} path
- * @returns {string}
- */
-birka.compiler.Compiler.prototype.m_getFileName = function(path) {
-    var filename = path.replace(/^.*[\\\/]/, '');
-    filename = filename.split('.').slice(0, -1).join('.');
-    filename = filename.replace(' ', '_');
-    return filename;
-};
-
-/**
- * ...
- *
- * @param   {Number} size
- * @param   {string} type
- * @returns {number}
- */
-//@TODO Unfinished method
-birka.compiler.Compiler.prototype.m_checkStatus = function(size, type) {
-    //console.log('10BM', this.bytesToSize(10000000));
-    //console.log(this.bytesToSize(500000));
-    var status = 0;
-    if(size > 500000){
-        status = 2;
-        this.warnings++;
-        this.footer.setWarnings = this.warnings;
-    } else if(type !== 'image/png'){
-        status = 1;
+birka.compiler.Compiler.prototype.m_incrementException = function(fileStatus) {
+    if(fileStatus > 0 && fileStatus < 10){
         this.errors++;
         this.footer.setErrors = this.errors;
     }
-    return status;
+    if(fileStatus >= 10){
+        this.warnings++;
+        this.footer.setWarnings = this.warnings;
+    }
+
 };
 
 /**
- * ...
  *
- * @param   {Number} bytes
- * @returns {string}
+ * @param fileStatus
  */
-birka.compiler.Compiler.prototype.m_bytesToSize = function(bytes) {
-    var sizes = ['B', 'kB', 'MB', 'GB', 'TB'];
-    if (bytes === 0) return '0 Byte';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+birka.compiler.Compiler.prototype.m_decrementException = function(fileStatus) {
+    if(fileStatus > 0 && fileStatus < 10){
+        this.errors--;
+        this.footer.setErrors = this.errors;
+    }
+    if(fileStatus >= 10){
+        this.warnings--;
+        this.footer.setWarnings = this.warnings;
+    }
+};
+
+/**
+ *
+ * @param name
+ * @return {boolean}
+ */
+birka.compiler.Compiler.prototype.m_checkIfDuplicate = function(name) {
+    var flag = false;
+    for(var i = 0; i<this.files.length; i++) {
+        if(this.files[i].file.name === name){
+            flag = true;
+        }
+    }
+    return flag;
 };
 
 /**
@@ -370,42 +418,123 @@ birka.compiler.Compiler.prototype.m_bytesToSize = function(bytes) {
  * @param   {birka.compiler.TableRow} row
  * @returns {undefined}
  */
-//@TODO Unfinished method
+//@TODO Clean
 birka.compiler.Compiler.prototype.m_changeName = function(e, row) {
-    //console.log(row.textInput.value);
-    //console.log(this.m_checkForDuplicates(row.textInput.value));
     for(var i=0; i<this.files.length; i++){
         if(this.files[i].row === row){
-            this.files[i].result.name = row.textInput.value;
-            console.log(this.files[i].result.status);
-
-            //@FIXME Undone
-            if((this.m_checkForDuplicates(row.textInput.value, row) === false)/* && (this.files[i].result.status === 3)*/){
-                console.log('clear');
-                row.m_styleRow(0);
+            var fileObj = this.files[i];
+            // Duplicate file name and has been before as well
+            if(this.m_checkIfDuplicate(row.textInput.value) && fileObj.file.isDuplicate()){
+                this.m_checkRemainingDuplicates(fileObj.file.name);
+                this.m_checkForNewDuplicates(row.textInput.value);
             }
+
+            // Duplicate file name but was NOT previously.
+            else if(this.m_checkIfDuplicate(row.textInput.value) && !fileObj.file.isDuplicate()){
+                this.m_checkForNewDuplicates(row.textInput.value);
+                this.m_addDuplicateError(fileObj, (i+2));
+            }
+
+            // NOT a duplicate file name, but it has been
+            else if(!this.m_checkIfDuplicate(row.textInput.value) && fileObj.file.isDuplicate()){
+                this.m_removeDuplicateError(fileObj);
+                // checks if there are more files with the old name that are now solved too.
+                this.m_checkRemainingDuplicates(fileObj.file.name);
+            }
+
+            this.files[i].file.setName = row.textInput.value;
+        }
+    }
+};
+
+
+//check if changed name removed duplicate status from other file/row
+//@TODO Rename, clean
+birka.compiler.Compiler.prototype.m_checkRemainingDuplicates = function(oldName) {
+   var count = 0;
+   for(var i=0; i<this.files.length; i++){
+       if(this.files[i].row.textInput.value === oldName) {
+           count++;
+           //console.log("duplicate");
+       }
+   }
+   for(var i=0; i<this.files.length; i++) {
+       if (this.files[i].row.textInput.value === oldName) {
+           if (count <= 1) {
+               this.m_removeDuplicateError(this.files[i]);
+           }
+       }
+   }
+};
+
+//check if it changed name turned other file/row into a duplicate
+//@TODO Rename, clean.
+birka.compiler.Compiler.prototype.m_checkForNewDuplicates = function(name) {
+    for(var i = 0; i<this.files.length; i++) {
+        if ((this.files[i].file.name === name) && (!this.files[i].file.isDuplicate())) {
+            var pos = 0;
+            for(var j = 0; j<this.table.tableElem.childNodes.length; j++) {
+                if(this.table.tableElem.childNodes[j].childNodes[0] === this.files[i].row.element){
+                    //console.log(j);
+                    pos = j;
+                }
+            }
+            this.m_addDuplicateError(this.files[i], pos);
         }
     }
 };
 
 /**
- * ...
  *
- * @param   {string} name
- * @param   {birka.compiler.TableRow} row
- * @return  {boolean}
+ * @param fileObj
+ * @param pos
  */
-//@TODO Unfinished method
-birka.compiler.Compiler.prototype.m_checkForDuplicates = function(name, row) {
-    var flag = false;
-    for(var i = 0; i<this.files.length; i++) {
-        if(this.files[i].result.name === name){
-            console.log('Duplicate');
-            row.m_changeStatus(3);
-            flag = true;
-        } else {
-            flag = false;
-        }
+birka.compiler.Compiler.prototype.m_addDuplicateError = function(fileObj, pos) {
+    fileObj.file.setStatus = 2;
+
+    if(fileObj.message === undefined || fileObj.message === null){
+        var message = new birka.compiler.Message(this.table.tableElem);
+
+        message.create(this.table.tableElem, pos);
+        fileObj.message = message;
     }
-    return flag;
+    fileObj.message.addMessage(2);
+
+    //if(fileObj.file.status.indexOf(10) > -1){ //@TODO
+    console.log(fileObj.file.hasWarning());
+    if(fileObj.file.hasWarning()){ //@TODO
+        fileObj.row.m_styleRow(5); // remove warning, add error style
+    } else{
+        fileObj.row.m_styleRow(2); // add error style
+    }
+    this.m_incrementException(2);
+};
+
+/**
+ *
+ * @param fileObj
+ */
+birka.compiler.Compiler.prototype.m_removeDuplicateError = function(fileObj) {
+    if(fileObj.message.containsDuplicateErr()){
+        fileObj.message.removeDup();
+        fileObj.file.removeError(2);
+    }
+
+    // if file contains a warning
+    if(fileObj.file.status.indexOf(10) > -1){ //@TODO
+        fileObj.row.m_styleRow(10);
+    }
+
+    this.m_decrementException(2);
+
+    //console.log(this.files[i]);
+    if(fileObj.file.status.length === 0){
+        fileObj.message.tbody.parentNode.removeChild(fileObj.message.tbody);
+        fileObj.message = null;
+        //console.log(this.files[i].message);
+        if(fileObj.row.tds[4].classList.contains('coll-active')){
+            fileObj.row.tds[4].classList.remove('coll-active');
+        }
+        fileObj.row.m_styleRow(0);
+    }
 };

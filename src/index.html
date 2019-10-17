@@ -5,18 +5,25 @@
     <title>[NAME] Helper</title>
     <link rel="stylesheet" href="./css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400&display=swap" rel="stylesheet">
     <script src="js/scope/Manifest.js"></script>
-    <!--<script src="js/compiler/RequestHandler.js"></script>-->
 
     <script src="js/manifest/Manifest.js"></script>
 
     <script src="js/compiler/Table.js"></script>
     <script src="js/compiler/Form.js"></script>
     <script src="js/compiler/Footer.js"></script>
+    <script src="js/compiler/File.js"></script>
+    <script src="js/compiler/Message.js"></script>
+    <script src="js/compiler/MessageRow.js"></script>
     <script src="js/compiler/TableRow.js"></script>
 
 
     <script src="js/Tool.js"></script>
+    <script src="js/project/ElementManager.js"></script>
+
+    <script src="js/project/Project.js"></script>
+
     <script src="js/compiler/Compiler.js"></script>
     <script src="js/ui/Elem.js"></script>
 
@@ -29,21 +36,63 @@
             <div></div>
             <nav>
                 <ul>
-                    <li><a href="#" id="tool-1"> <!--class="active">-->Compiler</a></li>
+                    <li><a href="#" id="tool-0" class="active">Project</a></li>
+                    <li><a href="#" id="tool-1">Compiler</a></li>
                     <li><a href="#" id="tool-2">SomeTool</a></li>
                 </ul>
             </nav>
         </div>
 
         <div id="tool-wrapper">
-            <div id="home">
-                <div id="home-header">
+            <!--
+            <div id="project">
+                <div class="project-left">
                     <h2>Let's get started!</h2>
+                    <p>Start by selecting an existing project or create a new project.</p>
                     <div>
-                        <input type="button" value="Compiler">
-                        <input type="button" value="SomeTool">
+                        <input type="button" value="Choose project...">
+                        <h3>OR</h3>
+                        <input type="button" value="Create new project">
                     </div>
                 </div>
+
+                <div class="project-right">
+
+                    <form>
+                        <div>
+                            <span>Project name</span>
+                            <input type="text" placeholder="Write your project name..." class="game-name">
+                        </div>
+                        <fieldset>
+                            <legend>Project location</legend>
+                            <div class="input-field">
+                            <div class="filepath">User/folder/folder2/folder3</div>
+                            <input type="button" class="project-browse" value="">
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Configuration settings</legend>
+                            <label>Id</label>
+                            <input type="number" placeholder="0">
+                            <label>Framerate</label>
+                            <input type="number" placeholder="60">
+                            <label>Id</label>
+                            <input type="number" placeholder="0">
+                            <label>Framerate</label>
+                            <input type="number" placeholder="60">
+                        </fieldset>
+                        <input type="submit" value="Save" id="save">
+                    </form>
+                   <!--
+                        <div class="no-project">
+                            <p>No project loaded...</p>
+                        </div>
+                        -->
+            <!--
+                </div>
+            </div>
+            -->
+
             </div>
         </div>
     </div>
