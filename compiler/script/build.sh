@@ -6,9 +6,27 @@ java -jar ./../bin/compiler.jar \
 --warning_level VERBOSE \
 --compilation_level SIMPLE_OPTIMIZATIONS \
 --isolation_mode IIFE \
---js "./../../src/index.html" \
---js "./../../src/css/style.css" \
---js "./../../src/img/error.png" \
---js "./../../src/img/warning.png" \
---js "./../../src/js/Main.js" \
---js_output_file "./../../dist/helper.js";
+--js "./../../src/js/scope/Manifest.js" \
+--js "./../../src/js/ui/Elem.js" \
+--js "./../../src/js/Tool.js" \
+--js "./../../src/js/Projectdirectory.js" \
+--js "./../../src/js/Resourcefile.js" \
+--js "./../../src/js/project/Toolbar.js" \
+--js "./../../src/js/project/Modal.js" \
+--js "./../../src/js/project/CreateModal.js" \
+--js "./../../src/js/project/ElementManager.js" \
+--js "./../../src/js/project/Project.js" \
+--js "./../../src/js/project/ProjectManager.js" \
+--js "./../../src/js/compiler/ui/Table.js" \
+--js "./../../src/js/compiler/ui/Form.js" \
+--js "./../../src/js/compiler/ui/Footer.js" \
+--js "./../../src/js/compiler/File.js" \
+--js "./../../src/js/compiler/Message.js" \
+--js "./../../src/js/compiler/MessageRow.js" \
+--js "./../../src/js/compiler/TableRow.js" \
+--js "./../../src/js/compiler/Compiler.js" \
+--js "./../../src/js/system/Main.js" \
+--js "./../../src/js/scope/Alias.js" \
+--js_output_file "./../../dist/birka.js";
+
+

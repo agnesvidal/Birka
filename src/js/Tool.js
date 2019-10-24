@@ -21,7 +21,9 @@ birka.Tool = function(name) {
      *
      * @type {HTMLElement} toolWrapper
      */
-    this.toolWrapper = null; // @TODO Alternativt skicka med toolWrapper från Main
+    this.appContent = null; // @TODO Alternativt skicka med toolWrapper från Main
+
+    this.toolElem = null;
 
 };
 
@@ -34,6 +36,7 @@ birka.Tool = function(name) {
  * @returns undefined
  */
 birka.Tool.prototype.initHeader = function(){
+    this.appContent = document.getElementById('app-content');
     this.toolWrapper = document.getElementById('tool-wrapper');
     this.toolHeader = Elem.appendNewClassElem(this.toolWrapper, 'div', 'tool-header');
     var toolName = Elem.appendNewElem(this.toolHeader,'h2');

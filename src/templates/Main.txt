@@ -1,0 +1,37 @@
+//------------------------------------------------------------------------------
+// Constructor scope
+//------------------------------------------------------------------------------
+
+/**
+ * ...
+ *
+ * @constructor
+ * 
+ * @class
+ * @classdesc
+ * 
+ * ...
+ */
+%APP%.system.Main = function(options) {
+
+    //--------------------------------------------------------------------------
+    // Super call
+    //--------------------------------------------------------------------------
+    
+    /**
+     * ...
+     */
+    rune.system.Main.call(this, {
+        title: '%TITLE%',
+        id: '%ID%',
+        scene: %APP%.scene.SceneMain,
+        resources: %APP%.data.Resources
+    });
+};
+
+//------------------------------------------------------------------------------
+// Inheritance
+//------------------------------------------------------------------------------
+
+%APP%.system.Main.prototype = Object.create(rune.system.Main.prototype);
+%APP%.system.Main.prototype.constructor = %APP%.system.Main;

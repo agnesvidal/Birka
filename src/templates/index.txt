@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>%APP% - Debug</title>
+
+        <script src="./../lib/rune.js"></script>
+
+        <script src="./../src/scope/Manifest.js"></script>
+        <script src="./../src/data/Resources.js"></script>
+        <script src="./../src/scene/SceneMain.js"></script>
+        <script src="./../src/system/Main.js"></script>
+        <script src="./../src/scope/Alias.js"></script>
+
+        <script>
+
+            var %APP% = new %APP%.system.Main();
+                %APP%.start();
+
+        </script>
+
+    </head>
+
+    <body></body>
+
+</html>

@@ -1,3 +1,4 @@
+
 //------------------------------------------------------------------------------
 // Constructor scope
 //------------------------------------------------------------------------------
@@ -10,29 +11,50 @@
  */
 birka.project.Project = function() {
     //--------------------------------------------------------------------------
-    // Super call
+    // Public properties
     //--------------------------------------------------------------------------
-    birka.Tool.call(this, "Project");
+
+    // ...
+
+    //--------------------------------------------------------------------------
+    // Private properties
+    //--------------------------------------------------------------------------
+    /**
+     * @type {HTMLElement}
+     * @private
+     */
+    this.m_appContent = null;
 
     /**
      *
-     * @type {birka.project.ElementManager}
+     * @type {birka.project.Toolbar}
+     * @private
      */
-    this.elemManager = null;
+    this.m_toolbar = null;
 
-    //--------------------------------------------------------------------------
-    // Public properties
-    //--------------------------------------------------------------------------
-    this.app = require('electron').remote;
-    this.dialog = this.app.dialog;
-    this.fs = require('fs');
-    this.path = require('path');
+    /**
+     * toolWrapper - Reference to wrapper containing tool.
+     *
+     * @property {HTMLElement}
+     * @default null
+     * @private
+     */
+    this.m_toolWrapper = null;
+
+    /**
+     * @type {Array}
+     * @default []
+     * @private
+     */
+    this.m_tabs =  [];
+
+    /**
+     * @type {birka.compiler.Tool} | {birka.project.Project}
+     * @default null
+     * @private
+     */
+    this.m_activeTool = null;
 };
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
-birka.project.Project.prototype = Object.create(birka.Tool.prototype);
-birka.project.Project.prototype.constructor = birka.project.Project;
 
 //------------------------------------------------------------------------------
 // Public methods
@@ -43,85 +65,85 @@ birka.project.Project.prototype.constructor = birka.project.Project;
  * @returns {undefined}
  */
 birka.project.Project.prototype.init = function(){
-    this.m_initUI(this.m_initModules);
+    this.m_appContent = document.getElementById('app-content');
+    this.m_clearWindow();
+    this.m_initUI();
 };
 
+//------------------------------------------------------------------------------
+// Private methods
+//------------------------------------------------------------------------------
 /**
  * ...
  *
  * @returns {undefined}
  */
-birka.project.Project.prototype.m_initModules = function(){
-    this.fs = require('fs');
-    this.path = require('path');
-};
-
-/**
- * Initializes user interface.
- *
- * @param callback
- * @returns {undefined}
- */
-birka.project.Project.prototype.m_initUI = function(callback){
+birka.project.Project.prototype.m_initUI = function() {
+    var m_this = this;
+    this.m_toolbar = new birka.project.Toolbar();
+    this.m_tabs = this.m_toolbar.tabs;
+    for (var i = 0; i < this.m_tabs.length; i++) {
+        this.m_tabs[i].addEventListener('click',function(event){m_this.changeTool(event, this)});
+    }
+    this.m_toolWrapper = Elem.appendNewIdElem(this.m_appContent, 'div', 'tool-wrapper');
+    this.m_initProjectDetails();
     this.m_initTitle();
-    this.elemManager = new birka.project.ElementManager(this.toolWrapper);
-    this.elemManager.init();
-    //console.log(sessionStorage.loaded);
-    if(sessionStorage.loaded === 'true') {
-        this.m_initLoadedProject();
+
+};
+
+//@TODO TEMPORARY
+birka.project.Project.prototype.m_initProjectDetails = function() {
+    var projectname = Elem.appendNewElem(this.m_toolWrapper, 'h2');
+    var toolHeader = Elem.appendNewClassElem(this.m_toolWrapper, 'div', 'tool-header');
+    var toolName = Elem.appendNewElem(toolHeader,'h2');
+    Elem.text(toolName, 'Project name: ' + window.sessionStorage.name);
+
+};
+
+/**
+ * Changes the title of the application to the name of the project.
+ *
+ * @returns undefined
+ */
+birka.project.Project.prototype.m_initTitle = function(){
+    document.title = window.sessionStorage.name;
+};
+
+/**
+ * ...
+ *
+ * @returns {undefined}
+ */
+birka.project.Project.prototype.changeTool = function(e, elem) {
+    if (elem.classList.contains('active')) {
+        return;
+    } else {
+        for (var i = 0; i < this.m_tabs.length; i++) {
+            this.m_tabs[i].classList.remove('active');
+        }
+        elem.classList.toggle("active");
+        this.startTool(e.target.id);
     }
-    this.m_addListeners();
-    callback();
-};
-
-
-/**
- * ...
- *
- * @returns {undefined}
- */
-birka.project.Project.prototype.m_addListeners = function(){
-    var m_this = this;
-    //this.elemManager.newProjectBtn.addEventListener('click',function(){m_this.m_createNewProject(this)});
-    this.elemManager.mainBtns[1].addEventListener('click',function(){ m_this.m_createProject(this)});
-    this.elemManager.mainBtns[0].addEventListener('click',function(){ m_this.m_openProject(this)});
 };
 
 /**
  * ...
  *
+ * @param toolId
  * @returns {undefined}
  */
-//@TODO In progress
-birka.project.Project.prototype.m_createProject = function(){
-    var m_this = this;
-    this.elemManager.createProjectForm();
-    this.elemManager.browseBtn.addEventListener('click',function(){m_this.m_chooseLocation(this)});
-    this.elemManager.saveBtn.addEventListener('click',function(){m_this.m_saveProject(this)});
-    document.addEventListener('invalid', (function(){
-        return function(e){
-            //prevent the browser from showing default error bubble/ hint
-            e.preventDefault();
-            // optionally fire off some custom validation handler
-            console.log(e.target);
-            e.target.style.borderBottom = '1px solid red';
-        };
-    })(), true);
-
-};
-
-/**
- * ...
- *
- * @returns {undefined}
- */
-birka.project.Project.prototype.m_saveProject = function(){
-    if(this.elemManager.locationpath.innerHTML === ""){
-       this.elemManager.locationpath.parentNode.style.border = '1px solid red';
-    } else{
-        sessionStorage.setItem('loaded', true);
-        sessionStorage.setItem('projectName', this.elemManager.projectName.value);
-        sessionStorage.setItem('projectLocation', this.elemManager.locationpath.innerHTML); //@TODO resourcePath instead?
+birka.project.Project.prototype.startTool = function(toolId) {
+    switch (toolId) {
+        case 'overview' :
+            this.removeTool();
+            this.m_activeTool = new birka.project.Project();
+            this.m_activeTool.init();
+            break;
+        case 'compiler' :
+            this.removeTool();
+            this.m_activeTool = new birka.compiler.Compiler();
+            this.m_activeTool.init();
+            break;
     }
 };
 
@@ -130,52 +152,10 @@ birka.project.Project.prototype.m_saveProject = function(){
  *
  * @returns {undefined}
  */
-birka.project.Project.prototype.m_chooseLocation = function(){
-    var m_this = this;
-    this.dialog.showOpenDialog({
-        title: "Select a folder",
-        properties: ['openDirectory']
-    }, function(folderPaths) {
-        if(folderPaths === undefined || folderPaths.length === 0){
-            //console.log("No destination folder selected");
-            return;
-        } else {
-           // m_this.m_loadProject(folderPaths[0]);
-            m_this.elemManager.locationpath.innerHTML = folderPaths[0];
-
-            //console.log(folderPaths[0]);
-            /*
-            m_this.outputPath = folderPaths[0];
-            m_this.form.outputPath.innerHTML = folderPaths[0];
-            */
-        }
-    });
-};
-
-
-/**
- * ...
- *
- * @returns {undefined}
- */
-birka.project.Project.prototype.m_openProject = function(){
-    var m_this = this;
-    this.dialog.showOpenDialog({
-        title: "Select a folder",
-        properties: ['openDirectory']
-    }, function(folderPaths) {
-        if(folderPaths === undefined || folderPaths.length === 0){
-            //console.log("No destination folder selected");
-            return;
-        } else {
-            m_this.m_loadProject(folderPaths[0]);
-            //console.log(folderPaths[0]);
-            /*
-            m_this.outputPath = folderPaths[0];
-            m_this.form.outputPath.innerHTML = folderPaths[0];
-            */
-        }
-    });
+birka.project.Project.prototype.m_clearWindow = function(){
+    while (this.m_appContent.hasChildNodes()) {
+        this.m_appContent.removeChild(this.m_appContent.firstChild);
+    }
 };
 
 /**
@@ -183,22 +163,9 @@ birka.project.Project.prototype.m_openProject = function(){
  *
  * @returns {undefined}
  */
-birka.project.Project.prototype.m_loadProject = function(path){
-    this.m_createProject();
-    this.elemManager.projectName.value = 'myGame';
-    this.elemManager.locationpath.innerHTML = 'User/folder1/folder2/games';
-    this.elemManager.saveBtn.setAttribute('value', 'Update');
-};
-
-/**
- * ...
- *
- * @returns {undefined}
- */
-birka.project.Project.prototype.m_initLoadedProject = function(){
-    this.m_createProject();
-    this.elemManager.projectName.value = sessionStorage.projectName;
-    this.elemManager.locationpath.innerHTML = sessionStorage.projectLocation;
-    this.elemManager.saveBtn.setAttribute('value', 'Update');
-
+birka.project.Project.prototype.removeTool = function(){
+    while (this.m_toolWrapper.hasChildNodes()) {
+        this.m_toolWrapper.removeChild(this.m_toolWrapper.firstChild);
+    }
+    this.m_activeTool = null;
 };

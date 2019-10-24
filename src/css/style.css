@@ -22,17 +22,83 @@ input[type=button], input[type=submit]{
 }
 
 /* * * * * * * * * NAV * * * * * * * * */
-#nav-wrapper {
+.current-project{
+    text-align: center;
+    padding: 5px;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    color: #FFF;
+    background-color: #666;
+    /*margin-left: 100px;*/
+    width: 100%;
+
+}
+
+.current-project input{
+    background: url("../img/folder.png") no-repeat 2px 3px;
+    background-size: 16px;
+    width: 18px;
+    height: 14px;
+    margin-right: 2px;
+    border: none;
+    cursor: pointer;
+    display: inline;
+}
+
+.current-project p{
+    display: inline;
+}
+
+.current-project span{
+    font-weight: 600;
+}
+#project-header {
+    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
+    width: 100%;
+    height: 30px;
+    position: fixed;
+    top: 0;
+    background-color: #666;
+
+    z-index: 999;
+}
+/*
+#project-header p:first-child {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    display: inline;
+}
+
+#project-header p:last-of-type {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: #999;
+    display: inline;
+}
+*/
+#nav-wrapper {
+    /*
+    display: flex;
+    justify-content: space-between;
+    */
     padding: 0px;
     border-bottom: 0px solid #01345B;
     width: 100%;
     position: fixed;
-    background-color: #FFFFFF;
+    background-color: #fff;
     top: 0;
     z-index: 999;
     font-family: Montserrat, sans-serif;
+    /*display: none;*/
 }
 
 nav {
@@ -65,7 +131,6 @@ nav a {
     margin-right: 4px;
 
     /*border: 1px solid #ececec;*/
-    background-color: #FFFFFF;
     color: #ccc;
     font-weight: 300;
     letter-spacing: 0.05em;
@@ -118,6 +183,7 @@ h2{
     /*margin-top: 25%;*/
     display: flex;
     justify-content: space-between;
+
 }
 
 #project h2 {
@@ -146,6 +212,8 @@ h2{
     height: calc(100vh - 140px);
     padding: 20px;
     margin: 20px;
+    margin-top: calc(50vh - (250px));
+
 }
 
 .project-right{
@@ -155,6 +223,8 @@ h2{
     height: calc(100vh - 70px);
     padding: 20px;
     margin-right: 40px;
+    margin-top: calc(50vh - (250px));
+
 }
 
 #project .no-project{
@@ -202,7 +272,7 @@ h2{
     font-size: 13px;
     letter-spacing: 0.05em;
     padding-top: 8px;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 #project label {
@@ -210,6 +280,7 @@ h2{
     font-weight: 400;
     font-size: 12px;
     color: #333;
+    display: block;
 }
 
 
@@ -223,17 +294,63 @@ h2{
 }
 
 #project fieldset input[type=text]{
+    box-sizing: border-box;
     background: #FFF;
+    padding: 10px;
     font-family: 'Montserrat', sans-serif;
     font-size: 12px;
     text-align: left;
     font-weight: 300;
-    padding-bottom: 10px;
     border: 1px solid #dedede;
-    width: 95%;
+    width: 100%;
     border-radius: 2px;
+    display: block;
+    height: 40px;
 }
 
+/*
+#project fieldset input[type=text]{
+    box-sizing: border-box;
+    background: #FFF;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    text-align: left;
+    font-weight: 300;
+    border: 1px solid #dedede;
+    width: 100%;
+    border-radius: 2px;
+    display: block;
+}
+*/
+
+#project input:valid{
+    border-bottom: 1px solid #ccc;
+}
+
+#project .spanerror.active {
+    font-size: 12px;
+    text-transform: none;
+    border: 1px solid #ffd8dd;
+    position: relative;
+    top: -10px;
+    background-color: #FAEDED;
+    color: red;
+    padding: 5px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    box-shadow: none;
+}
+
+#project .spanerror, #project .spanerror-active  {
+    margin-bottom: 10px;
+}
+
+
+#project input:invalid:focus{
+    border-bottom: 1px solid red;
+}
 
 #project fieldset input[type=number]{
     box-sizing: border-box;
@@ -247,10 +364,11 @@ h2{
     width: 100%;
     border-radius: 2px;
     display: block;
+    height: 40px;
 }
 
-#project fieldset input:focus{
-    border: 1px solid #23d7d7;
+#project fieldset input:valid:focus{
+    border: 1px solid #23d7d7; /*23d7d7*/
 
 }
 
@@ -280,6 +398,7 @@ h2{
     margin-bottom: 4px;
     /*margin-top: 4px;*/
     margin-top: 0px;
+    margin-bottom: 12px;
 
 }
 
@@ -933,4 +1052,299 @@ tr:nth-child(even).ignored{
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+}
+
+
+
+/***********/
+
+.dialog-error{
+    background:  url("../img/error.png") no-repeat 10px 10px; /*21c7c7*/
+    background-size: 26px;
+    padding: 10px;
+    padding-left: 50px;
+}
+
+.dialog{
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.15);
+    overflow: auto;
+
+    /*
+        margin: 200px;
+        color: red;
+        background-color: #FFF;
+        text-align: center;
+        */
+}
+
+
+.dialog-container{
+    position: relative;
+    margin: 0 auto;
+    left: 0;
+    width: 400px;
+    top: 50%;
+    transform: perspective(1px) translateY(-50%);
+    /*height: 200px;*/
+    /*height: 100%;*/
+    padding: 10px;
+    background-color: #FFF;
+    overflow: auto;
+    display: block;
+    border-radius: 4px;
+    border: none;
+
+
+    /*
+        margin: 200px;
+        color: red;
+        background-color: #FFF;
+        text-align: center;
+        */
+}
+
+
+.dialog-header{
+    box-sizing: border-box;
+    display: block;
+    border-bottom: 1px solid #ececec;
+    width: 100%;
+    padding: 10px;
+
+}
+
+.dialog-header h1{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.dialog-footer{
+    box-sizing: border-box;
+    display: block;
+    border-top: 1px solid #ececec;
+    width: 100%;
+
+    padding: 10px;
+
+
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    bottom: 0;
+}
+
+.dialog-footer input{
+    padding: 10px;
+    width: 100px;
+    background-color: #FFF;
+    border: 1px solid #ececec;
+    /*
+    background-color: #ab98f9;
+    border: 1px solid #9574ea;
+    */
+    border-radius: 2px;
+    margin-left: 5px;
+
+}
+
+.dialog-footer input:last-of-type {
+    background-color: #ab98f9;
+    border: 1px solid #9574ea;
+    color: #FFF;
+}
+
+
+.dialog fieldset {
+    border: none;
+    text-transform: uppercase;
+    font-family: 'Lato',sans-serif;
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    padding-top: 8px;
+    margin-top: 10px;
+}
+
+.dialog label {
+    padding-left: 2px;
+    font-weight: 400;
+    font-size: 12px;
+    color: #333;
+    display: block;
+}
+
+
+.dialog fieldset input{
+    margin-top: 3px;
+    margin-bottom: 12px;
+}
+
+.dialog fieldset input[type=button]{
+
+}
+
+.dialog fieldset input[type=text]{
+    box-sizing: border-box;
+    background: #FFF;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    text-align: left;
+    font-weight: 300;
+    border: 1px solid #dedede;
+    width: 100%;
+    border-radius: 2px;
+    display: block;
+    height: 40px;
+}
+
+.dialog input:valid{
+    border-bottom: 1px solid #ccc;
+}
+
+.dialog .spanerror.active {
+    font-size: 12px;
+    text-transform: none;
+    border: 1px solid #ffd8dd;
+    position: relative;
+    top: -10px;
+    background-color: #FAEDED;
+    color: red;
+    padding: 5px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    box-shadow: none;
+}
+
+.dialog .spanerror, .dialog .spanerror-active  {
+    margin-bottom: 10px;
+}
+
+
+.dialog input:invalid:focus{
+    border-bottom: 1px solid red;
+}
+
+.dialog fieldset input[type=number]{
+    box-sizing: border-box;
+    background: #FFF;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    text-align: left;
+    font-weight: 300;
+    border: 1px solid #dedede;
+    width: 100%;
+    border-radius: 2px;
+    display: block;
+    height: 40px;
+}
+
+.dialog fieldset input:valid:focus{
+    border: 1px solid #23d7d7; /*23d7d7*/
+
+}
+
+.dialog .project-browse{
+    background: #21c7c7 url("../img/folder.png") no-repeat 10px 10px; /*21c7c7*/
+    background-size: 16px;
+    padding: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: block;
+    text-align: left;
+    color: #FFF;
+    border-radius: 2px;
+    border: 1px solid #1eb7b7;
+    margin: 0;
+}
+
+.dialog .project-browse:hover {
+    background-color: #23d7d7;
+
+}
+.dialog .input-field {
+    justify-content: space-between;
+    border: 1px solid #dedede;
+    border-radius: 2px;
+    margin-bottom: 4px;
+    /*margin-top: 4px;*/
+    margin-top: 0px;
+    margin-bottom: 12px;
+
+}
+
+.dialog .filepath {
+    display: block;
+    margin-left: 2px;
+    padding-top: 8px;
+    padding-left: 4px;
+    font-size: 12px;
+    text-transform: none;
+    font-weight: 300;
+    color: #333333;
+    /*color: #ccc;*/
+    /*text-transform: lowercase;*/
+
+}
+
+.dialog .project-path{
+    display: inline;
+
+    padding: 10px;
+    background-color: #FFF;
+}
+
+.dialog #save {
+    float: right;
+    border: 1px solid #9574ea;
+    background: #ab98f9;
+    color: #FFF;
+    padding: 10px;
+    border-radius: 2px;
+    width: 100px;
+}
+
+.dialog #save:hover {
+    background: #9574ea;
+}
+
+.dialog .game-name::placeholder{
+    font-size: 22px;
+    color: #ccc;
+}
+
+.dialog .game-name:focus{
+    border-bottom: 1px solid #23d7d7;
+
+}
+
+.dialog span{
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+
+}
+.dialog .game-name{
+    background: none;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 42px;
+    text-align: left;
+    font-weight: 300;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+    width: 100%;
+    margin-bottom: 20px;
 }

@@ -81,7 +81,6 @@ birka.compiler.Form.prototype.init = function(){
         inputBtns[i].setAttribute('value', 'Browse...');
         divs.push(Elem.appendNewClassElem(inputFields[i], 'div', 'output-row'));
         labels.push(Elem.appendNewElem(divs[i], 'label'));
-
     }
     labels[0].setAttribute('for', 'selectInputBtn');
     labels[0].innerText = 'Select input folder';
@@ -107,9 +106,9 @@ birka.compiler.Form.prototype.init = function(){
     this.outputPath = filepathBoxes[1];
 
     this.inputPath.innerHTML = 'No folder chosen.';
-    if(sessionStorage.projectLocation === undefined || sessionStorage.projectLocation === "") {
+    if(window.sessionStorage.output === undefined || window.sessionStorage.output === "") {
         this.outputPath.innerHTML = 'No folder chosen.';
     } else {
-        this.outputPath.innerHTML = sessionStorage.projectLocation;
+        this.outputPath.innerHTML = window.sessionStorage.output;
     }
 };

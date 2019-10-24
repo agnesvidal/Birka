@@ -1,4 +1,17 @@
+//------------------------------------------------------------------------------
+// Constructor scope
+//------------------------------------------------------------------------------
+/**
+ * ...
+ * @constructor
+ *
+ * @class
+ * @classdesc
+ */
 birka.compiler.MessageRow = function(tbody, status){
+    //--------------------------------------------------------------------------
+    // Public properties
+    //--------------------------------------------------------------------------
     /**
      * ...
      *
@@ -12,6 +25,13 @@ birka.compiler.MessageRow = function(tbody, status){
     this.status = 0;
 };
 
+//------------------------------------------------------------------------------
+// Public getter and setter methods
+//------------------------------------------------------------------------------
+/**
+ * @member {number} setStatus
+ * @memberof birka.compiler.MessageRow
+ */
 Object.defineProperty(birka.compiler.MessageRow.prototype, "setStatus", {
     set: function (value) {
         this.status = value;

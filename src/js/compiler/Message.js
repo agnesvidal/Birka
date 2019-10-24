@@ -1,4 +1,17 @@
+//------------------------------------------------------------------------------
+// Constructor scope
+//------------------------------------------------------------------------------
+/**
+ * ...
+ * @constructor
+ *
+ * @class
+ * @classdesc
+ */
 birka.compiler.Message = function(table){
+    //--------------------------------------------------------------------------
+    // Public properties
+    //--------------------------------------------------------------------------
     /**
      * ...
      *
@@ -17,7 +30,6 @@ birka.compiler.Message = function(table){
 /**
  * Creates row in table.
  *
- * @param   {Object} data ...
  * @returns {undefined}
  */
 birka.compiler.Message.prototype.create = function(table, pos) {
@@ -26,6 +38,10 @@ birka.compiler.Message.prototype.create = function(table, pos) {
     table.insertBefore(this.tbody, table.children[pos+1]);
 };
 
+/**
+ *
+ * @param status
+ */
 birka.compiler.Message.prototype.addMessage = function(status) {
     if(status.length > 0){
         for(var i = 0; i<status.length; i++) {
@@ -41,7 +57,11 @@ birka.compiler.Message.prototype.addMessage = function(status) {
     this.tbody.style.display = "none";
 };
 
-
+/**
+ *
+ * @param status
+ * @param pos
+ */
 birka.compiler.Message.prototype.addMessageAt = function(status, pos) {
         for(var i = 0; i<status.length; i++) {
             var msg = new birka.compiler.MessageRow(this.tbody, status[i]);
@@ -51,6 +71,11 @@ birka.compiler.Message.prototype.addMessageAt = function(status, pos) {
     this.tbody.style.display = "none";
 };
 
+/**
+ *
+ * @param status
+ * @param pos
+ */
 birka.compiler.Message.prototype.removeDup = function(status, pos) {
     for(var i = 0; i<this.messages.length; i++) {
         if(this.messages[i].status === 2) {
@@ -60,7 +85,10 @@ birka.compiler.Message.prototype.removeDup = function(status, pos) {
     }
 };
 
-
+/**
+ *
+ * @return {boolean}
+ */
 birka.compiler.Message.prototype.containsDuplicateErr = function() {
     var flag = false;
     for(var i = 0; i<this.messages.length; i++) {
@@ -72,5 +100,3 @@ birka.compiler.Message.prototype.containsDuplicateErr = function() {
     }
     return flag;
 };
-
-

@@ -3,16 +3,18 @@
 //------------------------------------------------------------------------------
 
 /**
- * @namespace birka
+ * ...
+ * 
+ * @namespace %APP%
  */
-var birka = function(){
+var %APP% = function() {
 
     //--------------------------------------------------------------------------
     // Public static scope
     //--------------------------------------------------------------------------
-
+    
     /**
-     * The object's public scope, represented by an object.
+     * ...
      *
      * @type {Object}
      * @private
@@ -22,49 +24,40 @@ var birka = function(){
     //--------------------------------------------------------------------------
     // Package structure
     //--------------------------------------------------------------------------
-    /**
-     * ...
-     *
-     * @namespace compiler
-     * @memberof birka
-     * @since 1.0
-     */
-    m_this.compiler = {};
 
     /**
      * ...
      *
-     * @namespace project
-     * @memberof birka
+     * @namespace data
+     * @memberof %APP%
      * @since 1.0
      */
-    m_this.project = {};
+    m_this.data = {};
 
     /**
-     * The system package containing the project's core classes.
+     * ...
+     *
+     * @namespace scene
+     * @memberof %APP%
+     * @since 1.0
+     */
+    m_this.scene = {};
+
+    /**
+     * ...
      *
      * @namespace system
-     * @memberof birka
+     * @memberof %APP%
      * @since 1.0
      */
     m_this.system = {};
-
-    /**
-     * ...
-     *
-     * @namespace ui
-     * @memberof birka
-     * @since 1.0
-     */
-    m_this.ui = {};
-
 
     //--------------------------------------------------------------------------
     // Return public scope object
     //--------------------------------------------------------------------------
 
     /**
-     * Appending project namespace to vendor namespace.
+     * ...
      */
     return m_this;
 

@@ -1,0 +1,58 @@
+//------------------------------------------------------------------------------
+// Constructor scope
+//------------------------------------------------------------------------------
+
+/**
+ * ...
+ *
+ * @constructor
+ * @extends rune.scene.Scene
+ *
+ * @class
+ * @classdesc
+ * 
+ * ...
+ */
+%APP%.scene.SceneMain = function() {
+
+    //--------------------------------------------------------------------------
+    // Super call
+    //--------------------------------------------------------------------------
+    
+    /**
+     * ...
+     */
+    rune.scene.Scene.call(this);
+};
+
+//------------------------------------------------------------------------------
+// Inheritance
+//------------------------------------------------------------------------------
+
+%APP%.scene.SceneMain.prototype = Object.create(rune.scene.Scene.prototype);
+%APP%.scene.SceneMain.prototype.constructor = %APP%.scene.SceneMain;
+
+//------------------------------------------------------------------------------
+// Override public methods
+//------------------------------------------------------------------------------
+
+/**
+ * @override
+ */
+%APP%.scene.SceneMain.prototype.init = function() {
+
+};
+
+/**
+ * @override
+ */
+%APP%.scene.SceneMain.prototype.update = function() {
+
+};
+
+/**
+ * @override
+ */
+%APP%.scene.SceneMain.prototype.dispose = function() {
+
+};

@@ -1,14 +1,19 @@
 {
-  "name": "helper",
+  "name": "birka",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager . Birka"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^6.0.10"
+    "electron": "^6.0.10",
+    "electron-packager": "^14.0.6"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.1"
   }
 }

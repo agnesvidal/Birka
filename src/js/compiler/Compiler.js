@@ -73,13 +73,51 @@ birka.compiler.Compiler = function() {
      */
     this.warnings = 0;
 
-    this.app = require('electron').remote;
-    this.dialog = this.app.dialog;
-    this.fs = require('fs');
-    this.path = require('path');
+    /**
+     * ...
+     *
+     * @type {birka.project.Modal}
+     */
+    this.modal = null;
 };
+//------------------------------------------------------------------------------
+// Public Static constants
+//------------------------------------------------------------------------------
+/**
+ * Reference to Electron dialog API
+ *
+ * @type {Electron.Dialog}
+ * @constant
+ * @default
+ */
+birka.compiler.Compiler.dialog = require('electron').remote.dialog;
 
+/**
+ * Array containing allowed file types.
+ *
+ * @type {string[]}
+ * @constant
+ * @default
+ */
 birka.compiler.Compiler.ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "audio/ogg", "audio/mpeg", "text/xml", "application/json"];
+
+/**
+ * Reference to Node.js FileSystem module
+ *
+ * @type {module:fs}
+ * @constant
+ * @default
+ */
+birka.compiler.Compiler.fs = require('fs');
+
+/**
+ * Reference to Node.js Path module
+ *
+ * @type {module:path}
+ * @constant
+ * @default
+ */
+birka.compiler.Compiler.path = require('path');
 
 //------------------------------------------------------------------------------
 // Inheritance
@@ -96,10 +134,23 @@ birka.compiler.Compiler.prototype.constructor = birka.compiler.Compiler;
  * @returns {undefined}
  */
 birka.compiler.Compiler.prototype.init = function(){
-    console.log(localStorage.projectName);
-    console.log(localStorage.projectLocation);
+    if(window.sessionStorage.loaded === undefined) {
+        //alert('Select a project first.');
+        //this.modals = [];
+        /*
+        this.modals.push(new birka.project.Modal(this.modals, {
+            title: ['Error'],
+            message: ['Select or create a project first.']
+        }));
+        */
+        this.initHeader();
 
-    this.m_initUI(this.m_initModules);
+        var div = Elem.appendNewClassElem(this.toolHeader,'div','no-project');
+        var pElem = Elem.appendNewElem(div,'p');
+        Elem.text(pElem, "No project loaded...");
+    } else {
+    this.m_initUI();
+    }
 };
 
 //------------------------------------------------------------------------------
@@ -108,10 +159,9 @@ birka.compiler.Compiler.prototype.init = function(){
 /**
  * Initializes user interface.
  *
- * @param callback
  * @returns {undefined}
  */
-birka.compiler.Compiler.prototype.m_initUI = function(callback){
+birka.compiler.Compiler.prototype.m_initUI = function(){
     this.initHeader();
     this.form = new birka.compiler.Form(this.toolHeader);
     this.form.init();
@@ -120,17 +170,6 @@ birka.compiler.Compiler.prototype.m_initUI = function(callback){
     this.footer = new birka.compiler.Footer(this.toolWrapper);
     this.footer.init();
     this.m_addListeners();
-    callback();
-};
-
-/**
- * ...
- *
- * @returns {undefined}
- */
-birka.compiler.Compiler.prototype.m_initModules = function(){
-    this.fs = require('fs');
-    this.path = require('path');
 };
 
 /**
@@ -167,21 +206,26 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
     //@TODO
     // Checks whether there are any errors...
     for(var i=0; i<temp.length; i++) {
-        console.log(temp[i].status.length);
         if(temp[i].status.length > 0) {
             for(var j=0; j< temp[i].status.length; j++){
                 if((temp[i].status[j] === 1) || (temp[i].status[j] === 2)){
-                    console.log(temp);
-                    console.log("Error. Can't compile.");
+                    //console.log(temp);
+                    //console.log("Error. Can't compile.");
+                    m_this.modal = new birka.project.Modal(m_this.modal, {
+                        type: 'error',
+                        title: 'Can\'t compile',
+                        message: 'Your selected folder contains errors.'
+                    });
                     return;
                 }
             }
         }
     }
-    console.log('sessionStorage projectPath', sessionStorage.projectLocation);
-    console.log('For compilation:', temp, m_this.outputPath);
+    //console.log('sessionStorage projectPath', window.sessionStorage.projectLocation);
+    //console.log('For compilation:', temp, m_this.outputPath);
 
-    // @TODO Skicka array (temp) till ...
+    var res = new birka.Resourcefile(window.sessionStorage.name, window.sessionStorage.projectLocation);
+    res.compile(temp);
 };
 
 /**
@@ -192,12 +236,12 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
  */
 birka.compiler.Compiler.prototype.m_chooseOutput = function(e) {
     var m_this = this;
-    this.dialog.showOpenDialog({
+    birka.compiler.Compiler.dialog.showOpenDialog({
         title: "Select a folder",
         properties: ['openDirectory']
     }, function(folderPaths) {
         if(folderPaths === undefined || folderPaths.length === 0){
-            //console.log("No destination folder selected");
+            console.log("No destination folder selected");
             return;
         } else {
             m_this.outputPath = folderPaths[0];
@@ -215,12 +259,12 @@ birka.compiler.Compiler.prototype.m_chooseOutput = function(e) {
  */
 birka.compiler.Compiler.prototype.m_uploadFiles = function(e){
     var m_this = this;
-    this.dialog.showOpenDialog({
+    birka.compiler.Compiler.dialog.showOpenDialog({
         title: "Select a folder",
         properties: ['openDirectory']
     }, function(folderPaths) {
         if(folderPaths === undefined || folderPaths.length === 0){
-            //console.log("No destination folder selected");
+            console.log("No destination folder selected");
             return;
         } else {
             m_this.m_emptyTable();
@@ -273,9 +317,9 @@ birka.compiler.Compiler.prototype.m_emptyTable = function(){
  */
 birka.compiler.Compiler.prototype.m_walkDir = function(dir) {
     var m_this = this;
-    this.fs.readdirSync(dir).forEach(function(file) {
-        var fullPath = this.path.join(dir, file);
-        if (this.fs.lstatSync(fullPath).isDirectory()) {
+    birka.compiler.Compiler.fs.readdirSync(dir).forEach(function(file) {
+        var fullPath = birka.compiler.Compiler.path.join(dir, file);
+        if (birka.compiler.Compiler.fs.lstatSync(fullPath).isDirectory()) {
             m_this.m_walkDir(fullPath);
         } else {
             if(!fullPath.match(/(^|\/)\.[^\/\.]/g)){
@@ -331,7 +375,7 @@ birka.compiler.Compiler.prototype.m_getData = function(file) {
     //create row and add listener to textinput
     var row = new birka.compiler.TableRow(this.table.tableElem);
     row.create(file);
-    row.textInput.addEventListener('input',function(){m_this.m_changeName(event, row)});
+    row.textInput.addEventListener('input',function(event){m_this.m_changeName(event, row)});
 
     // if error/warning -> add message and increment error/warning
     if(file.status.length > 0) {
@@ -423,7 +467,6 @@ birka.compiler.Compiler.prototype.m_changeName = function(e, row) {
                 // checks if there are more files with the old name that are now solved too.
                 this.m_checkRemainingDuplicates(fileObj.file.name);
             }
-
             this.files[i].file.setName = row.textInput.value;
         }
     }
@@ -483,7 +526,6 @@ birka.compiler.Compiler.prototype.m_addDuplicateError = function(fileObj, pos) {
     fileObj.message.addMessage(2);
 
     //if(fileObj.file.status.indexOf(10) > -1){ //@TODO
-    console.log(fileObj.file.hasWarning());
     if(fileObj.file.hasWarning()){ //@TODO
         fileObj.row.m_styleRow(5); // remove warning, add error style
     } else{
