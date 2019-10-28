@@ -1,5 +1,5 @@
 @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
-*{padding: 0; margin: 0; /*box-sizing: border-box*/}
+*{padding: 0; margin: 0; box-sizing: border-box}
 
 body {
     background-color: #f1f3f6;
@@ -522,6 +522,10 @@ input {
 
 }
 
+.input-field:nth-of-type(2) { /*@TODO add id like "compiler"*/
+    margin-left: 120px;
+}
+
 
 /*
 .input-field input[type=button] {
@@ -849,12 +853,12 @@ td:nth-child(4) {
 }
 
 
-.msg {
+.problems-container {
     /*display: none;*/
     padding: 10px;
 }
 
-.msg.error td {
+.problems-container.error td {
     padding: 10px;
     padding-left: 40px;
     color: #ff000d;
@@ -865,7 +869,7 @@ td:nth-child(4) {
     /*border-left: 6px solid #f4504e;*/
 }
 
-.msg.warning td {
+.problems-containerwarning td {
     padding: 10px;
     color: #ff9a45;
     padding-left: 40px;
@@ -954,13 +958,13 @@ tr .coll-cell:hover:after {
     padding-left: 20px;
 }
 
-.msg-error{
+.problems-error{
     background: url("../img/error.png") no-repeat;
     background-size: 18px;
     padding-left: 20px;
 }
 
-.msg-warning{
+.problems-warning{
     background: url("../img/warning.png") no-repeat;
     background-size: 18px;
     padding-left: 20px;

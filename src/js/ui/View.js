@@ -8,7 +8,9 @@
  * @class
  * @classdesc
  */
-birka.Tool = function(name) {
+birka.ui.View = function(name) {
+
+    this.element = null;
     /**
      * Name of the tool.
      *
@@ -19,11 +21,9 @@ birka.Tool = function(name) {
     /**
      * Reference to the tool's wrapper.
      *
-     * @type {HTMLElement} toolWrapper
+     * @type {Element} toolWrapper
      */
-    this.appContent = null; // @TODO Alternativt skicka med toolWrapper från Main
-
-    this.toolElem = null;
+    this.toolHeader = null;
 
 };
 
@@ -35,12 +35,11 @@ birka.Tool = function(name) {
  *
  * @returns undefined
  */
-birka.Tool.prototype.initHeader = function(){
-    this.appContent = document.getElementById('app-content');
-    this.toolWrapper = document.getElementById('tool-wrapper');
-    this.toolHeader = Elem.appendNewClassElem(this.toolWrapper, 'div', 'tool-header');
+birka.ui.View.prototype.initHeader = function(){
+    this.element = document.getElementById('tool-wrapper');
+    this.toolHeader = Elem.appendNewClassElem(this.element, 'div', 'tool-header');
     var toolName = Elem.appendNewElem(this.toolHeader,'h2');
-    Elem.text(toolName, this.name);
+    Elem.setText(toolName, this.name);
 
     this.m_initTitle();
 };
@@ -53,6 +52,6 @@ birka.Tool.prototype.initHeader = function(){
  *
  * @returns undefined
  */
-birka.Tool.prototype.m_initTitle = function(){
-    document.title = 'Birka ' + this.name;
+birka.ui.View.prototype.m_initTitle = function(){
+    document.title = 'Birka ' + this.name; //@TODO "Birka" or project name?
 };

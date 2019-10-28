@@ -7,8 +7,8 @@ java -jar ./../bin/compiler.jar \
 --compilation_level SIMPLE_OPTIMIZATIONS \
 --isolation_mode IIFE \
 --js "./../../src/js/scope/Manifest.js" \
+--js "./../../src/js/ui/View.js" \
 --js "./../../src/js/ui/Elem.js" \
---js "./../../src/js/Tool.js" \
 --js "./../../src/js/Projectdirectory.js" \
 --js "./../../src/js/Resourcefile.js" \
 --js "./../../src/js/project/Toolbar.js" \
@@ -17,9 +17,7 @@ java -jar ./../bin/compiler.jar \
 --js "./../../src/js/project/ElementManager.js" \
 --js "./../../src/js/project/Project.js" \
 --js "./../../src/js/project/ProjectManager.js" \
---js "./../../src/js/compiler/ui/Table.js" \
---js "./../../src/js/compiler/ui/Form.js" \
---js "./../../src/js/compiler/ui/Footer.js" \
+--js "./../../src/js/compiler/ui/CompilerView.js" \
 --js "./../../src/js/compiler/File.js" \
 --js "./../../src/js/compiler/Message.js" \
 --js "./../../src/js/compiler/MessageRow.js" \
