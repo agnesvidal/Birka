@@ -20,7 +20,7 @@ birka.compiler.File = function(blob, path) {
     this.init();
 };
 
-birka.compiler.File.ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "audio/ogg", "audio/mpeg", "application/xml", "application/json"];
+birka.compiler.File.ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/gif", "audio/ogg", "audio/mpeg", "application/xml", "application/json"];
 
 //------------------------------------------------------------------------------
 // Public getter and setter methods
@@ -31,7 +31,8 @@ birka.compiler.File.ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "audio/ogg"
  */
 Object.defineProperty(birka.compiler.File.prototype, "setStatus", {
     set: function (value) {
-        this.status.push(value);
+        var m_this = this;
+        m_this.status.push(value);
     }
 });
 
@@ -41,7 +42,8 @@ Object.defineProperty(birka.compiler.File.prototype, "setStatus", {
  */
 Object.defineProperty(birka.compiler.File.prototype, "setName", {
     set: function (value) {
-        this.name = value;
+        var m_this = this;
+        m_this.name = value;
     }
 });
 
@@ -98,7 +100,7 @@ birka.compiler.File.prototype.hasWarning = function() {
 /**
  * ...
  *
- * @returns {number}
+ * @returns {undefined}
  */
 birka.compiler.File.prototype.m_checkStatus = function() {
     //console.log('10MB', this.bytesToSize(10000000));
@@ -107,7 +109,7 @@ birka.compiler.File.prototype.m_checkStatus = function() {
         this.setStatus = 1;
     }
 
-    if((this.blob.type === "image/png") || (this.blob.type === "image/jpg")){
+    if((this.blob.type === "image/png") || (this.blob.type === "image/jpg") || (this.blob.type === "image/gif")){
         if(this.blob.size > 1100000){ //@TODO change to: 1100000 /* = 1MB */
             this.setStatus = 10;
         }
@@ -132,7 +134,10 @@ birka.compiler.File.prototype.m_checkStatus = function() {
 birka.compiler.File.prototype.m_getFileName = function(path){
     var filename = path.replace(/^.*[\\\/]/, '');
     filename = filename.split('.').slice(0, -1).join('.');
-    filename = filename.replace(' ', '_');
+    if(filename.indexOf(' ') > -1) {
+        filename = filename.replace(' ', '_');
+        this.setStatus = 12;
+    }
     return filename;
 };
 

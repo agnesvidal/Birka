@@ -39,6 +39,9 @@ birka.project.CreateModal = function(modal, options) {
 
     this.buttons = [];
 
+
+    this.paths = []; // Temporary test
+
     this.init();
 };
 
@@ -88,7 +91,7 @@ birka.project.CreateModal.prototype.m_initCustom = function() {
     var div = Elem.appendNewElem(this.content,'div');
 
     var span = Elem.appendNewElem(div,'span');
-    Elem.text(span, "Project name");
+    Elem.setText(span, "Project name");
     this.inputs = [];
 
     var projectName = Elem.appendNewClassElem(div,'input','game-name');
@@ -182,6 +185,8 @@ birka.project.CreateModal.prototype.m_initCustom = function() {
 //@TODO Optimize
 birka.project.CreateModal.prototype.save = function(callback, caller) {
     var m_this = this;
+
+
     if (!m_this.inputs[0].validity.valid) {
         m_this.spans[0].innerHTML = "Fill in a project name.";
         m_this.spans[0].className = "spanerror active";
@@ -205,29 +210,136 @@ birka.project.CreateModal.prototype.save = function(callback, caller) {
             if(m_this.inputs[2].validity.valid)
                 if(m_this.locationpath.innerHTML !== "") {
 
-                    var projectObj = {
-                        name: m_this.inputs[0].value,
-                        location: m_this.locationpath.innerHTML,
-                        id: m_this.inputs[1].value,
-                        title: m_this.inputs[2].value
-                    };
+                    if(m_this.m_walkDir(m_this.locationpath.innerHTML, m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value) === false){
+                        var filename = m_this.locationpath.innerHTML.replace(/^.*[\\\/]/, '');
 
-                    window.sessionStorage.setItem('loaded', 'true');
-                    window.sessionStorage.setItem('name', m_this.inputs[0].value);
-                    window.sessionStorage.setItem('projectLocation', m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
-                    window.sessionStorage.setItem('output', m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value + '/src/data');
-                    //console.log(projectObj);
+                        birka.project.CreateModal.dialog.showMessageBox({
+                            title: "Warning",
+                            type: "warning",
+                            message: "A file or folder with this name already exists in the folder " + filename + ". Replacing it will overwrite its current contents.",
+                            icon: './src/img/error.png',
+                            buttons: ['Overwrite', 'Cancel'],
+                            cancelId: 1
+                        }, function (response) {
+                            if(response === 1) {
+                            } else if (response === 0) {
+                                var projectObj = {
+                                    name: m_this.inputs[0].value,
+                                    location: m_this.locationpath.innerHTML,
+                                    id: m_this.inputs[1].value,
+                                    title: m_this.inputs[2].value
+                                };
 
-                    var pd = new birka.Projectdirectory(projectObj);
-                    pd.create();
+                                window.sessionStorage.setItem('loaded', 'true');
+                                window.sessionStorage.setItem('name', m_this.inputs[0].value);
+                                window.sessionStorage.setItem('projectLocation', m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
+                                window.sessionStorage.setItem('output', m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value + '/src/data');
+                                //console.log(projectObj);
 
-                    m_this.m_close();
-                    callback(caller);
+                                if(window.localStorage.getItem('recentProjects') !== null) {
+                                    var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
+                                    console.log(recentP);
+                                    recentP.projects.unshift(m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
+                                    if(recentP.projects.length > 5) {
+                                        recentP.projects.splice(5);
+                                    }
+                                    window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
+                                } else {
+                                    var recentP = {
+                                        projects: [m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value]
+                                    };
+                                    window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
+                                    console.log(window.localStorage.getItem('recentProjects'))
+                                    //window.localStorage.setItem('', JSON.stringify());
+                                }
+
+                                var pd = new birka.Projectdirectory(projectObj);
+                                pd.create();
+
+                                m_this.m_close();
+                                callback(caller);
+                            }
+                        });
+                    } else {
+                        var projectObj = {
+                            name: m_this.inputs[0].value,
+                            location: m_this.locationpath.innerHTML,
+                            id: m_this.inputs[1].value,
+                            title: m_this.inputs[2].value
+                        };
+
+                        window.sessionStorage.setItem('loaded', 'true');
+                        window.sessionStorage.setItem('name', m_this.inputs[0].value);
+                        window.sessionStorage.setItem('projectLocation', m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
+                        window.sessionStorage.setItem('output', m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value + '/src/data');
+                        //console.log(projectObj);
+
+                        if(window.localStorage.getItem('recentProjects') !== null) {
+                            var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
+                            //console.log(recentP);
+                            recentP.projects.unshift(m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
+                            if(recentP.projects.length > 5) {
+                                recentP.projects.splice(5);
+                            }
+                            window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
+                        } else {
+                            var recentP = {
+                                projects: [m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value]
+                            };
+                            window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
+                            console.log(window.localStorage.getItem('recentProjects'))
+                        }
+
+                        var pd = new birka.Projectdirectory(projectObj);
+                        pd.create();
+
+                        m_this.m_close();
+                        callback(caller);
+                    }
+
                 }
+
+};
+
+birka.project.CreateModal.prototype.m_walkDir = function(dir, newPath) {
+    var m_this = this;
+    var paths = [];
+    var replace = true;
+
+    birka.project.CreateModal.fs.readdirSync(dir).forEach(function(file) {
+        var fullPath = birka.project.ProjectManager.path.join(dir, file);
+            if(!fullPath.match(/(^|\/)\.[^\/\.]/g)){
+                paths.push(fullPath);
+        }
+    });
+
+    for(var i=0; i<paths.length; i++) {
+        if(paths[i] === newPath){
+            replace = false;
+        }
+    }
+
+    return replace;
+};
+
+
+birka.project.CreateModal.prototype.m_electronDialog = function(msg, details) {
+    birka.project.CreateModal.dialog.showMessageBox({
+        title: "Warning",
+        type: "warning",
+        message: msg,
+        icon: './src/img/error.png',
+        buttons: ['Replace', 'Cancel'],
+        cancelId: 1,
+        detail: details
+    }, function (response) {
+        console.log(response);
+        });
 };
 
 birka.project.CreateModal.prototype.m_chooseLocation = function(){
     var m_this = this;
+
     birka.project.CreateModal.dialog.showOpenDialog({
         title: "Select a folder",
         properties: ['openDirectory']
@@ -248,6 +360,7 @@ birka.project.CreateModal.prototype.m_chooseLocation = function(){
 
         }
     });
+
 };
 
 // Overrides method

@@ -15,7 +15,7 @@ birka.compiler.Message = function(table){
     /**
      * ...
      *
-     * @type {HTMLElement}
+     * @type {Element}
      */
     //this.tbody = Elem.appendNewElem(table, 'tbody');
     this.tbody = null;

@@ -219,7 +219,7 @@ h2{
 .project-right{
     box-sizing: border-box;
     /*background-color: #fff;*/
-    width: 40%;
+    width: 45%;
     height: calc(100vh - 70px);
     padding: 20px;
     margin-right: 40px;
@@ -858,7 +858,7 @@ td:nth-child(4) {
     padding: 10px;
 }
 
-.problems-container.error td {
+.msg.error td {
     padding: 10px;
     padding-left: 40px;
     color: #ff000d;
@@ -869,7 +869,7 @@ td:nth-child(4) {
     /*border-left: 6px solid #f4504e;*/
 }
 
-.problems-containerwarning td {
+.msg.warning td {
     padding: 10px;
     color: #ff9a45;
     padding-left: 40px;
@@ -1209,7 +1209,7 @@ tr:nth-child(even).ignored{
     height: 40px;
 }
 
-.dialog input:valid{
+input:valid{
     border-bottom: 1px solid #ccc;
 }
 
@@ -1233,11 +1233,20 @@ tr:nth-child(even).ignored{
 }
 
 
-.dialog input:invalid:focus{
+input:invalid:focus{
     border-bottom: 1px solid red;
 }
 
-.dialog fieldset input[type=number]{
+.fileIndex input:required:invalid{
+    border-bottom: 1px solid red;
+
+}
+
+input:invalid{
+    border-bottom: 1px solid red;
+}
+
+fieldset input[type=number]{
     box-sizing: border-box;
     background: #FFF;
     padding: 10px;
@@ -1351,4 +1360,38 @@ tr:nth-child(even).ignored{
     border-radius: 0;
     width: 100%;
     margin-bottom: 20px;
+}
+
+
+#project .recent-projects {
+
+}
+
+#project .recent-projects h3 {
+    font-weight: 400;
+    font-size: 1em;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0;
+    padding-left: 4px;
+    margin-bottom: 10px;
+    border-left: 2px solid #000;
+
+}
+
+#project .recent-projects a > div {
+    background-color: #ebebeb;
+    margin-bottom: 0.5em;
+    padding: 1em;
+}
+
+#project .recent-projects a > div:hover {
+    color: #ccc;/*
+    background-color: #e7e7e7;*/
+}
+
+#project .recent-projects p {
+    padding: 0;
+    text-align: left;
 }

@@ -137,7 +137,9 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
     // Checks whether there are any errors...
     for(var i=0; i<temp.length; i++) {
         if(temp[i].status.length > 0) {
+            //console.log(temp[i]);
             for(var j=0; j< temp[i].status.length; j++){
+                //console.log(temp[i].name);
                 if((temp[i].status[j] === 1) || (temp[i].status[j] === 2)){
                     //console.log(temp);
                     //console.log("Error. Can't compile.");
@@ -149,12 +151,20 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
                     return;
                 }
             }
+        } else if(temp[i].name === ""){
+            m_this.modal = new birka.project.Modal(m_this.modal, {
+                type: 'error',
+                title: 'Can\'t compile',
+                message: 'One or more resources is not named.'
+            });
+            return;
         }
     }
     //console.log('sessionStorage projectPath', window.sessionStorage.projectLocation);
 
     var res = new birka.Resourcefile(window.sessionStorage.name, window.sessionStorage.projectLocation);
     res.compile(temp);
+
 };
 
 /**

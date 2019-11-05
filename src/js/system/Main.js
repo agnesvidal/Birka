@@ -56,6 +56,8 @@ birka.system.Main.init = function() {
 birka.system.Main.m_initUI = function() {
     this.projectManager = new birka.project.ProjectManager(birka.system.Main.m_addProject);
     this.projectManager.init();
+    //console.log(window);
+
 };
 
 

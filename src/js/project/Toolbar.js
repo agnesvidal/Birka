@@ -35,7 +35,8 @@ birka.project.Toolbar = function() {
  */
 Object.defineProperty(birka.project.Toolbar.prototype, "tabs", {
     get: function () {
-        return this.m_tabs;
+        var m_this = this;
+        return m_this.m_tabs;
     }
 });
 

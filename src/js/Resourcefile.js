@@ -217,4 +217,5 @@ birka.Resourcefile.prototype.m_onComplete = function(data) {
     this.m_project = "";
     this.m_output = "";
     console.log('Resource file has been saved!');
+    alert('Resource file has been saved!')
 };

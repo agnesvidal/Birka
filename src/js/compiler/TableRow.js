@@ -13,7 +13,7 @@ birka.compiler.TableRow = function(table) {
     /**
      * ...
      *
-     * @type {HTMLElement}
+     * @type {Element}
      */
     this.tbody = Elem.appendNewElem(table, 'tbody');
 
@@ -29,7 +29,7 @@ birka.compiler.TableRow = function(table) {
     /**
      * ...
      *
-     * @type {HTMLElement}
+     * @type {Element}
      */
     this.m_parentTable = table;
 
@@ -43,7 +43,7 @@ birka.compiler.TableRow = function(table) {
     /**
      * ...
      *
-     * @type {null}
+     * @type {Element}
      */
     this.textInput = null;
 
@@ -102,7 +102,7 @@ birka.compiler.TableRow.prototype.m_createCells = function(data) {
 /**
  * Adds checkbox to row.
  *
- * @param   {HTMLElement} td ...
+ * @param   {Element} td ...
  * @returns {undefined}
  */
 birka.compiler.TableRow.prototype.m_addCheckbox = function(td) {
@@ -118,7 +118,7 @@ birka.compiler.TableRow.prototype.m_addCheckbox = function(td) {
 /**
  * Toggles whether the row/file is to be included when compiling.
  *
- * @param   {event} e
+ * @param   {Event} e
  * @returns {undefined}
  */
 birka.compiler.TableRow.prototype.m_toggleInclude = function(e){
@@ -130,7 +130,7 @@ birka.compiler.TableRow.prototype.m_toggleInclude = function(e){
 /**
  * Creates text input for filename and writes default name.
  *
- * @param   {HTMLElement}   td
+ * @param   {Element}   td
  * @param   {String}        name
  * @returns {undefined}
  */
@@ -138,6 +138,12 @@ birka.compiler.TableRow.prototype.m_inputName = function(td, name) {
     this.textInput = Elem.appendNewElem(td, 'input');
     this.textInput.setAttribute('type', 'text');
     this.textInput.setAttribute('value', name);
+    this.textInput.setAttribute('required','');
+    this.textInput.addEventListener('keypress', function(e){
+      if(e.keyCode === 32){
+          e.preventDefault();
+        }
+    })
 };
 
 /**
@@ -178,6 +184,8 @@ birka.compiler.TableRow.prototype.m_styleRow = function(status) {
         case 10: this.element.classList.add('warning');
                 break;
         case 11: this.element.classList.add('warning');
+            break;
+        case 12: this.element.classList.add('warning');
             break;
         case 5: this.element.classList.remove('warning');
                 this.element.classList.add('error');

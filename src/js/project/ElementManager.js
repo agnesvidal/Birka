@@ -16,49 +16,26 @@ birka.project.ElementManager = function() {
 
     /**
      *
-     * @type {null}
+     * @type {Element}
      */
     this.projectElem = null;
 
     /**
      *
-     * @type {Array}
+     * @type {Object}
      */
     this.buttons = {};
 
     /**
      *
-     * @type {null}
+     * @type {Element}
      */
     this.rightElem = null;
 
-    /**
-     *
-     * @type {null}
-     */
-    this.projectName = null;
+    this.paths = [];
 
-    /**
-     *
-     * @type {null}
-     */
-    this.locationpath = null;
+    this.links = [];
 
-    /**
-     *
-     * @type {null}
-     */
-    this.browseBtn = null;
-
-    /**
-     *
-     * @type {null}
-     */
-    this.saveBtn = null; //@TODO Rename
-
-    this.form = null;
-
-    this.formInputElems = null;
 };
 
 //------------------------------------------------------------------------------
@@ -75,10 +52,6 @@ birka.project.ElementManager.prototype.removeElems = function() {
     }
     //Main.allApps.splice(app, 1);
     //this.m_activeTool = null;
-};
-
-birka.project.ElementManager.prototype.createProjectForm = function() {
-    this.m_createFormElems();
 };
 
 //------------------------------------------------------------------------------
@@ -99,9 +72,9 @@ birka.project.ElementManager.prototype.m_initLeft = function() {
 
     var leftElem = Elem.appendNewClassElem(this.projectElem,'div','project-left');
     var h2 = Elem.appendNewElem(leftElem,'h2');
-    Elem.text(h2, "Let's get started!");
+    Elem.setText(h2, "Let's get started!");
     var pElem = Elem.appendNewElem(leftElem,'p');
-    Elem.text(pElem, "Start by selecting an existing project or create a new project.");
+    Elem.setText(pElem, "Start by selecting an existing project or create a new project.");
 
     var div = Elem.appendNewElem(leftElem,'div');
     var inputBtns = [];
@@ -112,7 +85,7 @@ birka.project.ElementManager.prototype.m_initLeft = function() {
     inputBtns[0] = Elem.appendNewElem(div,'input');
     inputBtns[0].setAttribute('type', 'button');
     var h3 = Elem.appendNewElem(div,'h3');
-    Elem.text(h3, "OR");
+    Elem.setText(h3, "OR");
     inputBtns[1] = Elem.appendNewElem(div,'input');
     inputBtns[1].setAttribute('type', 'button');
     inputBtns[0].setAttribute('value', 'Choose project...');
@@ -134,9 +107,57 @@ birka.project.ElementManager.prototype.m_initLeft = function() {
  */
 birka.project.ElementManager.prototype.m_initRight = function() {
     this.rightElem = Elem.appendNewClassElem(this.projectElem,'div','project-right');
+    //var div = Elem.appendNewClassElem(this.rightElem,'div','recent-projects');
+    var list = Elem.appendNewClassElem(this.rightElem,'div','recent-projects');
+
+    var pElem = Elem.appendNewElem(list,'h3');
+    Elem.setText(pElem, "Open recent project");
+
+    //var links = [];
+
+    //var list = Elem.appendNewElem(this.rightElem,'ul');
+    var listElems = [];
+    //var paths = [];
+
+    var projectNames = [];
+//console.log(window.localStorage.getItem('recentProjects') );
+
+    if(window.localStorage.getItem('recentProjects') !== null){
+        var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
+        if(recentP.projects.length > 0 ){
+            for(var i=0; i<recentP.projects.length; i++){
+                /*
+                listElems.push(Elem.appendNewElem(list,'li'));
+                links.push(Elem.appendNewElem(listElems[i],'a'));
+                Elem.setText(links[i], recentP.projects[i]);
+                links[i].setAttribute('href', recentP.projects[i])
+                */
+
+                this.links.push(Elem.appendNewElem(list,'a'));
+                this.links[i].setAttribute('href', "#");
+                listElems.push(Elem.appendNewElem(this.links[i],'div'));
+
+
+                projectNames.push(Elem.appendNewElem(listElems[i],'h4'));
+                var filename = recentP.projects[i].replace(/^.*[\\\/]/, '');
+                Elem.setText(projectNames[i], filename);
+
+                this.paths.push(Elem.appendNewElem(listElems[i],'p'));
+                Elem.setText(this.paths[i], recentP.projects[i]);
+                //links[i].setAttribute('href', recentP.projects[i])
+            }
+        } else {
+            var noP = Elem.appendNewElem(list,'p');
+            Elem.setText(noP, '...');
+        }
+    }
+
+
+    /*
     var div = Elem.appendNewClassElem(this.rightElem,'div','no-project');
     var pElem = Elem.appendNewElem(div,'p');
-    Elem.text(pElem, "No project loaded...");
+    Elem.setText(pElem, "No project loaded...");
+    */
 
 };
 

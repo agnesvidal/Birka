@@ -53,5 +53,5 @@ birka.ui.View.prototype.initHeader = function(){
  * @returns undefined
  */
 birka.ui.View.prototype.m_initTitle = function(){
-    document.title = 'Birka ' + this.name; //@TODO "Birka" or project name?
+    document.title = window.sessionStorage.name; //@TODO "Birka" or project name?
 };

@@ -20,7 +20,7 @@ birka.project.Project = function() {
     // Private properties
     //--------------------------------------------------------------------------
     /**
-     * @type {HTMLElement}
+     * @type {Element}
      * @private
      */
     this.m_appContent = null;
@@ -35,7 +35,7 @@ birka.project.Project = function() {
     /**
      * toolWrapper - Reference to wrapper containing tool.
      *
-     * @property {HTMLElement}
+     * @property {Element}
      * @default null
      * @private
      */
@@ -49,7 +49,7 @@ birka.project.Project = function() {
     this.m_tabs =  [];
 
     /**
-     * @type {birka.compiler.Tool} | {birka.project.Project}
+     * @type {birka.compiler.Tool|birka.project.Project}
      * @default null
      * @private
      */
@@ -96,7 +96,7 @@ birka.project.Project.prototype.m_initProjectDetails = function() {
     var projectname = Elem.appendNewElem(this.m_toolWrapper, 'h2');
     var toolHeader = Elem.appendNewClassElem(this.m_toolWrapper, 'div', 'tool-header');
     var toolName = Elem.appendNewElem(toolHeader,'h2');
-    Elem.text(toolName, 'Project name: ' + window.sessionStorage.name);
+    Elem.setText(toolName, 'Project name: ' + window.sessionStorage.name);
 
 };
 

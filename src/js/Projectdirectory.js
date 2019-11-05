@@ -135,7 +135,7 @@ birka.Projectdirectory = function(project) {
  * @type {Object}
  * @constant
  * @default
- * @suppress {undefinedVars	}
+ * @suppress {undefinedVars}
  *
  */
 birka.Projectdirectory.fs = require('fs');

@@ -95,6 +95,12 @@ birka.project.ProjectManager.prototype.m_initUI = function(){
         this.m_initLoadedProject();
     }*/
     this.m_addListeners();
+    /*
+    var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
+    var rP = {};
+    window.localStorage.setItem('recentProjects', JSON.stringify(rP));
+*/
+    //window.localStorage.recent
 };
 
 
@@ -107,6 +113,20 @@ birka.project.ProjectManager.prototype.m_addListeners = function(){
     var m_this = this;
     this.elemManager.buttons.createBtn.addEventListener('click',function(){ m_this.m_createProject(this)});
     this.elemManager.buttons.chooseBtn.addEventListener('click',function(){ m_this.m_openProject(this)});
+
+    for(var i=0; i<this.elemManager.links.length; i++){
+        var path = this.elemManager.paths[i].innerHTML;
+        this.elemManager.links[i].addEventListener('click',function(){
+            m_this.m_loadProject(this.querySelector('p').innerHTML)
+
+        });
+    }
+    //console.log(JSON.parse(localStorage.getItem('recentProjects')));
+    var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
+
+    //console.log(recentP.projects);
+
+
 };
 
 /**
@@ -155,6 +175,7 @@ birka.project.ProjectManager.prototype.m_openProject = function(){
  * @returns {undefined}
  */
 birka.project.ProjectManager.prototype.m_loadProject = function(path){
+    if(this.m_checkIfFolder(path) !== false){
     if(this.m_checkProjectValidity(path, this.m_walkDir(path))){
         //this.m_readConfig(this.chosenpath + config); //@TODO Reads xml file for now...
 
@@ -164,9 +185,67 @@ birka.project.ProjectManager.prototype.m_loadProject = function(path){
         window.sessionStorage.setItem('projectLocation', path);
         window.sessionStorage.setItem('output', path + '/src/data');
         window.sessionStorage.setItem('loaded', 'true');
+//console.log(window.localStorage.getItem('recentProjects'));
+
+        if(window.localStorage.getItem('recentProjects') !== null) {
+            var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
+
+        var p = path;
+            for (var i = 0; i < recentP.projects.length; i++) {
+
+                if (recentP.projects[i] === path) {
+                    recentP.projects.splice(i, 1);
+                }
+            }
+            recentP.projects.unshift(p);
+
+            if(recentP.projects.length > 5) {
+                recentP.projects.splice(5);
+            }
+            window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
+        } else if(window.localStorage.getItem('recentProjects') === null) {
+            var recentP = {
+                projects: [path]
+            };
+            window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
+            console.log(window.localStorage.getItem('recentProjects'))
+        }
         this.m_saveProject(this);
     } else {
         this.m_showError('Not a working project.', 'Missing Main.js and/or data folder.')
+    }
+    } else{
+        var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
+        for(var i=0; i<this.elemManager.links.length; i++){
+            //console.log(this.elemManager.links[i].querySelector('p'))
+            if(this.elemManager.links[i].querySelector('p').innerHTML === path){
+                //console.log(path, this.elemManager.links[i].querySelector('p').innerHTML);
+                this.elemManager.links[i].parentNode.removeChild(this.elemManager.links[i]);
+                this.elemManager.links.splice(i, 1);
+
+            }
+        }
+        for(var j=0; j<recentP.projects.length; j++){
+            if(path === recentP.projects[j]){
+                //console.log(j, recentP.projects[j]);
+                recentP.projects.splice(j, 1);
+                //console.log(recentP)
+            }
+        }
+
+        window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
+        //console.log(recentP);
+    }
+};
+
+birka.project.ProjectManager.prototype.m_checkIfFolder = function(dir) {
+    try{
+        birka.project.ProjectManager.fs.readdirSync(dir)
+    } catch(err){
+        if(err.code === "ENOENT"){
+            this.m_showError('Missing project folder', 'The project folder has either been removed, or moved to a new location.');
+            return false
+        }
     }
 };
 
@@ -178,8 +257,19 @@ birka.project.ProjectManager.prototype.m_loadProject = function(path){
  */
 birka.project.ProjectManager.prototype.m_walkDir = function(dir) {
     var m_this = this;
-
+/*
+    try{
+        birka.project.ProjectManager.fs.readdirSync(dir)
+    } catch(err){
+        if(err.code === "ENOENT"){
+            console.log('Err');
+            this.m_showError('Can\'t find the folder', '...');
+            return
+        }
+    }
+*/
     birka.project.ProjectManager.fs.readdirSync(dir).forEach(function(file) {
+
         var fullPath = birka.project.ProjectManager.path.join(dir, file);
         if (birka.project.ProjectManager.fs.lstatSync(fullPath).isDirectory()) {
             m_this.m_walkDir(fullPath);
@@ -190,6 +280,7 @@ birka.project.ProjectManager.prototype.m_walkDir = function(dir) {
             }
         }
     });
+
 //console.log(m_this.paths);
 };
 
@@ -200,7 +291,6 @@ birka.project.ProjectManager.prototype.m_walkDir = function(dir) {
  * @returns {boolean}
  */
 birka.project.ProjectManager.prototype.m_checkProjectValidity = function(path) {
-    //var config = '/config.xml';
     if(this.paths.indexOf(path + '/src/system/Main.js') > -1){
         if(this.paths.indexOf(path + '/src/data') > -1){
             return true

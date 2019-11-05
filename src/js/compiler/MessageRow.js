@@ -15,7 +15,7 @@ birka.compiler.MessageRow = function(tbody, status){
     /**
      * ...
      *
-     * @type {HTMLElement}
+     * @type {Element}
      */
     //this.element = Elem.appendNewElem(tbody, 'tr');
     this.element = Elem.appendNewClassElem(tbody, 'tr', 'msg');
@@ -85,9 +85,10 @@ birka.compiler.MessageRow.prototype.codeToMessage = function(code) {
     var message = "";
     switch(code){
         case 1: message = 'Invalid file type.';                 break;
-        case 2: message = 'Duplicate file name. Change ...';    break;
+        case 2: message = 'Duplicate file name.';    break;
         case 10: message = 'File size exceeds 1MB.';             break;
         case 11: message = 'File size exceeds 3MB';              break;
+        case 12: message = 'Spaces not allowed in name. The name has been modified from the original filename.';              break;
         //case 5: message = ''; break;
     }
     return message;
@@ -105,6 +106,8 @@ birka.compiler.MessageRow.prototype.setStyle = function(status) {
         case 10: this.element.classList.add('warning');
             break;
         case 11: this.element.classList.add('warning');
+            break;
+        case 12: this.element.classList.add('warning');
             break;
     }
 };
