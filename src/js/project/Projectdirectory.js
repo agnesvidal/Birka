@@ -14,7 +14,7 @@
  * 
  * CLASS DESCRIPTION
  */
-birka.Projectdirectory = function(project) {
+birka.project.Projectdirectory = function(project) {
 
     //--------------------------------------------------------------------------
     // Protected properties
@@ -138,7 +138,7 @@ birka.Projectdirectory = function(project) {
  * @suppress {undefinedVars}
  *
  */
-birka.Projectdirectory.fs = require('fs');
+birka.project.Projectdirectory.fs = require('fs');
 
 /**
  * Reference to Node.js mkdirp module
@@ -147,7 +147,7 @@ birka.Projectdirectory.fs = require('fs');
  * @constant
  * @default
  */
-birka.Projectdirectory.mkdirp = require('mkdirp');
+birka.project.Projectdirectory.mkdirp = require('mkdirp');
 
 
 //------------------------------------------------------------------------------
@@ -160,7 +160,7 @@ birka.Projectdirectory.mkdirp = require('mkdirp');
  *
  * @return {undefined} //TODO: boolean?
  */
-birka.Projectdirectory.prototype.create = function() {
+birka.project.Projectdirectory.prototype.create = function() {
     this.m_initFolders();
 };
 
@@ -173,7 +173,7 @@ birka.Projectdirectory.prototype.create = function() {
  * 
  * @private
  */
-birka.Projectdirectory.prototype.m_initFolders = function() {
+birka.project.Projectdirectory.prototype.m_initFolders = function() {
     for (var i = 0; i < this.m_folders.length; i++) {
         this.m_checkDirectory(this.m_folders[i]);
     }
@@ -187,7 +187,7 @@ birka.Projectdirectory.prototype.m_initFolders = function() {
  * 
  * @private
  */
-birka.Projectdirectory.prototype.m_initFiles = function() {
+birka.project.Projectdirectory.prototype.m_initFiles = function() {
     this.m_resquestQueue = this.m_files;
     this.m_processRequestQueue();
 };
@@ -198,7 +198,7 @@ birka.Projectdirectory.prototype.m_initFiles = function() {
  * 
  * @private
  */
-birka.Projectdirectory.prototype.m_processRequestQueue = function() {
+birka.project.Projectdirectory.prototype.m_processRequestQueue = function() {
     if (this.m_resquestQueue.length > 0) {
         this.m_request = this.m_resquestQueue.shift();
         this.m_processRequest();
@@ -213,7 +213,7 @@ birka.Projectdirectory.prototype.m_processRequestQueue = function() {
  *
  * @private
  */
-birka.Projectdirectory.prototype.m_processRequest = function() {
+birka.project.Projectdirectory.prototype.m_processRequest = function() {
     if(this.m_request.name == 'rune.js') {
         this.m_getURLdata();
     } else {
@@ -228,7 +228,7 @@ birka.Projectdirectory.prototype.m_processRequest = function() {
  *
  * @return {undefined} 
  */
-birka.Projectdirectory.prototype.m_getURLdata = function() {
+birka.project.Projectdirectory.prototype.m_getURLdata = function() {
     var m_this = this;
     var req = new XMLHttpRequest();
     req.open("GET", this.m_request.url, true);
@@ -250,8 +250,8 @@ birka.Projectdirectory.prototype.m_getURLdata = function() {
  *
  * @private
  */
-birka.Projectdirectory.prototype.m_checkDirectory = function(folderpath) {
-    birka.Projectdirectory.mkdirp.sync(this.m_output + folderpath);
+birka.project.Projectdirectory.prototype.m_checkDirectory = function(folderpath) {
+    birka.project.Projectdirectory.mkdirp.sync(this.m_output + folderpath);
 };
 
 /**
@@ -259,7 +259,7 @@ birka.Projectdirectory.prototype.m_checkDirectory = function(folderpath) {
  *
  * @private
  */
-birka.Projectdirectory.prototype.m_createFileData = function() {
+birka.project.Projectdirectory.prototype.m_createFileData = function() {
     var temp = this.m_readTemplate(this.m_request.template);
     var app = /%APP%/g;
     var data = temp.replace(app, this.m_project);
@@ -280,10 +280,10 @@ birka.Projectdirectory.prototype.m_createFileData = function() {
  * @param {string} data 
  * @private
  */
-birka.Projectdirectory.prototype.m_saveDataToFile = function(data) {
+birka.project.Projectdirectory.prototype.m_saveDataToFile = function(data) {
     var m_this = this; //@FIXME Tried fixing error after compilation...
     var file = this.m_output + this.m_request.directory + this.m_request.name;
-    birka.Projectdirectory.fs.writeFile(file, data, function(err) {
+    birka.project.Projectdirectory.fs.writeFile(file, data, function(err) {
        if (err) {
            throw err; //TODO felhantering
        } else {
@@ -299,8 +299,8 @@ birka.Projectdirectory.prototype.m_saveDataToFile = function(data) {
  * @private
  * @suppress {undefinedVars}
  */
-birka.Projectdirectory.prototype.m_readTemplate = function(path) {
-    var temp = birka.Projectdirectory.fs.readFileSync(__dirname + path).toString();
+birka.project.Projectdirectory.prototype.m_readTemplate = function(path) {
+    var temp = birka.project.Projectdirectory.fs.readFileSync(__dirname + path).toString();
     return temp;
 };
 
@@ -309,7 +309,7 @@ birka.Projectdirectory.prototype.m_readTemplate = function(path) {
  *
  * @private
  */
-birka.Projectdirectory.prototype.m_onComplete = function(path) {
+birka.project.Projectdirectory.prototype.m_onComplete = function(path) {
     //TODO är detta tillräckligt?
     this.m_resquestQueue = null;
     this.m_request = null;
@@ -321,6 +321,6 @@ birka.Projectdirectory.prototype.m_onComplete = function(path) {
  *
  * @private
  */
-birka.Projectdirectory.prototype.m_onError = function(path) {
+birka.project.Projectdirectory.prototype.m_onError = function(path) {
     //TODO felhantering
 };

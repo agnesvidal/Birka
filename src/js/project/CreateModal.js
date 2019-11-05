@@ -253,7 +253,7 @@ birka.project.CreateModal.prototype.save = function(callback, caller) {
                                     //window.localStorage.setItem('', JSON.stringify());
                                 }
 
-                                var pd = new birka.Projectdirectory(projectObj);
+                                var pd = new birka.project.Projectdirectory(projectObj);
                                 pd.create();
 
                                 m_this.m_close();
@@ -290,7 +290,7 @@ birka.project.CreateModal.prototype.save = function(callback, caller) {
                             console.log(window.localStorage.getItem('recentProjects'))
                         }
 
-                        var pd = new birka.Projectdirectory(projectObj);
+                        var pd = new birka.project.Projectdirectory(projectObj);
                         pd.create();
 
                         m_this.m_close();

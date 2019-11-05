@@ -14,7 +14,7 @@
  * 
  * CLASS DESCRIPTION
  */
-birka.Resourcefile = function(projectname, output) {
+birka.compiler.Resourcefile = function(projectname, output) {
 
     //--------------------------------------------------------------------------
     // Protected properties
@@ -74,7 +74,7 @@ birka.Resourcefile = function(projectname, output) {
  * @constant
  * @default
  */
-birka.Resourcefile.fs = require('fs');
+birka.compiler.Resourcefile.fs = require('fs');
 
 
 //------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ birka.Resourcefile.fs = require('fs');
  *
  * @return {undefined} //TODO: boolean?
  */
-birka.Resourcefile.prototype.compile = function(files) {
+birka.compiler.Resourcefile.prototype.compile = function(files) {
     if (files.length > 0) {
         this.m_resquestQueue = files;
         this.m_processRequestQueue();
@@ -110,7 +110,7 @@ birka.Resourcefile.prototype.compile = function(files) {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_processRequestQueue = function() {
+birka.compiler.Resourcefile.prototype.m_processRequestQueue = function() {
     if (this.m_resquestQueue.length > 0) {
         this.m_request = this.m_resquestQueue.shift();
         this.m_processRequest();
@@ -125,7 +125,7 @@ birka.Resourcefile.prototype.m_processRequestQueue = function() {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_processRequest = function() {
+birka.compiler.Resourcefile.prototype.m_processRequest = function() {
     this.m_generateBase64(this.m_request.blob, this.m_request.name);
 };
 
@@ -137,7 +137,7 @@ birka.Resourcefile.prototype.m_processRequest = function() {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_generateBase64 = function(blob, name) {
+birka.compiler.Resourcefile.prototype.m_generateBase64 = function(blob, name) {
     var m_this = this;
     var reader = new FileReader();
     reader.onload = function(event) {
@@ -156,7 +156,7 @@ birka.Resourcefile.prototype.m_generateBase64 = function(blob, name) {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_generateResponse = function(name, data) {
+birka.compiler.Resourcefile.prototype.m_generateResponse = function(name, data) {
     var str = "this.create(\"" + name + "\", \"" + data + "\");"
     this.m_tempArr.push(str);    
 };
@@ -166,7 +166,7 @@ birka.Resourcefile.prototype.m_generateResponse = function(name, data) {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_writeFile = function() {
+birka.compiler.Resourcefile.prototype.m_writeFile = function() {
     var temp = this.m_readTemplate();
     var app = /%APP%/g;
     var data = temp.replace(app, this.m_project);
@@ -182,10 +182,10 @@ birka.Resourcefile.prototype.m_writeFile = function() {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_saveDataToFile = function (data) {
+birka.compiler.Resourcefile.prototype.m_saveDataToFile = function (data) {
     var m_this = this; //@FIXME Tried fixing error after compilation...
     var file = this.m_output + '/src/data/Resources.js';
-    birka.Resourcefile.fs.writeFile(file, data, function(err) {
+    birka.compiler.Resourcefile.fs.writeFile(file, data, function(err) {
         if (err) {
             throw err; //TODO felhantering
         } else {
@@ -200,8 +200,8 @@ birka.Resourcefile.prototype.m_saveDataToFile = function (data) {
  * @return {String}
  * @private
  */
-birka.Resourcefile.prototype.m_readTemplate = function() {
-    var structure = birka.Resourcefile.fs.readFileSync(__dirname + '/templates/Resources.txt').toString();
+birka.compiler.Resourcefile.prototype.m_readTemplate = function() {
+    var structure = birka.compiler.Resourcefile.fs.readFileSync(__dirname + '/templates/Resources.txt').toString();
     return structure;
 };
 
@@ -210,7 +210,7 @@ birka.Resourcefile.prototype.m_readTemplate = function() {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_onComplete = function(data) {
+birka.compiler.Resourcefile.prototype.m_onComplete = function(data) {
     this.m_tempArr = [];
     this.m_resquestQueue = [];
     this.m_request = {};

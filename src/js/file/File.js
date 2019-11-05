@@ -1,0 +1,3 @@
+birka.File = function (){
+    
+}
