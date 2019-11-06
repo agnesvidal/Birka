@@ -58,7 +58,7 @@ birka.project.Projectdirectory = function(project) {
      * @type {array}
      * @ignore
      */
-    this.m_resquestQueue = []; //TODO Rename? not "requests"...
+    this.m_resquestQueue = []; 
 
     /**
      * ...
@@ -66,7 +66,7 @@ birka.project.Projectdirectory = function(project) {
      * @type {Object}
      * @ignore
      */
-    this.m_request = {}; //TODO Rename? not "request"...
+    this.m_request = {}; 
 
     /**
      * Array with paths to projectfolders.
@@ -149,6 +149,15 @@ birka.project.Projectdirectory.fs = require('fs');
  */
 birka.project.Projectdirectory.mkdirp = require('mkdirp');
 
+/**
+ * Reference to Node.js FileSystem module
+ *
+ * @type {undefined}
+ * @constant
+ * @default
+ */
+birka.project.Projectdirectory.dialog = require('electron').remote.dialog;
+
 
 //------------------------------------------------------------------------------
 // Public prototype methods
@@ -158,7 +167,7 @@ birka.project.Projectdirectory.mkdirp = require('mkdirp');
  * Create project direcctory
  *
  *
- * @return {undefined} //TODO: boolean?
+ * @return {undefined}
  */
 birka.project.Projectdirectory.prototype.create = function() {
     this.m_initFolders();
@@ -208,8 +217,7 @@ birka.project.Projectdirectory.prototype.m_processRequestQueue = function() {
 };
 
 /**
- * Process file request //TODO request?
- * 
+ * Process files 
  *
  * @private
  */
@@ -217,7 +225,7 @@ birka.project.Projectdirectory.prototype.m_processRequest = function() {
     if(this.m_request.name == 'rune.js') {
         this.m_getURLdata();
     } else {
-        this.m_createFileData();
+        this.m_readTemplate();
     }
 };
 
@@ -236,9 +244,9 @@ birka.project.Projectdirectory.prototype.m_getURLdata = function() {
         if (req.readyState === 4)
             if (req.status === 200) {
                 var data = this.responseText;
-                m_this.m_saveDataToFile(data);
+                m_this.m_writeFile(data);
             } else {
-                console.log("Error...");  //TODO felhantering
+                m_this.m_onError("Birka failed to fetch Rune.js from server. Try again. If error remains, please contact developer.")
             }
     };
     req.send();
@@ -259,8 +267,7 @@ birka.project.Projectdirectory.prototype.m_checkDirectory = function(folderpath)
  *
  * @private
  */
-birka.project.Projectdirectory.prototype.m_createFileData = function() {
-    var temp = this.m_readTemplate(this.m_request.template);
+birka.project.Projectdirectory.prototype.m_createFileData = function(temp) {
     var app = /%APP%/g;
     var data = temp.replace(app, this.m_project);
 
@@ -271,7 +278,7 @@ birka.project.Projectdirectory.prototype.m_createFileData = function() {
         data = data.replace(id, this.m_id)
     }
 
-    this.m_saveDataToFile(data);
+    this.m_writeFile(data);
 };
 
 /**
@@ -280,12 +287,13 @@ birka.project.Projectdirectory.prototype.m_createFileData = function() {
  * @param {string} data 
  * @private
  */
-birka.project.Projectdirectory.prototype.m_saveDataToFile = function(data) {
-    var m_this = this; //@FIXME Tried fixing error after compilation...
+birka.project.Projectdirectory.prototype.m_writeFile = function(data) {
+    var m_this = this;
     var file = this.m_output + this.m_request.directory + this.m_request.name;
+    var filename = m_this.m_request.name ? m_this.m_request.name : "unidentified";
     birka.project.Projectdirectory.fs.writeFile(file, data, function(err) {
        if (err) {
-           throw err; //TODO felhantering
+        m_this.m_onError("Birka could not save " + filename + " project file. Try again. If error remains, please contact developer.");
        } else {
            m_this.m_processRequestQueue();
        }
@@ -299,9 +307,17 @@ birka.project.Projectdirectory.prototype.m_saveDataToFile = function(data) {
  * @private
  * @suppress {undefinedVars}
  */
-birka.project.Projectdirectory.prototype.m_readTemplate = function(path) {
-    var temp = birka.project.Projectdirectory.fs.readFileSync(__dirname + path).toString();
-    return temp;
+birka.project.Projectdirectory.prototype.m_readTemplate = function() {
+    var path = this.m_request.template.toString();
+    var m_this = this;
+    birka.compiler.Resourcefile.fs.readFile(__dirname + path, 'utf8', function(err, data) {
+        if (err) {
+            var filename = m_this.m_request.name ? m_this.m_request.name : "unidentified";
+            m_this.m_onError("Birka could not read template for " + filename + " project file. Try again. If error remains, please contact developer.")
+        } else {
+            m_this.m_createFileData(data)
+        }
+    });
 };
 
 /**
@@ -310,10 +326,12 @@ birka.project.Projectdirectory.prototype.m_readTemplate = function(path) {
  * @private
  */
 birka.project.Projectdirectory.prototype.m_onComplete = function(path) {
-    //TODO är detta tillräckligt?
-    this.m_resquestQueue = null;
-    this.m_request = null;
-    console.log("Directory complete!");
+    birka.project.Projectdirectory.dialog.showMessageBox({
+        title: "Info",
+        message: 'New project directory created at "' + this.m_output + '" for the project "'+ this.m_project +'".',
+        buttons: ['OK']
+    });
+    this.m_reset();
 };
 
 /**
@@ -321,6 +339,22 @@ birka.project.Projectdirectory.prototype.m_onComplete = function(path) {
  *
  * @private
  */
-birka.project.Projectdirectory.prototype.m_onError = function(path) {
-    //TODO felhantering
+birka.project.Projectdirectory.prototype.m_onError = function(msg) {
+    birka.project.Projectdirectory.dialog.showMessageBox({
+        title: "Error",
+        message: msg,
+        icon: './src/img/error.png',
+        buttons: ['OK']
+    });
+    this.m_reset();
+};
+
+/**
+ * ...
+ *
+ * @private
+ */
+birka.project.Projectdirectory.prototype.m_reset = function() {
+    this.m_resquestQueue = null;
+    this.m_request = null;
 };
