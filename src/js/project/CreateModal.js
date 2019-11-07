@@ -13,21 +13,17 @@
  * @classdesc
  */
 //@TODO Fix inheritance
-birka.project.CreateModal = function(modal, options) {
+birka.project.CreateModal = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
     //birka.project.Modal.call(modal, options);
 
-    this.element = Elem.appendNewClassElem(document.body, 'div', 'dialog');
-
     //--------------------------------------------------------------------------
     // Public properties
     //--------------------------------------------------------------------------
 
-    this.modal = modal;
-
-    this.options = options;
+    this.m_options = null;
 
     this.browseBtn = null;
 
@@ -37,12 +33,10 @@ birka.project.CreateModal = function(modal, options) {
 
     this.spans = [];
 
-    this.buttons = [];
-
+    this.m_buttons = [];
 
     this.paths = []; // Temporary test
 
-    this.init();
 };
 
 //------------------------------------------------------------------------------
@@ -88,7 +82,7 @@ birka.project.CreateModal.prototype.constructor = birka.project.CreateModal;
 //@TODO Optimize
 birka.project.CreateModal.prototype.m_initCustom = function() {
     var m_this = this;
-    var div = Elem.appendNewElem(this.content,'div');
+    var div = Elem.appendNewElem(this.m_content,'div');
 
     var span = Elem.appendNewElem(div,'span');
     Elem.setText(span, "Project name");
@@ -112,7 +106,7 @@ birka.project.CreateModal.prototype.m_initCustom = function() {
     var fieldsets = [];
     var legends = [];
     for(var i=0; i<2; i++){
-        fieldsets.push(Elem.appendNewElem(this.content,'fieldset'));
+        fieldsets.push(Elem.appendNewElem(this.m_content,'fieldset'));
         legends.push(Elem.appendNewElem(fieldsets[i],'legend'));
     }
     legends[0].innerHTML = 'Project location';
@@ -179,7 +173,6 @@ birka.project.CreateModal.prototype.m_initCustom = function() {
             m_this.spans[3].className = "spanerror";
         }
     }, false);
-
 };
 
 //@TODO Optimize
@@ -222,7 +215,9 @@ birka.project.CreateModal.prototype.save = function(callback, caller) {
                             cancelId: 1
                         }, function (response) {
                             if(response === 1) {
+
                             } else if (response === 0) {
+
                                 var projectObj = {
                                     name: m_this.inputs[0].value,
                                     location: m_this.locationpath.innerHTML,
@@ -239,7 +234,16 @@ birka.project.CreateModal.prototype.save = function(callback, caller) {
                                 if(window.localStorage.getItem('recentProjects') !== null) {
                                     var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
                                     console.log(recentP);
-                                    recentP.projects.unshift(m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
+                                    var path = m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value;
+                                    for (var i = 0; i < recentP.projects.length; i++) {
+
+                                        if (recentP.projects[i].toLowerCase() === path.toLowerCase()) {
+                                            recentP.projects.splice(i, 1);
+                                        }
+                                    }
+                                    recentP.projects.unshift(path);
+
+                                    //recentP.projects.unshift(m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
                                     if(recentP.projects.length > 5) {
                                         recentP.projects.splice(5);
                                     }
@@ -257,10 +261,12 @@ birka.project.CreateModal.prototype.save = function(callback, caller) {
                                 pd.create();
 
                                 m_this.m_close();
-                                callback(caller);
+                                callback(m_this.m_parent);
+
                             }
                         });
                     } else {
+
                         var projectObj = {
                             name: m_this.inputs[0].value,
                             location: m_this.locationpath.innerHTML,
@@ -294,7 +300,8 @@ birka.project.CreateModal.prototype.save = function(callback, caller) {
                         pd.create();
 
                         m_this.m_close();
-                        callback(caller);
+                        callback(m_this.m_parent);
+
                     }
 
                 }
@@ -305,6 +312,7 @@ birka.project.CreateModal.prototype.m_walkDir = function(dir, newPath) {
     var m_this = this;
     var paths = [];
     var replace = true;
+    var newPath = newPath.toLowerCase();
 
     birka.project.CreateModal.fs.readdirSync(dir).forEach(function(file) {
         var fullPath = birka.project.ProjectManager.path.join(dir, file);
@@ -314,7 +322,7 @@ birka.project.CreateModal.prototype.m_walkDir = function(dir, newPath) {
     });
 
     for(var i=0; i<paths.length; i++) {
-        if(paths[i] === newPath){
+        if(paths[i].toLowerCase() === newPath){
             replace = false;
         }
     }
@@ -367,12 +375,18 @@ birka.project.CreateModal.prototype.m_chooseLocation = function(){
 birka.project.CreateModal.prototype.m_initFooterButtons = function() {
     var m_this = this;
     for(var i=0; i<2; i++){
-        this.buttons.push(Elem.appendNewClassElem(this.m_footer, 'input', 'button'));
-        this.buttons[i].setAttribute('type', 'button');
+        this.m_buttons.push(Elem.createClassElem('input', 'button'));
+        this.m_footer.appendChild(this.m_buttons[i]);
+        this.m_buttons[i].setAttribute('type', 'button');
     }
-    this.buttons[0].value = 'Cancel';
-    this.buttons[1].value = 'Create';
+    this.m_buttons[0].value = 'Cancel';
+    this.m_buttons[1].value = 'Create';
 
+    //this.m_footer.appendChild(this.buttons[0]);
+    //this.m_footer.appendChild(this.buttons[1]);
 
-    this.buttons[0].addEventListener('click', function(){m_this.m_close(this)});
+    this.m_buttons[0].addEventListener('click', function(){m_this.m_close(this)});
+    console.log(m_this.m_options.callback);
+    this.m_buttons[1].addEventListener('click', function(){m_this.save(m_this.m_options.callback)});
+
 };
