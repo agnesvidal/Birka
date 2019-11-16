@@ -69,6 +69,48 @@ var Elem = {
     },
 
     /**
+     * Creates new element and appends to parent element at a position.
+     *
+     * @param parent {Element}
+     * @param type {string}
+     * @param pos {Number}
+     * @returns {Element}
+     */
+    appendNewElemAt : function (parent, type, pos) {
+        var element = Elem.createElem(type);
+        this.appendElemAt(parent, element, pos);
+        return element;
+    },
+
+    /**
+     * Creates new class element and appends to parent element at a position.
+     *
+     * @param parent {Element}
+     * @param type {string}
+     * @param classname {string}
+     * @param pos {Number}
+     * @returns {Element}
+     */
+    appendNewClassElemAt : function (parent, type, classname, pos) {
+        var element = this.createClassElem(type, classname);
+        this.appendElemAt(parent, element, pos);
+        return element;
+    },
+
+
+    /**
+     * Appends element to parent element at a position.
+     *
+     * @param parent {Element}
+     * @param elem {Element}
+     * @param pos {Number}
+     * @returns {Element}
+     */
+    appendElemAt : function (parent, elem, pos) {
+        parent.insertBefore(elem, parent.children[pos]);
+    },
+
+    /**
      * Creates new element and appends to parent element.
      *
      * @param parent {Element}
