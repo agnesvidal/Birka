@@ -58,6 +58,15 @@ var birka = function(){
      */
     m_this.ui = {};
 
+    /**
+     * ...
+     *
+     * @namespace modal
+     * @memberof birka
+     * @since 1.0
+     */
+    m_this.modal = {};
+
 
     //--------------------------------------------------------------------------
     // Return public scope object

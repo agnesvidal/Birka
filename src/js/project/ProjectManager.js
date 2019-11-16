@@ -23,7 +23,7 @@ birka.project.ProjectManager = function(callback) {
      *
      * @type {birka.project.ElementManager}
      */
-    this.elemManager = null;
+    this.m_view = null;
 
     /**
      * ...
@@ -84,19 +84,13 @@ birka.project.ProjectManager.prototype.init = function(){
  * @returns {undefined}
  */
 birka.project.ProjectManager.prototype.m_initUI = function(){
-    this.elemManager = new birka.project.ElementManager(this.toolWrapper);
-    this.elemManager.init();
+    this.m_view = new birka.project.ProjectManagerView(this.toolWrapper);
+    this.m_view.init();
     /*
     if(sessionStorage.loaded === 'true') {
         this.m_initLoadedProject();
     }*/
     this.m_addListeners();
-    /*
-    var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
-    var rP = {};
-    window.localStorage.setItem('recentProjects', JSON.stringify(rP));
-*/
-    //window.localStorage.recent
 };
 
 
@@ -107,22 +101,16 @@ birka.project.ProjectManager.prototype.m_initUI = function(){
  */
 birka.project.ProjectManager.prototype.m_addListeners = function(){
     var m_this = this;
-    this.elemManager.buttons.createBtn.addEventListener('click',function(){ m_this.m_createProject(this)});
-    this.elemManager.buttons.chooseBtn.addEventListener('click',function(){ m_this.m_openProject(this)});
+    this.m_view.createBtn.addEventListener('click',function(){m_this.m_createProject()});
+    this.m_view.chooseBtn.addEventListener('click',function(){m_this.m_openProject()});
 
-    for(var i=0; i<this.elemManager.links.length; i++){
-        var path = this.elemManager.paths[i].innerHTML;
-        this.elemManager.links[i].addEventListener('click',function(){
+    for(var i=0; i<this.m_view.linkItems.length; i++){
+        var path = this.m_view.paths[i].innerHTML;
+        this.m_view.linkItems[i].addEventListener('click',function(){
             m_this.m_loadProject(this.querySelector('p').innerHTML)
 
         });
     }
-    //console.log(JSON.parse(localStorage.getItem('recentProjects')));
-    var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
-
-    //console.log(recentP.projects);
-
-
 };
 
 /**
@@ -258,12 +246,12 @@ birka.project.ProjectManager.prototype.m_loadProject = function(path){
 birka.project.ProjectManager.prototype.m_lala = function(parent, path) {
     var m_this = parent;
     var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
-    for(var i=0; i<m_this.elemManager.links.length; i++){
+    for(var i=0; i<m_this.m_view.links.length; i++){
         //console.log(this.elemManager.links[i].querySelector('p'))
-        if(m_this.elemManager.links[i].querySelector('p').innerHTML === path){
+        if(m_this.m_view.links[i].querySelector('p').innerHTML === path){
             //console.log(path, this.elemManager.links[i].querySelector('p').innerHTML);
-            m_this.elemManager.links[i].parentNode.removeChild(m_this.elemManager.links[i]);
-            m_this.elemManager.links.splice(i, 1);
+            m_this.m_view.links[i].parentNode.removeChild(m_this.elemManager.links[i]);
+            m_this.m_view.links.splice(i, 1);
 
         }
     }
