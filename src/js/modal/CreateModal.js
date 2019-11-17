@@ -37,6 +37,10 @@ birka.project.CreateModal = function() {
 
     this.paths = []; // Temporary test
 
+    this.inputs = [];
+
+    this.callback = null;
+
 };
 
 //------------------------------------------------------------------------------
@@ -76,88 +80,176 @@ birka.project.CreateModal.prototype = Object.create(birka.project.Modal.prototyp
 birka.project.CreateModal.prototype.constructor = birka.project.CreateModal;
 
 //------------------------------------------------------------------------------
+// Public getter and setter methods
+//------------------------------------------------------------------------------
+/**
+ * @member {string} path
+ * @memberof birka.project.CreateModal
+ */
+Object.defineProperty(birka.project.CreateModal.prototype, "path", {
+    get: function () {
+        return this.locationpath.innerHTML;
+    },
+    set: function (value) {
+        var m_this = this;
+        Elem.setText(m_this.locationpath, value);
+    }
+});
+
+//------------------------------------------------------------------------------
+// Override methods
+//------------------------------------------------------------------------------
+/**
+ * ... Overrides method
+ *
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_initCustom = function() {
+    this.callback = this.m_options.callback;
+    this.m_initFields();
+};
+
+// Overrides method
+birka.project.CreateModal.prototype.m_initFooterButtons = function() {
+    var m_this = this;
+    for(var i=0; i<2; i++){
+        this.m_buttons.push(Elem.createClassElem('input', 'button'));
+        this.m_footer.appendChild(this.m_buttons[i]);
+        this.m_buttons[i].setAttribute('type', 'button');
+    }
+    this.m_buttons[0].value = 'Cancel';
+    this.m_buttons[1].value = 'Create';
+
+    this.m_buttons[0].addEventListener('click', function(){m_this.m_close(this)});
+    this.m_buttons[1].addEventListener('click', function(){m_this.m_checkValidFields()});
+};
+
+birka.project.CreateModal.prototype.m_close = function(event) {
+    var m_this = this;
+    var modal = document.querySelector('.dialog');
+    if(modal){
+        while (modal.hasChildNodes()) {
+            modal.removeChild(modal.firstChild);
+        }
+        modal.parentNode.removeChild(this.element);
+    }
+    this.inputs = [];
+    this.paths = [];
+    this.spans = [];
+};
+
+//------------------------------------------------------------------------------
 // Private methods
 //------------------------------------------------------------------------------
-// Overrides method
-//@TODO Optimize
-birka.project.CreateModal.prototype.m_initCustom = function() {
-    var m_this = this;
-    var div = Elem.appendNewElem(this.m_content,'div');
+/**
+ * ...
+ *
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_initFields = function() {
+    // Fieldsets and Legends
+    var fields = [];
+    var legends = [];
+    for(var i=0; i<3; i++){
+        fields.push(Elem.appendNewElem(this.m_content,'fieldset'));
+        legends.push(Elem.appendNewElem(fields[i],'legend'));
+    }
+    Elem.setText(legends[0], 'Project name');
+    Elem.setText(legends[1], 'Project location');
+    Elem.setText(legends[2], 'Configuration settings');
+    this.m_initErrorSpans();
 
-    var span = Elem.appendNewElem(div,'span');
-    Elem.setText(span, "Project name");
-    this.inputs = [];
+    this.m_initNameField(fields[0]);
+    this.m_initLocationField(fields[1]);
+    this.m_initConfigField(fields[2]);
+    this.m_addListeners();
+};
 
-    var projectName = Elem.appendNewClassElem(div,'input','game-name');
-    projectName.setAttribute('type', 'text');
-    projectName.setAttribute('placeholder', 'Write your project name...');
-    projectName.setAttribute('required','');
-    projectName.setAttribute('minlength','1');
-
-    this.inputs.push(projectName);
-
-    this.spans = [];
+/**
+ * ...
+ *
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_initErrorSpans = function() {
     for(var j=0; j<4; j++){
         this.spans.push(Elem.createClassElem('span','spanerror'));
     }
-    //var spanError = Elem.appendNewClassElem(div,'span', 'spanerror');
-    div.appendChild(this.spans[0]);
+};
 
-    var fieldsets = [];
-    var legends = [];
-    for(var i=0; i<2; i++){
-        fieldsets.push(Elem.appendNewElem(this.m_content,'fieldset'));
-        legends.push(Elem.appendNewElem(fieldsets[i],'legend'));
-    }
-    legends[0].innerHTML = 'Project location';
-    legends[1].innerHTML = 'Configuration settings';
+/**
+ * ...
+ *
+ * @param field
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_initNameField = function(field) {
+    var projectName = Elem.appendNewClassElem(field,'input','game-name');
+    projectName.setAttribute('type', 'text');
+    projectName.setAttribute('placeholder', 'Write your project name...');
+    projectName.setAttribute('minlength','1');
+    field.appendChild(this.spans[0]);
+    this.inputs.push(projectName);
+};
 
-    var locationField = Elem.appendNewClassElem(fieldsets[0],'div','input-field');
-    this.locationpath = Elem.appendNewClassElem(locationField,'div','filepath');
+/**
+ * ...
+ *
+ * @param field
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_initLocationField = function(field) {
+    var m_this = this;
+    var locationField = Elem.appendNewClassElem(field,'div','input-field');
+    this.locationpath = Elem.appendNewClassElem(locationField,'p','filepath');
     this.browseBtn = Elem.appendNewClassElem(locationField,'input','project-browse');
     this.browseBtn.setAttribute('type','button');
+    field.appendChild(this.spans[1]);
+    locationField.addEventListener('click',function(){m_this.m_chooseLocation(this)});
+};
 
-    fieldsets[0].appendChild(this.spans[1]);
-
+/**
+ * ...
+ *
+ * @param field
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_initConfigField = function(field) {
     var labels = [];
     for(var i=0; i<2; i++){
-        //labels.push(Elem.appendNewElem(fieldsets[1],'label'));
-        //configInputs.push(Elem.appendNewElem(fieldsets[1],'input'));
+        labels.push(Elem.appendNewElem(field,'label'));
+        this.inputs.push(Elem.appendNewElem(field,'input'));
+        this.inputs[i].setAttribute('required','');
+
     }
-    labels[0] = Elem.appendNewElem(fieldsets[1],'label');
-    this.inputs[1] = Elem.appendNewElem(fieldsets[1],'input');
-    fieldsets[1].appendChild(this.spans[2]);
+    Elem.appendElemAt(field, this.spans[2], 3);
+    console.log(field);
+    Elem.appendElemAt(field, this.spans[3], 6);
 
-    labels[1] = Elem.appendNewElem(fieldsets[1],'label');
-    this.inputs[2] = Elem.appendNewElem(fieldsets[1],'input');
-    fieldsets[1].appendChild(this.spans[3]);
-
-    labels[0].innerHTML = 'Id';
+    Elem.setText(labels[0], 'Id');
     this.inputs[1].setAttribute('type', 'number'); //@TODO change later
     this.inputs[1].setAttribute('placeholder', 'E.g. 0');
-    this.inputs[1].setAttribute('required','');
 
-    labels[1].innerHTML = 'Title';
+    Elem.setText(labels[1], 'Title');
     this.inputs[2].setAttribute('type', 'text');
     this.inputs[2].setAttribute('placeholder', 'Title');
     this.inputs[2].setAttribute('required','');
+};
 
-    locationField.addEventListener('click',function(){m_this.m_chooseLocation(this)});
-
+/**
+ * ...
+ *
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_addListeners = function() {
+    var m_this = this;
     this.inputs[0].addEventListener("input", function (event) {
-        // Each time the user types something, we check if the
-        // email field is valid.
-        if ( m_this.inputs[0].validity.valid) {
-            // In case there is an error message visible, if the field
-            // is valid, we remove the error message.
-            m_this.spans[0].innerHTML = ""; // Reset the content of the message
-            m_this.spans[0].className = "spanerror"; // Reset the visual state of the message
+        if (m_this.inputs[0].validity.valid) {
+            m_this.spans[0].innerHTML = "";
+            m_this.spans[0].className = "spanerror";
         }
     }, false);
 
     this.inputs[1].addEventListener("input", function (event) {
-        // Each time the user types something, we check if the
-        // email field is valid.
         if (m_this.inputs[1].validity.valid) {
             m_this.spans[2].innerHTML = "";
             m_this.spans[2].className = "spanerror";
@@ -166,8 +258,6 @@ birka.project.CreateModal.prototype.m_initCustom = function() {
     }, false);
 
     this.inputs[2].addEventListener("input", function (event) {
-        // Each time the user types something, we check if the
-        // email field is valid.
         if (m_this.inputs[2].validity.valid) {
             m_this.spans[3].innerHTML = "";
             m_this.spans[3].className = "spanerror";
@@ -175,11 +265,13 @@ birka.project.CreateModal.prototype.m_initCustom = function() {
     }, false);
 };
 
-//@TODO Optimize
-birka.project.CreateModal.prototype.save = function(callback, caller) {
+/**
+ * ...
+ *
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_checkValidFields = function() {
     var m_this = this;
-
-
     if (!m_this.inputs[0].validity.valid) {
         m_this.spans[0].innerHTML = "Fill in a project name.";
         m_this.spans[0].className = "spanerror active";
@@ -193,121 +285,133 @@ birka.project.CreateModal.prototype.save = function(callback, caller) {
         m_this.spans[3].className = "spanerror active";
     }
 
-    if (m_this.locationpath.innerHTML === "") {
-        m_this.spans[1].innerHTML = "Please choose a location for your project."; // Reset the content of the message
-        m_this.spans[1].className = "spanerror active"; // Reset the visual state of the message
+    if (m_this.path === "") {
+        m_this.spans[1].innerHTML = "Please choose a location for your project.";
+        m_this.spans[1].className = "spanerror active";
     }
+
 
     if(m_this.inputs[0].validity.valid)
         if(m_this.inputs[1].validity.valid)
             if(m_this.inputs[2].validity.valid)
-                if(m_this.locationpath.innerHTML !== "") {
-
-                    if(m_this.m_walkDir(m_this.locationpath.innerHTML, m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value) === false){
-                        var filename = m_this.locationpath.innerHTML.replace(/^.*[\\\/]/, '');
-
-                        birka.project.CreateModal.dialog.showMessageBox({
-                            title: "Warning",
-                            type: "warning",
-                            message: "A file or folder with this name already exists in the folder " + filename + ". Replacing it will overwrite its current contents.",
-                            icon: './src/img/error.png',
-                            buttons: ['Overwrite', 'Cancel'],
-                            cancelId: 1
-                        }, function (response) {
-                            if(response === 1) {
-
-                            } else if (response === 0) {
-
-                                var projectObj = {
-                                    name: m_this.inputs[0].value,
-                                    location: m_this.locationpath.innerHTML,
-                                    id: m_this.inputs[1].value,
-                                    title: m_this.inputs[2].value
-                                };
-
-                                window.sessionStorage.setItem('loaded', 'true');
-                                window.sessionStorage.setItem('name', m_this.inputs[0].value);
-                                window.sessionStorage.setItem('projectLocation', m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
-                                window.sessionStorage.setItem('output', m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value + '/src/data');
-                                //console.log(projectObj);
-
-                                if(window.localStorage.getItem('recentProjects') !== null) {
-                                    var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
-                                    console.log(recentP);
-                                    var path = m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value;
-                                    for (var i = 0; i < recentP.projects.length; i++) {
-
-                                        if (recentP.projects[i].toLowerCase() === path.toLowerCase()) {
-                                            recentP.projects.splice(i, 1);
-                                        }
-                                    }
-                                    recentP.projects.unshift(path);
-
-                                    //recentP.projects.unshift(m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
-                                    if(recentP.projects.length > 5) {
-                                        recentP.projects.splice(5);
-                                    }
-                                    window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
-                                } else {
-                                    var recentP = {
-                                        projects: [m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value]
-                                    };
-                                    window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
-                                    console.log(window.localStorage.getItem('recentProjects'))
-                                    //window.localStorage.setItem('', JSON.stringify());
-                                }
-
-                                var pd = new birka.Projectdirectory(projectObj);
-                                pd.create();
-
-                                m_this.m_close();
-                                callback(m_this.m_parent);
-
-                            }
-                        });
-                    } else {
-
-                        var projectObj = {
-                            name: m_this.inputs[0].value,
-                            location: m_this.locationpath.innerHTML,
-                            id: m_this.inputs[1].value,
-                            title: m_this.inputs[2].value
-                        };
-
-                        window.sessionStorage.setItem('loaded', 'true');
-                        window.sessionStorage.setItem('name', m_this.inputs[0].value);
-                        window.sessionStorage.setItem('projectLocation', m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
-                        window.sessionStorage.setItem('output', m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value + '/src/data');
-                        //console.log(projectObj);
-
-                        if(window.localStorage.getItem('recentProjects') !== null) {
-                            var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
-                            //console.log(recentP);
-                            recentP.projects.unshift(m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
-                            if(recentP.projects.length > 5) {
-                                recentP.projects.splice(5);
-                            }
-                            window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
-                        } else {
-                            var recentP = {
-                                projects: [m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value]
-                            };
-                            window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
-                            console.log(window.localStorage.getItem('recentProjects'))
-                        }
-
-                        var pd = new birka.Projectdirectory(projectObj);
-                        pd.create();
-
-                        m_this.m_close();
-                        callback(m_this.m_parent);
-
-                    }
-
+                if(m_this.path !== "") {
+                    this.m_checkIfFolderExists();
                 }
-
 };
 
+/**
+ * ...
+ *
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_checkIfFolderExists = function() {
+    var m_this = this;
+        if(m_this.m_walkDir(m_this.path, m_this.path + "/" + m_this.inputs[0].value) === false){
+            var filename = m_this.path.replace(/^.*[\\\/]/, '');
+            birka.project.CreateModal.dialog.showMessageBox({
+                title: "Warning",
+                type: "warning",
+                message: "A file or folder with this name already exists in the folder " + filename + ". Replacing it will overwrite its current contents.",
+                icon: './src/img/error.png',
+                buttons: ['Overwrite', 'Cancel'],
+                cancelId: 1
+            }, function (response) {
+                if(response === 1) {
+                    // Do nothing.
+                } else if (response === 0) {
+                    m_this.m_saveRecent(true);
+                    m_this.m_save();
+                }
+            });
+        } else {
+            m_this.m_saveRecent(false);
+            m_this.m_save();
+        }
+};
+
+/**
+ * ...
+ *
+ * @param overwrite
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_saveRecent = function(overwrite) {
+    var m_this = this;
+    if(window.localStorage.getItem('recentProjects') !== null) {
+        this.m_saveRecentUnshift(overwrite);
+    } else {
+        var recentP = {
+            projects: [m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value]
+        };
+        window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
+    }
+};
+
+/**
+ * ...
+ *
+ * @param overwrite
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_saveRecentUnshift = function(overwrite) {
+    var m_this = this;
+    var recent = JSON.parse(window.localStorage.getItem('recentProjects'));
+    if (overwrite === false) {
+        recent.projects.unshift(m_this.path + "/" + m_this.inputs[0].value);
+        if(recent.projects.length > 5) {
+            recent.projects.splice(5);
+        }
+    } else {
+        var path = m_this.path + "/" + m_this.inputs[0].value;
+        for (var i = 0; i < recent.projects.length; i++) {
+            if (recent.projects[i].toLowerCase() === path.toLowerCase()) {
+                recent.projects.splice(i, 1);
+            }
+        }
+        recent.projects.unshift(path);
+
+        //recentP.projects.unshift(m_this.locationpath.innerHTML + "/" + m_this.inputs[0].value);
+        if(recent.projects.length > 5) {
+            recent.projects.splice(5);
+        }
+    }
+    window.localStorage.setItem('recentProjects', JSON.stringify(recent));
+};
+
+/**
+ * ...
+ *
+ * @returns undefined
+ */
+birka.project.CreateModal.prototype.m_save = function() {
+    var m_this = this;
+
+    var projectObj = {
+        name: m_this.inputs[0].value,
+        location: m_this.path,
+        id: m_this.inputs[1].value,
+        title: m_this.inputs[2].value
+    };
+
+    window.sessionStorage.setItem('loaded', 'true');
+    window.sessionStorage.setItem('name', projectObj.name);
+    window.sessionStorage.setItem('projectLocation', projectObj.location + "/" + projectObj.name);
+    window.sessionStorage.setItem('output', projectObj.location + "/" + projectObj.name + '/src/data');
+
+    var pd = new birka.Projectdirectory(projectObj);
+    pd.create();
+
+    m_this.m_close();
+    this.callback(m_this.m_parent);
+};
+
+/**
+ * ...
+ *
+ * @param dir
+ * @param newPath
+ * @returns {boolean}
+ */
 birka.project.CreateModal.prototype.m_walkDir = function(dir, newPath) {
     var m_this = this;
     var paths = [];
@@ -330,21 +434,11 @@ birka.project.CreateModal.prototype.m_walkDir = function(dir, newPath) {
     return replace;
 };
 
-
-birka.project.CreateModal.prototype.m_electronDialog = function(msg, details) {
-    birka.project.CreateModal.dialog.showMessageBox({
-        title: "Warning",
-        type: "warning",
-        message: msg,
-        icon: './src/img/error.png',
-        buttons: ['Replace', 'Cancel'],
-        cancelId: 1,
-        detail: details
-    }, function (response) {
-        console.log(response);
-        });
-};
-
+/**
+ * ...
+ *
+ * @returns undefined
+ */
 birka.project.CreateModal.prototype.m_chooseLocation = function(){
     var m_this = this;
 
@@ -368,25 +462,4 @@ birka.project.CreateModal.prototype.m_chooseLocation = function(){
 
         }
     });
-
-};
-
-// Overrides method
-birka.project.CreateModal.prototype.m_initFooterButtons = function() {
-    var m_this = this;
-    for(var i=0; i<2; i++){
-        this.m_buttons.push(Elem.createClassElem('input', 'button'));
-        this.m_footer.appendChild(this.m_buttons[i]);
-        this.m_buttons[i].setAttribute('type', 'button');
-    }
-    this.m_buttons[0].value = 'Cancel';
-    this.m_buttons[1].value = 'Create';
-
-    //this.m_footer.appendChild(this.buttons[0]);
-    //this.m_footer.appendChild(this.buttons[1]);
-
-    this.m_buttons[0].addEventListener('click', function(){m_this.m_close(this)});
-    console.log(m_this.m_options.callback);
-    this.m_buttons[1].addEventListener('click', function(){m_this.save(m_this.m_options.callback)});
-
 };

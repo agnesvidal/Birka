@@ -34,13 +34,6 @@ birka.project.ProjectManagerView = function() {
      */
     this.linkItems = [];
 
-    /**
-     * Array containing all paths to recently opened projects.
-     *
-     * @type {Array}
-     */
-    this.paths = [];
-
     //--------------------------------------------------------------------------
     // Private properties
     //--------------------------------------------------------------------------
@@ -140,6 +133,7 @@ birka.project.ProjectManagerView.prototype.m_initRecent = function() {
 
     var listElems = [];
     var projectNames = [];
+    var paths = [];
     if(window.localStorage.getItem('recentProjects') !== null){
         var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
         if(recentP.projects.length > 0 ){
@@ -153,8 +147,8 @@ birka.project.ProjectManagerView.prototype.m_initRecent = function() {
                 var filename = recentP.projects[i].replace(/^.*[\\\/]/, '');
                 Elem.setText(projectNames[i], filename);
 
-                this.paths.push(Elem.appendNewElem(listElems[i],'p'));
-                Elem.setText(this.paths[i], recentP.projects[i]);
+                paths.push(Elem.appendNewElem(listElems[i],'p'));
+                Elem.setText(paths[i], recentP.projects[i]);
             }
         } else {
             var noP = Elem.appendNewElem(recentModule,'p');

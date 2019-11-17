@@ -1059,8 +1059,7 @@ fieldset input[type=number]{
 }
 
 .dialog .game-name::placeholder{
-    font-size: 22px;
-    color: #ccc;
+    color: #999;
 }
 
 .dialog .game-name:focus{
@@ -1075,6 +1074,7 @@ fieldset input[type=number]{
     letter-spacing: 0.05em;
 
 }
+/*
 .dialog .game-name{
     background: none;
     border: none;
@@ -1089,4 +1089,4 @@ fieldset input[type=number]{
     width: 100%;
     margin-bottom: 20px;
 }
-
+*/
