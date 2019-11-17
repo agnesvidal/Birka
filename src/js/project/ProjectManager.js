@@ -30,7 +30,7 @@ birka.project.ProjectManager = function(callback) {
      *
      * @type {Array}
      */
-    this.paths = [];
+    this.m_paths = [];
 };
 
 //------------------------------------------------------------------------------
@@ -105,12 +105,17 @@ birka.project.ProjectManager.prototype.m_addListeners = function(){
     this.m_view.chooseBtn.addEventListener('click',function(){m_this.m_openProject()});
 
     for(var i=0; i<this.m_view.linkItems.length; i++){
-        var path = this.m_view.paths[i].innerHTML;
         this.m_view.linkItems[i].addEventListener('click',function(){
             m_this.m_loadProject(this.querySelector('p').innerHTML)
-
         });
     }
+    require('electron').ipcRenderer.on('create', function() {
+        m_this.m_createProject();
+    });
+
+    require('electron').ipcRenderer.on('open', function() {
+        m_this.m_openProject();
+    });
 };
 
 /**
@@ -120,29 +125,11 @@ birka.project.ProjectManager.prototype.m_addListeners = function(){
  */
 birka.project.ProjectManager.prototype.m_createProject = function(){
     var m_this = this;
-    /*
-    m_this.modal = new birka.project.CreateModal(m_this.modal, {
-        type: 'custom',
-        title: 'Create project'
-    });
-    */
-    /*
-    var modal = new birka.project.CreateModal({
-        type: 'custom',
-        title: 'Create project'
-    });
-        modal.buttons[1].addEventListener('click', function(){m_this.modal.save(m_this.m_saveProject, m_this)});
-
-    */
-
-
     birka.project.ProjectManager.CModal.openDialog({
         type: 'custom',
         title: 'Create project',
         callback: m_this.m_saveProject
     }, m_this);
-
-    //modal.buttons[1].addEventListener('click', function(){m_this.modal.save(m_this.m_saveProject, m_this)});
 };
 
 birka.project.ProjectManager.prototype.m_saveProject = function(caller) {
@@ -310,15 +297,15 @@ birka.project.ProjectManager.prototype.m_walkDir = function(dir) {
         var fullPath = birka.project.ProjectManager.path.join(dir, file);
         if (birka.project.ProjectManager.fs.lstatSync(fullPath).isDirectory()) {
             m_this.m_walkDir(fullPath);
-            m_this.paths.push(fullPath);
+            m_this.m_paths.push(fullPath);
         } else {
             if(!fullPath.match(/(^|\/)\.[^\/\.]/g)){
-                m_this.paths.push(fullPath);
+                m_this.m_paths.push(fullPath);
             }
         }
     });
 
-//console.log(m_this.paths);
+//console.log(m_this.m_paths);
 };
 
 /**
@@ -328,8 +315,8 @@ birka.project.ProjectManager.prototype.m_walkDir = function(dir) {
  * @returns {boolean}
  */
 birka.project.ProjectManager.prototype.m_checkProjectValidity = function(path) {
-    if(this.paths.indexOf(path + '/src/system/Main.js') > -1){
-        if(this.paths.indexOf(path + '/src/data') > -1){
+    if(this.m_paths.indexOf(path + '/src/system/Main.js') > -1){
+        if(this.m_paths.indexOf(path + '/src/data') > -1){
             return true
         }
     } else {
