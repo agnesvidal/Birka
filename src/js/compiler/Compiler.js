@@ -76,6 +76,9 @@ birka.compiler.Compiler.fs = require('fs');
  */
 birka.compiler.Compiler.path = require('path');
 
+birka.project.ProjectManager.Modal =  new birka.project.Modal();
+
+
 
 //------------------------------------------------------------------------------
 // Public methods
@@ -143,7 +146,7 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
                 if((temp[i].status[j] === 1) || (temp[i].status[j] === 2)){
                     //console.log(temp);
                     //console.log("Error. Can't compile.");
-                    m_this.modal = new birka.project.Modal(m_this.modal, {
+                    birka.project.ProjectManager.Modal.openDialog({
                         type: 'error',
                         title: 'Can\'t compile',
                         message: 'Your selected folder contains errors.'
@@ -152,7 +155,7 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
                 }
             }
         } else if(temp[i].name === ""){
-            m_this.modal = new birka.project.Modal(m_this.modal, {
+            birka.project.ProjectManager.Modal.openDialog({
                 type: 'error',
                 title: 'Can\'t compile',
                 message: 'One or more resources is not named.'

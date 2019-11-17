@@ -1,5 +1,6 @@
 @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
-*{padding: 0; margin: 0; box-sizing: border-box}
+*{padding: 0; margin: 0; box-sizing: border-box;
+}
 
 body {
     background-color: #f1f3f6;
@@ -20,6 +21,52 @@ a {
 input[type=button], input[type=submit]{
     cursor: pointer;
 }
+
+h1, h2, h3, h4, h5 {
+    font-weight: 300;
+
+}
+
+p{
+    font-weight: 300;
+}
+
+h3 {
+    font-size: 16px;
+}
+
+input[type=button] {
+   /* font-weight: 300;*/
+    color: #fff;
+}
+
+:root {
+    --white: #FFF;
+    --black: #000;
+    --grey: #666;
+    --light-cyan: #23d7d7;
+    --dark-cyan: #21c7c7;
+    --light-lilac: #ab98f9;
+    --dark-lilac: #9574ea;
+
+    --light-red: #faeded;
+    --lighter-red: #ff5451;
+    --orange: #ff9a45;
+    --light-yellow: #fffad7;
+
+    --base-font: Lato, Verdana, sans-serif;
+    --secondary-font: Montserrat, sans-serif;
+
+    --font-size-big: 26px;
+    --font-size-medium: 16px;
+    --font-size-small: 14px;
+
+    --padding: 20px;
+    --half-padding: 10px;
+    --quarter-padding: 5px;
+    --double-padding: 40px;
+}
+
 
 /* * * * * * * * * NAV * * * * * * * * */
 .current-project{
@@ -54,7 +101,6 @@ input[type=button], input[type=submit]{
     font-weight: 600;
 }
 #project-header {
-    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -138,7 +184,7 @@ nav a {
 
 nav a:hover {
     color: #333;
-    box-shadow: inset 0px 0 0 red, inset 0 0px 0 red, inset 0px 0 0 #ececec, inset 0 -1px 0 #21c7c7;
+    box-shadow: inset 0px 0 0 red, inset 0 0px 0 red, inset 0px 0 0 #ececec, inset 0 -1px 0 var(--dark-cyan);
 
 }
 
@@ -152,7 +198,7 @@ nav a:hover {
     /*background-color: #f1f3f6;*/
     color: #333;
     font-weight: 400;
-    box-shadow: inset 0px 0 0 red, inset 0 0px 0 red, inset 0px 0 0 #ececec, inset 0 -1px 0 #21c7c7;
+    box-shadow: inset 0px 0 0 red, inset 0 0px 0 red, inset 0px 0 0 #ececec, inset 0 -1px 0 var(--dark-cyan);
 
 }
 
@@ -165,7 +211,6 @@ nav a:hover {
 }
 
 .tool-header{
-    box-sizing: border-box;
     margin: 10px;
     padding: 20px;
     background-color: #FFFFFF;
@@ -177,323 +222,6 @@ h2{
     font-size: 26px;
 }
 
-/* * * * * * * * * HOME * * * * * * * * */
-#project {
-    width: 100%;
-    /*margin-top: 25%;*/
-    display: flex;
-    justify-content: space-between;
-
-}
-
-#project h2 {
-    /*padding: 16px;*/
-    text-align: center;
-
-}
-
-#project p{
-    font-weight: 300;
-    text-align: center;
-    padding: 10px;
-}
-
-#project h3 {
-    padding: 16px;
-    font-weight: 300;
-    font-size: 14px;
-    text-align: center;
-
-}
-
-.project-left{
-    box-sizing: border-box;
-    width: 45%;
-    height: calc(100vh - 140px);
-    padding: 20px;
-    margin: 20px;
-    margin-top: calc(50vh - (250px));
-
-}
-
-.project-right{
-    box-sizing: border-box;
-    /*background-color: #fff;*/
-    width: 45%;
-    height: calc(100vh - 70px);
-    padding: 20px;
-    margin-right: 40px;
-    margin-top: calc(50vh - (250px));
-
-}
-
-#project .no-project{
-    margin-left: 30%;
-    margin-top: calc(30vh);
-    color: #999;
-}
-
-#project .no-project {
-    background: url("../img/folder.png") no-repeat;
-    background-size: 38px;
-    background-position: 42px 13px;
-}
-
-#project .no-project p{
-    text-align: left;
-    padding-top: 50px;
-}
-
-.project-left div:first-of-type{
-    margin-top: 20%;
-}
-/*
-#project input[type=text]{
-    box-sizing: border-box;
-    margin: 10px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    padding-left: 10px;
-    border: 1px solid #ececec;
-    width: 100%; /*50vw
-    /*
-    color: #666;
-    font-weight: 300;
-    font-size: 14px;
-    border-radius: 2px;
-}
-*/
-
-#project fieldset {
-    border: none;
-    text-transform: uppercase;
-    font-family: 'Lato',sans-serif;
-    font-weight: 300;
-    font-size: 13px;
-    letter-spacing: 0.05em;
-    padding-top: 8px;
-    margin-top: 10px;
-}
-
-#project label {
-    padding-left: 2px;
-    font-weight: 400;
-    font-size: 12px;
-    color: #333;
-    display: block;
-}
-
-
-#project fieldset input{
-    margin-top: 3px;
-    margin-bottom: 12px;
-}
-
-#project fieldset input[type=button]{
-
-}
-
-#project fieldset input[type=text]{
-    box-sizing: border-box;
-    background: #FFF;
-    padding: 10px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
-    text-align: left;
-    font-weight: 300;
-    border: 1px solid #dedede;
-    width: 100%;
-    border-radius: 2px;
-    display: block;
-    height: 40px;
-}
-
-/*
-#project fieldset input[type=text]{
-    box-sizing: border-box;
-    background: #FFF;
-    padding: 10px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
-    text-align: left;
-    font-weight: 300;
-    border: 1px solid #dedede;
-    width: 100%;
-    border-radius: 2px;
-    display: block;
-}
-*/
-
-#project input:valid{
-    border-bottom: 1px solid #ccc;
-}
-
-#project .spanerror.active {
-    font-size: 12px;
-    text-transform: none;
-    border: 1px solid #ffd8dd;
-    position: relative;
-    top: -10px;
-    background-color: #FAEDED;
-    color: red;
-    padding: 5px;
-    width: 100%;
-    display: block;
-    box-sizing: border-box;
-    box-shadow: none;
-}
-
-#project .spanerror, #project .spanerror-active  {
-    margin-bottom: 10px;
-}
-
-
-#project input:invalid:focus{
-    border-bottom: 1px solid red;
-}
-
-#project fieldset input[type=number]{
-    box-sizing: border-box;
-    background: #FFF;
-    padding: 10px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
-    text-align: left;
-    font-weight: 300;
-    border: 1px solid #dedede;
-    width: 100%;
-    border-radius: 2px;
-    display: block;
-    height: 40px;
-}
-
-#project fieldset input:valid:focus{
-    border: 1px solid #23d7d7; /*23d7d7*/
-
-}
-
-#project .project-browse{
-    background: #21c7c7 url("../img/folder.png") no-repeat 10px 10px; /*21c7c7*/
-    background-size: 16px;
-    padding: 8px;
-    padding-left: 16px;
-    padding-right: 16px;
-    display: block;
-    text-align: left;
-    color: #FFF;
-    border-radius: 2px;
-    border: 1px solid #1eb7b7;
-    margin: 0;
-}
-
-#project .project-browse:hover {
-    background-color: #23d7d7;
-
-}
-
-#project .input-field {
-    justify-content: space-between;
-    border: 1px solid #dedede;
-    border-radius: 2px;
-    margin-bottom: 4px;
-    /*margin-top: 4px;*/
-    margin-top: 0px;
-    margin-bottom: 12px;
-
-}
-
-
-
-#project .filepath {
-    display: block;
-    margin-left: 2px;
-    padding-top: 8px;
-    padding-left: 4px;
-    font-size: 12px;
-    text-transform: none;
-    font-weight: 300;
-    color: #333333;
-    /*color: #ccc;*/
-    /*text-transform: lowercase;*/
-
-}
-
-#project .project-path{
-    display: inline;
-
-    padding: 10px;
-    background-color: #FFF;
-}
-
-#project #save {
-float: right;
-border: 1px solid #9574ea;
-background: #ab98f9;
-color: #FFF;
-padding: 10px;
-border-radius: 2px;
-width: 100px;
-}
-
-#project #save:hover {
-    background: #9574ea;
-}
-
-#project .game-name::placeholder{
-font-size: 22px;
-color: #ccc;
-}
-
-#project .game-name:focus{
-border-bottom: 1px solid #23d7d7;
-
-}
-
-#project span{
-font-weight: 300;
-text-transform: uppercase;
-font-size: 12px;
-letter-spacing: 0.05em;
-
-}
-#project .game-name{
-background: none;
-border: none;
-font-family: 'Montserrat', sans-serif;
-font-size: 42px;
-text-align: left;
-font-weight: 300;
-padding-top: 20px;
-padding-bottom: 30px;
-border-bottom: 1px solid #ccc;
-border-radius: 0;
-width: 100%;
-margin-bottom: 20px;
-}
-
-#project .project-left input[type=button]{
-display: block;
-margin: 10px;
-padding: 16px;
-width: 100%;
-border: 1px solid #9574ea;
-background: #ab98f9;
-color: #FFF;
-cursor: pointer;
-text-transform: uppercase;
-letter-spacing: 0.1em;
-font-weight: 300;
-font-size: 14px;
-border-radius: 2px;
-
-}
-
-#project .project-left  input[type=button]:hover{
-background: #9574ea;
-}
-
-
-
 /* * * * * * FORM * * * * * */
 input {
     /*
@@ -504,8 +232,6 @@ input {
 }
 
 .input-field {
-
-    box-sizing: border-box;
     margin-bottom: 4px;
     /*margin-top: 4px;*/
     margin-top: 20px;
@@ -560,9 +286,10 @@ input {
     margin-top: 3px;
     margin-bottom: 3px;
 
-    border: 1px solid #21c7c7;
+    border: 1px solid var(--dark-cyan);
     border-radius: 20px; /*4,0,0,4*/
-    background: #23d7d7;
+    background: var(--light-cyan);
+
     /*width: 130px;*/
     /*
     background: #21c7c7 url("../img/folder.png") no-repeat 10px 17px; /*21c7c7*/
@@ -591,7 +318,7 @@ input {
 
 
 .input-field .browse:hover {
-    background-color: #21c7c7; /*#8d5dca*/
+    background-color: var(--dark-cyan); /*#8d5dca*/
     color: #FFF;
 }
 
@@ -610,7 +337,7 @@ input {
     /*border-left: 1px solid #cccccc;*/
     /*border-radius: 0 4px 4px 0;*/
     border-radius: 0;
-    border-bottom: 1px solid #21c7c7;
+    border-bottom: 1px solid var(--dark-cyan);
     width: 55px;
     background: #FFFFFF url("../img/refresh.png") no-repeat 11px 12px;
     background-size: 20px;
@@ -649,7 +376,7 @@ input {
     padding-left: 2px;
     font-weight: 400;
     font-size: 12px;
-    color: #21c7c7;
+    color: var(--dark-cyan);
 }
 
 
@@ -675,7 +402,6 @@ form input[type=text]{
 }
 
 .fileIndex input[type=text]{
-    box-sizing: border-box;
     border: 1px solid #dedede;
     border-radius: 0;
     padding-left: 4px;
@@ -689,7 +415,7 @@ form input[type=text]{
     padding: 14px;
     padding-left: 40px;
     padding-right: 40px;
-    background-color: #21c7c7; /*#8d5dca*/
+    background-color: var(--dark-cyan); /*#8d5dca*/
     color: #FFF;
     border: none;
     margin-right: 20px;
@@ -698,17 +424,15 @@ form input[type=text]{
     text-transform: uppercase;
     letter-spacing: 0.2em;
     cursor: pointer;
-    border: 1px solid #1eb7b7;
+    border: 1px solid var(--dark-cyan);
 }
 
 #compileBtn:hover{
-    background-color: #23d7d7; /*#8d5dca*/
-
+    background-color: var(--light-cyan);
 }
 
 /* * * * * * FILEINDEX * * * * * */
 .fileIndex {
-    box-sizing: border-box;
     border: 0px solid #dedede;
     margin: 10px;
     margin-bottom: 20px;
@@ -723,6 +447,8 @@ form input[type=text]{
     background-color: #FFFFFF;
 
 }
+
+
 
 .fileIndex h3 {
     padding-bottom: 6px;
@@ -865,7 +591,7 @@ td:nth-child(4) {
     background: url('../img/error.png') no-repeat left;
     background-position: 13px 10px;
     background-size: 18px;
-    background-color: #faeded;
+    background-color: var(--light-red);
     /*border-left: 6px solid #f4504e;*/
 }
 
@@ -876,7 +602,7 @@ td:nth-child(4) {
     background: url('../img/warning.png') no-repeat left;
     background-position: 13px 10px;
     background-size: 18px;
-    background-color: #fffad7;
+    background-color: var(--light-yellow);
 
 }
 
@@ -892,7 +618,7 @@ tr:nth-child(even).error, tr:nth-child(odd).error {
     background-color: #faeded;
     color: #ff000d;
     */
-    box-shadow: inset 0px 0 0 red, inset 0 0px 0 red, inset 6px 0 0 #ff5451, inset 0 0px 0 red;
+    box-shadow: inset 0px 0 0 red, inset 0 0px 0 red, inset 6px 0 0 var(--lighter-red), inset 0 0px 0 red;
 
 }
 
@@ -905,7 +631,7 @@ tr:nth-child(even).warning, tr:nth-child(odd).warning {
     /*background-color: #ffae38;
     color: #FFF;
     cursor: pointer;*/
-    box-shadow: inset 0px 0 0 red, inset 0 0px 0 red, inset 6px 0 0 #ffae38, inset 0 0px 0 red;
+    box-shadow: inset 0px 0 0 red, inset 0 0px 0 red, inset 6px 0 0 var(--orange), inset 0 0px 0 red;
 }
 
 tr.warning .coll-cell:after {
@@ -1115,7 +841,6 @@ tr:nth-child(even).ignored{
 
 
 .dialog-header{
-    box-sizing: border-box;
     display: block;
     border-bottom: 1px solid #ececec;
     width: 100%;
@@ -1130,7 +855,6 @@ tr:nth-child(even).ignored{
 }
 
 .dialog-footer{
-    box-sizing: border-box;
     display: block;
     border-top: 1px solid #ececec;
     width: 100%;
@@ -1159,9 +883,17 @@ tr:nth-child(even).ignored{
 }
 
 .dialog-footer input:last-of-type {
-    background-color: #ab98f9;
-    border: 1px solid #9574ea;
-    color: #FFF;
+    background-color: var(--light-lilac);
+    border: 1px solid var(--dark-lilac);
+}
+
+.dialog-footer input:first-of-type {
+    color: #000;
+
+}
+
+.dialog-footer input:last-of-type:hover {
+    background-color: var(--dark-lilac);
 }
 
 
@@ -1191,11 +923,9 @@ tr:nth-child(even).ignored{
 }
 
 .dialog fieldset input[type=button]{
-
 }
 
 .dialog fieldset input[type=text]{
-    box-sizing: border-box;
     background: #FFF;
     padding: 10px;
     font-family: 'Montserrat', sans-serif;
@@ -1219,12 +949,11 @@ input:valid{
     border: 1px solid #ffd8dd;
     position: relative;
     top: -10px;
-    background-color: #FAEDED;
+    background-color: var(--light-red);
     color: red;
     padding: 5px;
     width: 100%;
     display: block;
-    box-sizing: border-box;
     box-shadow: none;
 }
 
@@ -1247,7 +976,6 @@ input:invalid{
 }
 
 fieldset input[type=number]{
-    box-sizing: border-box;
     background: #FFF;
     padding: 10px;
     font-family: 'Montserrat', sans-serif;
@@ -1262,12 +990,12 @@ fieldset input[type=number]{
 }
 
 .dialog fieldset input:valid:focus{
-    border: 1px solid #23d7d7; /*23d7d7*/
+    border: 1px solid var(--light-cyan); /*23d7d7*/
 
 }
 
 .dialog .project-browse{
-    background: #21c7c7 url("../img/folder.png") no-repeat 10px 10px; /*21c7c7*/
+    background: var(--dark-cyan) url("../img/folder.png") no-repeat 10px 10px; /*21c7c7*/
     background-size: 16px;
     padding: 8px;
     padding-left: 16px;
@@ -1276,12 +1004,12 @@ fieldset input[type=number]{
     text-align: left;
     color: #FFF;
     border-radius: 2px;
-    border: 1px solid #1eb7b7;
+    border: 1px solid var(--dark-cyan);
     margin: 0;
 }
 
 .dialog .project-browse:hover {
-    background-color: #23d7d7;
+    background-color: var(--light-cyan);
 
 }
 .dialog .input-field {
@@ -1318,8 +1046,8 @@ fieldset input[type=number]{
 
 .dialog #save {
     float: right;
-    border: 1px solid #9574ea;
-    background: #ab98f9;
+    border: 1px solid var(--dark-lilac);
+    background: var(--light-lilac);
     color: #FFF;
     padding: 10px;
     border-radius: 2px;
@@ -1327,16 +1055,15 @@ fieldset input[type=number]{
 }
 
 .dialog #save:hover {
-    background: #9574ea;
+    background: var(--dark-lilac);
 }
 
 .dialog .game-name::placeholder{
-    font-size: 22px;
-    color: #ccc;
+    color: #999;
 }
 
 .dialog .game-name:focus{
-    border-bottom: 1px solid #23d7d7;
+    border-bottom: 1px solid var(--light-cyan);
 
 }
 
@@ -1347,6 +1074,7 @@ fieldset input[type=number]{
     letter-spacing: 0.05em;
 
 }
+/*
 .dialog .game-name{
     background: none;
     border: none;
@@ -1361,37 +1089,4 @@ fieldset input[type=number]{
     width: 100%;
     margin-bottom: 20px;
 }
-
-
-#project .recent-projects {
-
-}
-
-#project .recent-projects h3 {
-    font-weight: 400;
-    font-size: 1em;
-    text-align: left;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    padding: 0;
-    padding-left: 4px;
-    margin-bottom: 10px;
-    border-left: 2px solid #000;
-
-}
-
-#project .recent-projects a > div {
-    background-color: #ebebeb;
-    margin-bottom: 0.5em;
-    padding: 1em;
-}
-
-#project .recent-projects a > div:hover {
-    color: #ccc;/*
-    background-color: #e7e7e7;*/
-}
-
-#project .recent-projects p {
-    padding: 0;
-    text-align: left;
-}
+*/

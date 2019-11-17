@@ -23,21 +23,14 @@ birka.project.ProjectManager = function(callback) {
      *
      * @type {birka.project.ElementManager}
      */
-    this.elemManager = null;
+    this.m_view = null;
 
     /**
      * ...
      *
      * @type {Array}
      */
-    this.paths = [];
-
-    /**
-     * ...
-     *
-     * @type {birka.project.Modal}
-     */
-    this.modal = null;
+    this.m_paths = [];
 };
 
 //------------------------------------------------------------------------------
@@ -70,6 +63,9 @@ birka.project.ProjectManager.fs = require('fs');
  */
 birka.project.ProjectManager.path = require('path');
 
+birka.project.ProjectManager.CModal =  new birka.project.CreateModal();
+birka.project.ProjectManager.Modal =  new birka.project.Modal();
+
 //------------------------------------------------------------------------------
 // Public methods
 //------------------------------------------------------------------------------
@@ -88,19 +84,13 @@ birka.project.ProjectManager.prototype.init = function(){
  * @returns {undefined}
  */
 birka.project.ProjectManager.prototype.m_initUI = function(){
-    this.elemManager = new birka.project.ElementManager(this.toolWrapper);
-    this.elemManager.init();
+    this.m_view = new birka.project.ProjectManagerView(this.toolWrapper);
+    this.m_view.init();
     /*
     if(sessionStorage.loaded === 'true') {
         this.m_initLoadedProject();
     }*/
     this.m_addListeners();
-    /*
-    var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
-    var rP = {};
-    window.localStorage.setItem('recentProjects', JSON.stringify(rP));
-*/
-    //window.localStorage.recent
 };
 
 
@@ -111,22 +101,21 @@ birka.project.ProjectManager.prototype.m_initUI = function(){
  */
 birka.project.ProjectManager.prototype.m_addListeners = function(){
     var m_this = this;
-    this.elemManager.buttons.createBtn.addEventListener('click',function(){ m_this.m_createProject(this)});
-    this.elemManager.buttons.chooseBtn.addEventListener('click',function(){ m_this.m_openProject(this)});
+    this.m_view.createBtn.addEventListener('click',function(){m_this.m_createProject()});
+    this.m_view.chooseBtn.addEventListener('click',function(){m_this.m_openProject()});
 
-    for(var i=0; i<this.elemManager.links.length; i++){
-        var path = this.elemManager.paths[i].innerHTML;
-        this.elemManager.links[i].addEventListener('click',function(){
+    for(var i=0; i<this.m_view.linkItems.length; i++){
+        this.m_view.linkItems[i].addEventListener('click',function(){
             m_this.m_loadProject(this.querySelector('p').innerHTML)
-
         });
     }
-    //console.log(JSON.parse(localStorage.getItem('recentProjects')));
-    var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
+    require('electron').ipcRenderer.on('create', function() {
+        m_this.m_createProject();
+    });
 
-    //console.log(recentP.projects);
-
-
+    require('electron').ipcRenderer.on('open', function() {
+        m_this.m_openProject();
+    });
 };
 
 /**
@@ -136,17 +125,18 @@ birka.project.ProjectManager.prototype.m_addListeners = function(){
  */
 birka.project.ProjectManager.prototype.m_createProject = function(){
     var m_this = this;
-    m_this.modal = new birka.project.CreateModal(m_this.modal, {
+    birka.project.ProjectManager.CModal.openDialog({
         type: 'custom',
-        title: 'Create project'
-    });
-
-    m_this.modal.buttons[1].addEventListener('click', function(){m_this.modal.save(m_this.m_saveProject, m_this)});
+        title: 'Create project',
+        callback: m_this.m_saveProject
+    }, m_this);
 };
 
 birka.project.ProjectManager.prototype.m_saveProject = function(caller) {
+    var m_this = this;
     var project = new birka.project.Project();
     caller.callback(project);
+
 };
 
 /**
@@ -193,7 +183,7 @@ birka.project.ProjectManager.prototype.m_loadProject = function(path){
         var p = path;
             for (var i = 0; i < recentP.projects.length; i++) {
 
-                if (recentP.projects[i] === path) {
+                if (recentP.projects[i].toLowerCase() === path.toLowerCase()) {
                     recentP.projects.splice(i, 1);
                 }
             }
@@ -215,6 +205,7 @@ birka.project.ProjectManager.prototype.m_loadProject = function(path){
         this.m_showError('Not a working project.', 'Missing Main.js and/or data folder.')
     }
     } else{
+        /*
         var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
         for(var i=0; i<this.elemManager.links.length; i++){
             //console.log(this.elemManager.links[i].querySelector('p'))
@@ -235,15 +226,48 @@ birka.project.ProjectManager.prototype.m_loadProject = function(path){
 
         window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
         //console.log(recentP);
+*/
     }
 };
 
+birka.project.ProjectManager.prototype.m_lala = function(parent, path) {
+    var m_this = parent;
+    var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
+    for(var i=0; i<m_this.m_view.links.length; i++){
+        //console.log(this.elemManager.links[i].querySelector('p'))
+        if(m_this.m_view.links[i].querySelector('p').innerHTML === path){
+            //console.log(path, this.elemManager.links[i].querySelector('p').innerHTML);
+            m_this.m_view.links[i].parentNode.removeChild(m_this.elemManager.links[i]);
+            m_this.m_view.links.splice(i, 1);
+
+        }
+    }
+    for(var j=0; j<recentP.projects.length; j++){
+        if(path === recentP.projects[j]){
+            //console.log(j, recentP.projects[j]);
+            recentP.projects.splice(j, 1);
+            //console.log(recentP)
+        }
+    }
+
+    window.localStorage.setItem('recentProjects', JSON.stringify(recentP));
+    //console.log(recentP);
+};
+
+
 birka.project.ProjectManager.prototype.m_checkIfFolder = function(dir) {
+    var m_this = this;
     try{
         birka.project.ProjectManager.fs.readdirSync(dir)
     } catch(err){
         if(err.code === "ENOENT"){
-            this.m_showError('Missing project folder', 'The project folder has either been removed, or moved to a new location.');
+            //this.m_showError('Missing project folder', 'The project folder has either been removed, or moved to a new location.');
+            birka.project.ProjectManager.Modal.openDialog({
+                type: "error",
+                title: "Missing project folder",
+                message: "The project folder has either been removed, or moved to a new location.",
+                callback: {func: m_this.m_lala, param: dir}
+            }, m_this);
             return false
         }
     }
@@ -273,15 +297,15 @@ birka.project.ProjectManager.prototype.m_walkDir = function(dir) {
         var fullPath = birka.project.ProjectManager.path.join(dir, file);
         if (birka.project.ProjectManager.fs.lstatSync(fullPath).isDirectory()) {
             m_this.m_walkDir(fullPath);
-            m_this.paths.push(fullPath);
+            m_this.m_paths.push(fullPath);
         } else {
             if(!fullPath.match(/(^|\/)\.[^\/\.]/g)){
-                m_this.paths.push(fullPath);
+                m_this.m_paths.push(fullPath);
             }
         }
     });
 
-//console.log(m_this.paths);
+//console.log(m_this.m_paths);
 };
 
 /**
@@ -291,8 +315,8 @@ birka.project.ProjectManager.prototype.m_walkDir = function(dir) {
  * @returns {boolean}
  */
 birka.project.ProjectManager.prototype.m_checkProjectValidity = function(path) {
-    if(this.paths.indexOf(path + '/src/system/Main.js') > -1){
-        if(this.paths.indexOf(path + '/src/data') > -1){
+    if(this.m_paths.indexOf(path + '/src/system/Main.js') > -1){
+        if(this.m_paths.indexOf(path + '/src/data') > -1){
             return true
         }
     } else {
@@ -305,9 +329,17 @@ birka.project.ProjectManager.prototype.m_checkProjectValidity = function(path) {
 birka.project.ProjectManager.prototype.m_showError = function(title, msg) {
     //this.m_electronDialog(title, msg);
     var m_this = this;
-    m_this.modal = new birka.project.Modal(m_this.modal, {
+    /*
+    m_this.modal = new birka.project.Modal({
         type: 'error',
         title: [title],
+        message: [msg]
+    });
+    */
+
+    birka.project.ProjectManager.Modal.openDialog({
+        type: 'error',
+        title: title,
         message: [msg]
     });
 };
