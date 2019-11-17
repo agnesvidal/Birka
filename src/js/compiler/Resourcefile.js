@@ -14,7 +14,7 @@
  * 
  * CLASS DESCRIPTION
  */
-birka.Resourcefile = function(projectname, output) {
+birka.compiler.Resourcefile = function(projectname, output) {
 
     //--------------------------------------------------------------------------
     // Protected properties
@@ -74,7 +74,16 @@ birka.Resourcefile = function(projectname, output) {
  * @constant
  * @default
  */
-birka.Resourcefile.fs = require('fs');
+birka.compiler.Resourcefile.fs = require('fs');
+
+/**
+ * Reference to Node.js FileSystem module
+ *
+ * @type {undefined}
+ * @constant
+ * @default
+ */
+birka.compiler.Resourcefile.dialog = require('electron').remote.dialog;
 
 
 //------------------------------------------------------------------------------
@@ -87,14 +96,14 @@ birka.Resourcefile.fs = require('fs');
  * @param {array} files Array with file objects, each object contains blob and filename.
  * @param {string} projectname Path to project resource folder.
  *
- * @return {undefined} //TODO: boolean?
+ * @return {undefined} 
  */
-birka.Resourcefile.prototype.compile = function(files) {
+birka.compiler.Resourcefile.prototype.compile = function(files) {
     if (files.length > 0) {
         this.m_resquestQueue = files;
         this.m_processRequestQueue();
     } else {
-        this.m_writeFile();
+        this.m_readTemplate();
     };
 
 };
@@ -110,12 +119,12 @@ birka.Resourcefile.prototype.compile = function(files) {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_processRequestQueue = function() {
+birka.compiler.Resourcefile.prototype.m_processRequestQueue = function() {
     if (this.m_resquestQueue.length > 0) {
         this.m_request = this.m_resquestQueue.shift();
         this.m_processRequest();
     } else {
-        this.m_writeFile();
+        this.m_readTemplate();
     }
 };
 
@@ -125,7 +134,7 @@ birka.Resourcefile.prototype.m_processRequestQueue = function() {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_processRequest = function() {
+birka.compiler.Resourcefile.prototype.m_processRequest = function() {
     this.m_generateBase64(this.m_request.blob, this.m_request.name);
 };
 
@@ -137,7 +146,7 @@ birka.Resourcefile.prototype.m_processRequest = function() {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_generateBase64 = function(blob, name) {
+birka.compiler.Resourcefile.prototype.m_generateBase64 = function(blob, name) {
     var m_this = this;
     var reader = new FileReader();
     reader.onload = function(event) {
@@ -145,6 +154,10 @@ birka.Resourcefile.prototype.m_generateBase64 = function(blob, name) {
         m_this.m_resquest = null;
         m_this.m_processRequestQueue();
     }
+    reader.onerror = function(event) {
+        reader.abort();
+        m_this.onError("Birka failed to read a resource file. Check ingoing resources and try again. If error remains, please contact developer.");
+    };
     reader.readAsDataURL(blob);
 };
 
@@ -156,7 +169,7 @@ birka.Resourcefile.prototype.m_generateBase64 = function(blob, name) {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_generateResponse = function(name, data) {
+birka.compiler.Resourcefile.prototype.m_generateResponse = function(name, data) {
     var str = "this.create(\"" + name + "\", \"" + data + "\");"
     this.m_tempArr.push(str);    
 };
@@ -166,15 +179,13 @@ birka.Resourcefile.prototype.m_generateResponse = function(name, data) {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_writeFile = function() {
-    var temp = this.m_readTemplate();
+birka.compiler.Resourcefile.prototype.m_saveDataToFile = function(temp) {
     var app = /%APP%/g;
     var data = temp.replace(app, this.m_project);
-
     var resources = this.m_tempArr.join('\n\t');
-    data = data.replace("%RESOURCES%", resources);
 
-    this.m_saveDataToFile(data);
+    data = data.replace("%RESOURCES%", resources);
+    this.m_writeFile(data);
 };
 
 /**
@@ -182,12 +193,12 @@ birka.Resourcefile.prototype.m_writeFile = function() {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_saveDataToFile = function (data) {
-    var m_this = this; //@FIXME Tried fixing error after compilation...
+birka.compiler.Resourcefile.prototype.m_writeFile = function (data) {
+    var m_this = this;
     var file = this.m_output + '/src/data/Resources.js';
-    birka.Resourcefile.fs.writeFile(file, data, function(err) {
+    birka.compiler.Resourcefile.fs.writeFile(file, data, function(err) {
         if (err) {
-            throw err; //TODO felhantering
+            m_this.m_onError("Birka could not save resource file. Try again. If error remains, please contact developer.");
         } else {
             m_this.m_onComplete();
         }
@@ -199,10 +210,18 @@ birka.Resourcefile.prototype.m_saveDataToFile = function (data) {
  *
  * @return {String}
  * @private
+ * 
+ *  
  */
-birka.Resourcefile.prototype.m_readTemplate = function() {
-    var structure = birka.Resourcefile.fs.readFileSync(__dirname + '/templates/Resources.txt').toString();
-    return structure;
+birka.compiler.Resourcefile.prototype.m_readTemplate = function() {
+    var m_this = this;
+    birka.compiler.Resourcefile.fs.readFile(__dirname + '/templates/Resources.txt'.toString(), 'utf8', function(err, data) {
+        if (err) {
+            m_this.m_onError("Birka could not read template for resource file. Try again. If error remains, please contact developer.");  
+        } else {
+            m_this.m_saveDataToFile(data)
+        }
+    });
 };
 
 /**
@@ -210,12 +229,55 @@ birka.Resourcefile.prototype.m_readTemplate = function() {
  *
  * @private
  */
-birka.Resourcefile.prototype.m_onComplete = function(data) {
+birka.compiler.Resourcefile.prototype.m_onError = function(msg) {
+    birka.compiler.Resourcefile.dialog.showMessageBox({
+        title: "Error",
+        message: msg,
+        icon: './src/img/error.png',
+        buttons: ['OK']
+    });
+    this.m_reset();
+}
+
+/**
+ * ...
+ *
+ * @private
+ */
+birka.compiler.Resourcefile.prototype.m_onComplete = function() {
+    var location = '"' + this.m_output + '/src/data/Resources.js"';
+    var size = this.m_getFilesize();
+
+    birka.compiler.Resourcefile.dialog.showMessageBox({
+        title: "Info",
+        message: "The resources has been compiled and saved to "+ location +" with a size of "+ size +" KB.",
+        buttons: ['OK']
+    });
+    this.m_reset();
+};
+
+/**
+ * ...
+ *
+ * @private
+ */
+birka.compiler.Resourcefile.prototype.m_getFilesize = function() {
+    var stats = birka.compiler.Resourcefile.fs.statSync(this.m_output + '/src/data/Resources.js');
+    var fileSize = stats.size;
+    var kiloBytes = Math.round(fileSize/1000);
+
+    return kiloBytes;
+}
+
+/**
+ * ...
+ *
+ * @private
+ */
+birka.compiler.Resourcefile.prototype.m_reset = function() {
     this.m_tempArr = [];
     this.m_resquestQueue = [];
     this.m_request = {};
     this.m_project = "";
     this.m_output = "";
-    console.log('Resource file has been saved!');
-    alert('Resource file has been saved!')
 };

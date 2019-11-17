@@ -165,7 +165,7 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
     }
     //console.log('sessionStorage projectPath', window.sessionStorage.projectLocation);
 
-    var res = new birka.Resourcefile(window.sessionStorage.name, window.sessionStorage.projectLocation);
+    var res = new birka.compiler.Resourcefile(window.sessionStorage.name, window.sessionStorage.projectLocation);
     res.compile(temp);
 
 };
