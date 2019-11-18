@@ -119,6 +119,11 @@ birka.project.Projectdirectory = function(project) {
             name: 'Index.html',
             template: '/templates/Index.txt',
             directory: '/bin-debug/'
+        },
+        {
+            name: 'Resourses.js',
+            template: '/templates/Resources.txt',
+            directory: '/src/data/'
         }
     ];
 
