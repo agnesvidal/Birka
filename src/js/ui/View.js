@@ -19,9 +19,9 @@ birka.ui.View = function(name) {
     this.name = name || "";
 
     /**
-     * Reference to the tool's wrapper.
+     * Reference to the tool's header.
      *
-     * @type {Element} toolWrapper
+     * @type {Element} toolHeader
      */
     this.toolHeader = null;
 

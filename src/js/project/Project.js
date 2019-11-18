@@ -98,6 +98,10 @@ birka.project.Project.prototype.m_initProjectDetails = function() {
     var toolName = Elem.appendNewElem(toolHeader,'h2');
     Elem.setText(toolName, 'Project name: ' + window.sessionStorage.name);
 
+    var updateSDK =  Elem.appendNewClassElem(toolHeader, 'input', 'project-update-sdk-btn');
+    updateSDK.setAttribute('type', 'button');
+    updateSDK.setAttribute('value', 'Uppdatera SDK version');
+    this.m_addListeners();
 };
 
 /**
@@ -107,6 +111,20 @@ birka.project.Project.prototype.m_initProjectDetails = function() {
  */
 birka.project.Project.prototype.m_initTitle = function(){
     document.title = window.sessionStorage.name;
+};
+
+/**
+ * Changes the title of the application to the name of the project.
+ *
+ * @returns undefined
+ */
+birka.project.Project.prototype.m_addListeners = function(){
+    var sdkBtn = document.querySelector('.project-update-sdk-btn');
+    sdkBtn.addEventListener('click', function(){
+        // @TODO REPLACE WITH CALL TO SOME OTHER METHOD
+        alert('Ersätt denna alert med anrop till annan metod i: birka.project.Project.prototype.m_addListeners')
+        console.log(window.sessionStorage);
+    });
 };
 
 /**

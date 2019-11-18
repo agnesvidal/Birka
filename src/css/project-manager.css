@@ -1,0 +1,81 @@
+
+.project-manager {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.project-manager h3 {
+    font-size: 14px;
+}
+
+.project-manager-col-1 h3 {
+    padding: 1em;
+}
+
+.project-manager-col-1 {
+    width: 45%;
+    height: calc(100vh - 140px);
+    padding: var(--padding);
+    margin: 20px;
+    margin-top: calc(50vh - (250px));
+}
+
+.project-manager-col-1 h2, .project-manager-col-1 h3, .project-manager-col-1 p {
+    text-align: center;
+}
+
+.project-manager-col-1 p{
+    padding: var(--quarter-padding);
+}
+
+.project-manager-buttons input[type=button]{
+    display: block;
+    width: 100%;
+    margin: 10px;
+    padding: 1em;
+    border: 1px solid var(--dark-lilac);
+    background: var(--light-lilac);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 300;
+    font-size: 14px;
+    border-radius: 2px;
+}
+
+.project-manager-buttons input[type=button]:hover{
+    background: var(--dark-lilac);
+}
+
+.project-manager-col-2{
+    width: 45%;
+    height: calc(100vh - 70px);
+    padding: var(--padding);
+    margin-right: 40px;
+    margin-top: calc(50vh - (250px));
+}
+
+.project-manager-recent h3 {
+    padding-left: var(--quarter-padding);
+    margin-bottom: 1em;
+    font-weight: 400;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-left: 2px solid #000;
+}
+
+.project-manager-recent h4 {
+    font-weight: 400;
+}
+
+.project-manager-list-item div {
+    background-color: #ebebeb;
+    margin-bottom: 0.5em;
+    padding: 1em;
+}
+
+.project-manager-list-item > div:hover {
+    color: #ccc;
+}
