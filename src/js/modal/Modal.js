@@ -58,7 +58,6 @@ birka.project.Modal.prototype.init = function() {
     } else if(this.m_options.type === 'warning'){
         this.m_initMessage(this.m_options.type)
     } else if(this.m_options.type === 'custom'){
-        console.log('lala');
         this.m_initCustom();
     }
 

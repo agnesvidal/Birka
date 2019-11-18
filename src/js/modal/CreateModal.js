@@ -222,7 +222,6 @@ birka.project.CreateModal.prototype.m_initConfigField = function(field) {
 
     }
     Elem.appendElemAt(field, this.spans[2], 3);
-    console.log(field);
     Elem.appendElemAt(field, this.spans[3], 6);
 
     Elem.setText(labels[0], 'Id');
@@ -398,7 +397,7 @@ birka.project.CreateModal.prototype.m_save = function() {
     window.sessionStorage.setItem('projectLocation', projectObj.location + "/" + projectObj.name);
     window.sessionStorage.setItem('output', projectObj.location + "/" + projectObj.name + '/src/data');
 
-    var pd = new birka.Projectdirectory(projectObj);
+    var pd = new birka.project.Projectdirectory(projectObj);
     pd.create();
 
     m_this.m_close();

@@ -230,10 +230,10 @@ birka.project.ProjectManager.prototype.m_loadProject = function(path){
     }
 };
 
-birka.project.ProjectManager.prototype.m_lala = function(parent, path) {
+birka.project.ProjectManager.prototype.m_removeRecent = function(parent, path) {
     var m_this = parent;
     var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
-    console.log(m_this.m_view.linkItems)
+    //console.log(m_this.m_view.linkItems)
 
     for(var i=0; i<m_this.m_view.linkItems.length; i++){
         //console.log(this.elemManager.links[i].querySelector('p'))
@@ -268,7 +268,7 @@ birka.project.ProjectManager.prototype.m_checkIfFolder = function(dir) {
                 type: "error",
                 title: "Missing project folder",
                 message: "The project folder has either been removed, or moved to a new location.",
-                callback: {func: m_this.m_lala, param: dir}
+                callback: {func: m_this.m_removeRecent, param: dir}
             }, m_this);
             return false
         }
