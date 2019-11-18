@@ -215,6 +215,7 @@ nav a:hover {
     padding: 20px;
     background-color: #FFFFFF;
     width: calc(100vw - 20px);
+    height: 150px;
 }
 
 h2{
@@ -1090,3 +1091,21 @@ fieldset input[type=number]{
     margin-bottom: 20px;
 }
 */
+
+.project-update-sdk-btn {
+    margin-top: 20px;
+    padding: 14px;
+    padding-left: 40px;
+    padding-right: 40px;
+    cursor: pointer;
+    background-color: var(--dark-cyan); /*#8d5dca*/
+    border-radius: 20px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    border: 1px solid var(--dark-cyan);
+}
+
+.project-update-sdk-btn:hover {
+    background-color: var(--light-cyan); /*#8d5dca*/
+}

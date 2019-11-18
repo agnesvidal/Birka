@@ -233,12 +233,14 @@ birka.project.ProjectManager.prototype.m_loadProject = function(path){
 birka.project.ProjectManager.prototype.m_lala = function(parent, path) {
     var m_this = parent;
     var recentP = JSON.parse(window.localStorage.getItem('recentProjects'));
-    for(var i=0; i<m_this.m_view.links.length; i++){
+    console.log(m_this.m_view.linkItems)
+
+    for(var i=0; i<m_this.m_view.linkItems.length; i++){
         //console.log(this.elemManager.links[i].querySelector('p'))
-        if(m_this.m_view.links[i].querySelector('p').innerHTML === path){
+        if(m_this.m_view.linkItems[i].querySelector('p').innerHTML === path){
             //console.log(path, this.elemManager.links[i].querySelector('p').innerHTML);
-            m_this.m_view.links[i].parentNode.removeChild(m_this.elemManager.links[i]);
-            m_this.m_view.links.splice(i, 1);
+            m_this.m_view.linkItems[i].parentNode.removeChild(m_this.m_view.linkItems[i]);
+            m_this.m_view.linkItems.splice(i, 1);
 
         }
     }
