@@ -122,7 +122,10 @@ birka.project.Project.prototype.m_addListeners = function(){
     var sdkBtn = document.querySelector('.project-update-sdk-btn');
     sdkBtn.addEventListener('click', function(){
         // @TODO REPLACE WITH CALL TO SOME OTHER METHOD
-        alert('Ersätt denna alert med anrop till annan metod i: birka.project.Project.prototype.m_addListeners')
+        //alert('Ersätt denna alert med anrop till annan metod i: birka.project.Project.prototype.m_addListeners')
+        //OBS! Det här är en fullösning så länge, tror inte det är smart att skapa nytt objekt vid varje klick...
+        var sdk = new birka.project.ProjectSDK();
+        sdk.updateToLatestVersion();
         console.log(window.sessionStorage);
     });
 };
