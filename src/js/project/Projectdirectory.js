@@ -121,7 +121,7 @@ birka.project.Projectdirectory = function(project) {
             directory: '/bin-debug/'
         },
         {
-            name: 'Resourses.js',
+            name: 'Resources.js',
             template: '/templates/Resources.txt',
             directory: '/src/data/'
         }
@@ -284,6 +284,9 @@ birka.project.Projectdirectory.prototype.m_createFileData = function(temp) {
     } else if (this.m_request.name == 'Resourses.js') {
         var resources = /%RESOURCES%/g;
         data = data.replace(resources, " ");
+    } else if (this.m_request.name === 'Index.html') {
+        var title = /%TITLE%/g;
+        data = data.replace(title, this.m_title);
     }
 
     this.m_writeFile(data);
