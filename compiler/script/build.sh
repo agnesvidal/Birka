@@ -9,14 +9,14 @@ java -jar ./../bin/compiler.jar \
 --js "./../../src/js/scope/Manifest.js" \
 --js "./../../src/js/ui/View.js" \
 --js "./../../src/js/ui/Elem.js" \
---js "./../../src/js/Projectdirectory.js" \
---js "./../../src/js/Resourcefile.js" \
 --js "./../../src/js/project/Toolbar.js" \
 --js "./../../src/js/modal/Modal.js" \
 --js "./../../src/js/modal/CreateModal.js" \
+--js "./../../src/js/project/Projectdirectory.js" \
 --js "./../../src/js/project/ProjectManagerView.js" \
 --js "./../../src/js/project/Project.js" \
 --js "./../../src/js/project/ProjectManager.js" \
+--js "./../../src/js/compiler/Resourcefile.js" \
 --js "./../../src/js/compiler/ui/CompilerView.js" \
 --js "./../../src/js/compiler/File.js" \
 --js "./../../src/js/compiler/Message.js" \

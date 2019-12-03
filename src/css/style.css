@@ -188,11 +188,12 @@ nav a:hover {
 
 }
 
+/*
 .active:hover {
     color: #333;
     font-weight: 400;
-
 }
+*/
 
 .active {
     /*background-color: #f1f3f6;*/
@@ -215,7 +216,7 @@ nav a:hover {
     padding: 20px;
     background-color: #FFFFFF;
     width: calc(100vw - 20px);
-    height: 150px;
+    min-height: 150px;
 }
 
 h2{
@@ -995,13 +996,17 @@ fieldset input[type=number]{
 
 }
 
+.dialog fieldset input:required:invalid:focus{
+    border: 1px solid red; /*23d7d7*/
+}
+
 .dialog .project-browse{
     background: var(--dark-cyan) url("../img/folder.png") no-repeat 10px 10px; /*21c7c7*/
     background-size: 16px;
     padding: 8px;
     padding-left: 16px;
     padding-right: 16px;
-    display: block;
+    display: block;.
     text-align: left;
     color: #FFF;
     border-radius: 2px;

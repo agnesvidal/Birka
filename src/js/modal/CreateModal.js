@@ -5,8 +5,6 @@
  * ...
  *
  * @constructor
- * @param modal
- * @param options
  *
  *
  * @class
@@ -52,6 +50,7 @@ birka.project.CreateModal = function() {
  * @type {Electron.Dialog}
  * @constant
  * @default
+ * @suppress {undefinedVars}
  */
 birka.project.CreateModal.dialog = require('electron').remote.dialog;
 
@@ -71,7 +70,7 @@ birka.project.CreateModal.fs = require('fs');
  * @constant
  * @default
  */
-birka.project.CreateModal.path = require('path');
+//birka.project.CreateModal.path = require('path');
 
 //------------------------------------------------------------------------------
 // Inheritance
@@ -241,27 +240,86 @@ birka.project.CreateModal.prototype.m_initConfigField = function(field) {
  */
 birka.project.CreateModal.prototype.m_addListeners = function() {
     var m_this = this;
+    //this.inputs[0].addEventListener("input", m_this.m_checkValid(event), false);
+
     this.inputs[0].addEventListener("input", function (event) {
-        if (m_this.inputs[0].validity.valid) {
-            m_this.spans[0].innerHTML = "";
-            m_this.spans[0].className = "spanerror";
-        }
+        m_this.m_checkValidTextInput(m_this.inputs[0],  m_this.spans[0]);
+        m_this.m_compareInputs(m_this.inputs[0], m_this.inputs[2]);
+    }, false);
+
+    this.inputs[0].addEventListener("focusout", function (event) {
+       if(m_this.inputs[0].value === "") {
+           m_this.m_checkValidTextInput(m_this.inputs[0], m_this.spans[0]);
+       }
     }, false);
 
     this.inputs[1].addEventListener("input", function (event) {
         if (m_this.inputs[1].validity.valid) {
+            event.preventDefault();
             m_this.spans[2].innerHTML = "";
             m_this.spans[2].className = "spanerror";
-            event.preventDefault();
+        } else {
+            m_this.spans[2].innerHTML = "Fill in an id for your project.";
+            m_this.spans[2].className = "spanerror active";
+        }
+    }, false);
+
+    this.inputs[1].addEventListener("focusout", function (event) {
+        if(!m_this.inputs[1].validity.valid) {
+            m_this.spans[2].innerHTML = "Fill in an id for your project.";
+            m_this.spans[2].className = "spanerror active";
         }
     }, false);
 
     this.inputs[2].addEventListener("input", function (event) {
-        if (m_this.inputs[2].validity.valid) {
-            m_this.spans[3].innerHTML = "";
-            m_this.spans[3].className = "spanerror";
-        }
+         m_this.m_checkValidTextInput(m_this.inputs[2],  m_this.spans[3]);
+         m_this.m_compareInputs(m_this.inputs[2], m_this.inputs[0]);
     }, false);
+
+    this.inputs[2].addEventListener("focusout", function (event) {
+       if(m_this.inputs[2].value === "") {
+           m_this.m_checkValidTextInput(m_this.inputs[2], m_this.spans[3]);
+       }
+    }, false);
+};
+
+birka.project.CreateModal.prototype.m_checkValidTextInput = function(textInput, span) {
+    if (textInput.value === "") {
+         span.innerHTML = "Fill in field.";
+         span.className = "spanerror active";
+         textInput.setCustomValidity("Invalid field");
+    }
+
+     var regex = /^[a-zåäöA-ZÅÄÖ0-9]+$/;
+     if (textInput.value !== "" && !regex.test(textInput.value)) {
+         span.innerHTML = "Name should only contain characters: A-Ö, 0-9";
+         span.className = "spanerror active";
+         textInput.setCustomValidity("Invalid field.");
+     }
+
+     if (textInput.value !== "" && regex.test(textInput.value)) {
+         span.innerHTML = "";
+         span.className = "spanerror";
+         textInput.setCustomValidity("");
+     }
+};
+
+birka.project.CreateModal.prototype.m_compareInputs = function(thisField, thatField) {
+    var m_this = this;
+    if(thisField.value !== "" &&  thatField.value !== "") {
+        if (thisField.value === thatField.value) {
+            m_this.inputs[0].setCustomValidity("Invalid field.");
+            m_this.spans[0].innerHTML = "Project name and title must not be the same.";
+            m_this.spans[0].className = "spanerror active";
+
+            m_this.inputs[2].setCustomValidity("Invalid field.");
+            m_this.spans[3].innerHTML = "Project name and title must not be the same.";
+            m_this.spans[3].className = "spanerror active";
+        } else {
+            m_this.m_checkValidTextInput(m_this.inputs[2],  m_this.spans[3]);
+            m_this.m_checkValidTextInput(m_this.inputs[0],  m_this.spans[0]);
+        }
+    }
 };
 
 /**
@@ -271,18 +329,30 @@ birka.project.CreateModal.prototype.m_addListeners = function() {
  */
 birka.project.CreateModal.prototype.m_checkValidFields = function() {
     var m_this = this;
+
+    m_this.m_checkValidTextInput(m_this.inputs[0],  m_this.spans[0]);
+    m_this.m_checkValidTextInput(m_this.inputs[2],  m_this.spans[3]);
+
+    /*
+    var input = m_this.inputs[0].value;
+    var regex = /^[a-zåäöA-ZÅÄÖ0-9]+$/;
+    if (regex.test(input)) {
+        m_this.spans[0].innerHTML = "";
+        m_this.spans[0].className = "spanerror ";
+    } else {
+        m_this.spans[0].innerHTML = "Name should only contain characters: A-Ö, 0-9";
+        m_this.spans[0].className = "spanerror active";
+    }
+
     if (!m_this.inputs[0].validity.valid) {
         m_this.spans[0].innerHTML = "Fill in a project name.";
         m_this.spans[0].className = "spanerror active";
     }
-    if (!m_this.inputs[1].validity.valid) {
-        m_this.spans[2].innerHTML = "Fill in an id for your project.";
-        m_this.spans[2].className = "spanerror active";
-    }
-    if (!m_this.inputs[2].validity.valid) {
-        m_this.spans[3].innerHTML = "Fill in a title for your project.";
-        m_this.spans[3].className = "spanerror active";
-    }
+    */
+    if (!m_this.inputs[1].validity.valid) {                                               
+        m_this.spans[2].innerHTML = "Fill in an id for your project.";                    
+        m_this.spans[2].className = "spanerror active";                                   
+    }                                                                                     
 
     if (m_this.path === "") {
         m_this.spans[1].innerHTML = "Please choose a location for your project.";
@@ -446,19 +516,19 @@ birka.project.CreateModal.prototype.m_chooseLocation = function(){
         properties: ['openDirectory']
     }, function(folderPaths) {
         if(folderPaths === undefined || folderPaths.length === 0){
-            //console.log("No destination folder selected");
+             if (m_this.path === "") {
+                 m_this.spans[1].innerHTML = "Please choose a location for your project.";
+                 m_this.spans[1].className = "spanerror active";
+             }
             return;
         } else {
             //@TODO
-
             if(m_this.spans.length > 0){
                 m_this.spans[1].innerHTML = "";
                 m_this.spans[1].className = "spanerror";
             }
-
             // m_this.m_loadProject(folderPaths[0]);
             m_this.locationpath.innerHTML = folderPaths[0];
-
         }
     });
 };
