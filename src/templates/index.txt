@@ -2,7 +2,7 @@
 <html>
     <head>
 
-        <title>%APP% - Debug</title>
+        <title>%TITLE% - Debug</title>
 
         <script src="./../lib/rune.js"></script>
 
@@ -14,8 +14,8 @@
 
         <script>
 
-            var %APP% = new %APP%.system.Main();
-                %APP%.start();
+            var %TITLE% = new %APP%.system.Main();
+                %TITLE%.start();
 
         </script>
 

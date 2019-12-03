@@ -119,6 +119,11 @@ birka.project.Projectdirectory = function(project) {
             name: 'Index.html',
             template: '/templates/Index.txt',
             directory: '/bin-debug/'
+        },
+        {
+            name: 'Resources.js',
+            template: '/templates/Resources.txt',
+            directory: '/src/data/'
         }
     ];
 
@@ -246,7 +251,7 @@ birka.project.Projectdirectory.prototype.m_getURLdata = function() {
                 var data = this.responseText;
                 m_this.m_writeFile(data);
             } else {
-                m_this.m_onError("Birka failed to fetch Rune.js from server. Try again. If error remains, please contact developer.")
+                m_this.m_onError("Birka failed to fetch Rune.js from server. Make sure you have internet access and try again. If error remains, please contact developer.")
             }
     };
     req.send();
@@ -271,11 +276,17 @@ birka.project.Projectdirectory.prototype.m_createFileData = function(temp) {
     var app = /%APP%/g;
     var data = temp.replace(app, this.m_project);
 
-    if(this.m_request.name == 'Main.js') {
+    if (this.m_request.name == 'Main.js') {
         var title = /%TITLE%/g;
         data = data.replace(title, this.m_title);
         var id = /%ID%/g;
         data = data.replace(id, this.m_id)
+    } else if (this.m_request.name == 'Resourses.js') {
+        var resources = /%RESOURCES%/g;
+        data = data.replace(resources, " ");
+    } else if (this.m_request.name === 'Index.html') {
+        var title = /%TITLE%/g;
+        data = data.replace(title, this.m_title);
     }
 
     this.m_writeFile(data);
