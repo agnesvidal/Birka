@@ -136,7 +136,17 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
             temp.push( m_this.m_files[i].file);
         }
     }
-    //@TODO
+   
+    if(temp.length === 0){     
+        birka.project.ProjectManager.Modal.openDialog({
+            type: 'error',
+            title: 'Can\'t compile',
+            message: 'Select a folder first.'
+        });
+        return;
+    }
+
+     //@TODO
     // Checks whether there are any errors...
     for(var i=0; i<temp.length; i++) {
         if(temp[i].status.length > 0) {
@@ -163,7 +173,6 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
             return;
         }
     }
-    //console.log('sessionStorage projectPath', window.sessionStorage.projectLocation);
 
     var res = new birka.compiler.Resourcefile(window.sessionStorage.name, window.sessionStorage.projectLocation);
     res.compile(temp);
@@ -391,7 +400,6 @@ birka.compiler.Compiler.prototype.m_changeName = function(e, row) {
         }
     }
 };
-
 
 //check if changed name removed duplicate status from other file/row
 //@TODO Rename, clean

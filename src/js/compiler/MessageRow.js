@@ -18,7 +18,7 @@ birka.compiler.MessageRow = function(tbody, status){
      * @type {Element}
      */
     //this.element = Elem.appendNewElem(tbody, 'tr');
-    this.element = Elem.appendNewClassElem(tbody, 'tr', 'msg');
+    this.element = Elem.appendNewClassElem(tbody, 'tr', 'app-compiler-resource-message');
 
     this.create(status);
 
@@ -48,35 +48,17 @@ Object.defineProperty(birka.compiler.MessageRow.prototype, "setStatus", {
  * @returns {undefined}
  */
 birka.compiler.MessageRow.prototype.create = function(status) {
-    //var m_this = this;
-
     this.setStyle(status);
 
     var td = Elem.appendNewElem(this.element, 'td');
     td.setAttribute('colspan', '5');
     td.innerHTML = this.codeToMessage(status);
-
-    //this.element.style.display = "table-row";
 };
-
-/*
-birka.compiler.MessageRow.prototype.statusToMessage = function(status) {
-    var msg = "";
-    switch(status){
-        case 1: msg = "Invalid file type."; break;
-        case 2: msg = "File size exceeds [...]."; break;
-        case 3: msg = "Duplicate file name."; break;
-    }
-    return msg;
-};
-*/
 
 birka.compiler.MessageRow.prototype.m_toggleDisabled = function(disabled) {
-    //this.m_makeCollapsible();
     if(disabled){
         this.element.style.display = "none";
     } else {
-        //this.messageRow.style.display = "table-row";
         this.element.style.display = "table-row";
     }
 };
@@ -89,13 +71,11 @@ birka.compiler.MessageRow.prototype.codeToMessage = function(code) {
         case 10: message = 'File size exceeds 1MB.';             break;
         case 11: message = 'File size exceeds 3MB';              break;
         case 12: message = 'Spaces not allowed in name. The name has been modified from the original filename.';              break;
-        //case 5: message = ''; break;
     }
     return message;
 };
 
 birka.compiler.MessageRow.prototype.setStyle = function(status) {
-    //console.log(status);
     switch(status){
         case 0: this.element.classList.remove('error');
             break;

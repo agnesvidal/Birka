@@ -68,6 +68,7 @@ birka.compiler.TableRow.prototype.create = function(data) {
     //this.m_createRow(data);
     this.m_createCells(data);
     this.m_makeCollapsible();
+    this.tbody.className = 'app-compiler-resources-item';
 
     if(data.status.length > 0) {
         this.m_changeStatus(data.status);
@@ -95,7 +96,7 @@ birka.compiler.TableRow.prototype.m_createCells = function(data) {
     this.m_inputName(this.tds[2], data.name);
     this.tds[3].innerHTML = data.size;
 
-    this.tds[4].classList.add('coll-cell');
+    this.tds[4].classList.add('app-compiler-resources-item-toggle');
 
 };
 
@@ -123,7 +124,7 @@ birka.compiler.TableRow.prototype.m_addCheckbox = function(td) {
  */
 birka.compiler.TableRow.prototype.m_toggleInclude = function(e){
     var m_this = this;
-    m_this.element.classList.toggle('ignored');
+    m_this.element.classList.toggle('is-ignored');
     m_this.include = m_this.include !== true;
 };
 
@@ -165,7 +166,6 @@ birka.compiler.TableRow.prototype.m_changeStatus = function(status) {
             }
         }
     }
-    //this.tds[4].classList.add('coll-cell');
     this.m_styleRow(s);
 };
 /**
@@ -194,13 +194,10 @@ birka.compiler.TableRow.prototype.m_styleRow = function(status) {
 };
 
 birka.compiler.TableRow.prototype.m_toggleDisabled = function(disabled) {
-    //this.m_makeCollapsible();
-
     if(disabled){
         this.messageRow.style.display = "none";
         this.m_makeCollapsible();
     } else {
-        //this.messageRow.style.display = "table-row";
         this.m_makeCollapsible();
     }
 };
@@ -218,7 +215,7 @@ birka.compiler.TableRow.prototype.m_makeCollapsible = function() {
 birka.compiler.TableRow.prototype.m_collapse = function(e) {
     var m_this = this;
     if (this.element.classList.contains('error') || this.element.classList.contains('warning')) {
-        e.classList.toggle("coll-active");
+        e.classList.toggle("app-compiler-resources-item-toggle-active");
         var message = m_this.tbody.nextElementSibling;
         if (message.style.display === "table-row-group") {
             message.style.display = "none";

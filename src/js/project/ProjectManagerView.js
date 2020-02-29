@@ -87,9 +87,9 @@ birka.project.ProjectManagerView.prototype.removeElems = function() {
  */
 birka.project.ProjectManagerView.prototype.m_initHeader = function() {
     this.m_toolWrapper = document.getElementById('app-content');
-    this.m_element = Elem.appendNewClassElem(this.m_toolWrapper,'div', 'project-manager');
+    this.m_element = Elem.appendNewClassElem(this.m_toolWrapper,'div', 'app-project-manager');
 
-    var col1 = Elem.appendNewClassElem(this.m_element,'div','project-manager-col-1');
+    var col1 = Elem.appendNewClassElem(this.m_element,'div','app-project-manager-col-1');
     var h2 = Elem.appendNewElem(col1,'h2');
     Elem.setText(h2, "Let's get started!");
     var pElem = Elem.appendNewElem(col1,'p');
@@ -102,8 +102,8 @@ birka.project.ProjectManagerView.prototype.m_initHeader = function() {
  * @returns {undefined}
  */
 birka.project.ProjectManagerView.prototype.m_initButtons = function() {
-    var col1 = document.querySelector('.project-manager-col-1');
-    var div = Elem.appendNewClassElem(col1,'div', 'project-manager-buttons');
+    var col1 = document.querySelector('.app-project-manager-col-1');
+    var div = Elem.appendNewClassElem(col1,'div', 'app-project-manager-buttons');
     var inputBtns = [];
     for(var i=0; i<2; i++){
         inputBtns.push(Elem.appendNewElem(div,'input'));
@@ -125,8 +125,8 @@ birka.project.ProjectManagerView.prototype.m_initButtons = function() {
  * @returns {undefined}
  */
 birka.project.ProjectManagerView.prototype.m_initRecent = function() {
-    var col2 = Elem.appendNewClassElem(this.m_element,'div','project-manager-col-2');
-    var recentModule = Elem.appendNewClassElem(col2,'div','project-manager-recent');
+    var col2 = Elem.appendNewClassElem(this.m_element,'div','app-project-manager-col-2');
+    var recentModule = Elem.appendNewClassElem(col2,'div','app-project-manager-recent');
 
     var heading = Elem.appendNewElem(recentModule,'h3');
     Elem.setText(heading, "Open recent project");
@@ -139,7 +139,7 @@ birka.project.ProjectManagerView.prototype.m_initRecent = function() {
         if(recentP.projects.length > 0 ){
             for(var i=0; i<recentP.projects.length; i++){
 
-                this.linkItems.push(Elem.appendNewClassElem(recentModule,'a', 'project-manager-list-item'));
+                this.linkItems.push(Elem.appendNewClassElem(recentModule,'a', 'app-project-manager-list-item'));
                 this.linkItems[i].setAttribute('href', "#");
                 listElems.push(Elem.appendNewElem(this.linkItems[i],'div'));
 

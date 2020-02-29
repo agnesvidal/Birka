@@ -58,7 +58,6 @@ Object.defineProperty(birka.compiler.File.prototype, "setName", {
 birka.compiler.File.prototype.init = function(){
     this.name = this.m_getFileName(this.path);
     this.size = this.m_bytesToSize(this.blob.size);
-    //this.status = this.m_checkStatus(this.name, this.blob.size, this.blob.type);
 };
 
 /**
@@ -103,14 +102,12 @@ birka.compiler.File.prototype.hasWarning = function() {
  * @returns {undefined}
  */
 birka.compiler.File.prototype.m_checkStatus = function() {
-    //console.log('10MB', this.bytesToSize(10000000));
-
     if(birka.compiler.File.ALLOWED_FILE_TYPES.indexOf(this.blob.type) < 0){
         this.setStatus = 1;
     }
 
     if((this.blob.type === "image/png") || (this.blob.type === "image/jpg") || (this.blob.type === "image/gif")){
-        if(this.blob.size > 1100000){ //@TODO change to: 1100000 /* = 1MB */
+        if(this.blob.size > 1100000){ 
             this.setStatus = 10;
         }
     }

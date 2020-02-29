@@ -1,0 +1,45 @@
+input {
+    font-family: 'Lato', Verdana sans-serif;
+    font-size: 0.9em;
+}
+
+input[type=button] {
+     color: #fff;
+}
+  
+input:invalid{
+    border-bottom: 1px solid red;
+}
+
+input:invalid:focus{
+    border-bottom: 1px solid red;
+}
+
+input[type=text]{
+    box-sizing: border-box;
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    margin-top: 4px;
+    padding-left: 4px;
+    height: 30px;
+    background-color: #FFF; 
+}
+
+.app-input-field {
+    margin-bottom: 4px;
+    margin-top: 20px;
+    width: 100%;
+    background-color: var(--white); 
+    display:flex;
+}
+
+ .app-input-filepath {
+     display: block;
+     margin-left: 2px;
+     padding-top: 5px;
+     font-size: 13px;
+     font-weight: 300;
+     color: #333333; 
+ }
+
+ 

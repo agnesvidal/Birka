@@ -1,19 +1,19 @@
 
-.project-manager {
+.app-project-manager {
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
 
-.project-manager h3 {
+.app-project-manager h3 {
     font-size: 14px;
 }
 
-.project-manager-col-1 h3 {
+.app-project-manager-col-1 h3 {
     padding: 1em;
 }
 
-.project-manager-col-1 {
+.app-project-manager-col-1 {
     width: 45%;
     height: calc(100vh - 140px);
     padding: var(--padding);
@@ -21,15 +21,15 @@
     margin-top: calc(50vh - (250px));
 }
 
-.project-manager-col-1 h2, .project-manager-col-1 h3, .project-manager-col-1 p {
+.app-project-manager-col-1 h2, .app-project-manager-col-1 h3, .app-project-manager-col-1 p {
     text-align: center;
 }
 
-.project-manager-col-1 p{
+.app-project-manager-col-1 p{
     padding: var(--quarter-padding);
 }
 
-.project-manager-buttons input[type=button]{
+.app-project-manager-buttons input[type=button]{
     display: block;
     width: 100%;
     margin: 10px;
@@ -44,11 +44,11 @@
     border-radius: 2px;
 }
 
-.project-manager-buttons input[type=button]:hover{
+.app-project-manager-buttons input[type=button]:hover{
     background: var(--dark-lilac);
 }
 
-.project-manager-col-2{
+.app-project-manager-col-2{
     width: 45%;
     height: calc(100vh - 70px);
     padding: var(--padding);
@@ -56,7 +56,7 @@
     margin-top: calc(50vh - (250px));
 }
 
-.project-manager-recent h3 {
+.app-project-manager-recent h3 {
     padding-left: var(--quarter-padding);
     margin-bottom: 1em;
     font-weight: 400;
@@ -66,16 +66,16 @@
     border-left: 2px solid #000;
 }
 
-.project-manager-recent h4 {
+.app-project-manager-recent h4 {
     font-weight: 400;
 }
 
-.project-manager-list-item div {
+.app-project-manager-list-item div {
     background-color: #ebebeb;
     margin-bottom: 0.5em;
     padding: 1em;
 }
 
-.project-manager-list-item > div:hover {
+.app-project-manager-list-item > div:hover {
     color: #ccc;
 }

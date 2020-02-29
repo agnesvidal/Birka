@@ -36,8 +36,8 @@ birka.ui.View = function(name) {
  * @returns undefined
  */
 birka.ui.View.prototype.initHeader = function(){
-    this.element = document.getElementById('tool-wrapper');
-    this.toolHeader = Elem.appendNewClassElem(this.element, 'div', 'tool-header');
+    this.element = document.getElementsByClassName('app-tool-wrapper')[0];
+    this.toolHeader = Elem.appendNewClassElem(this.element, 'div', 'app-tool-header');
     var toolName = Elem.appendNewElem(this.toolHeader,'h2');
     Elem.setText(toolName, this.name);
 
@@ -53,5 +53,5 @@ birka.ui.View.prototype.initHeader = function(){
  * @returns undefined
  */
 birka.ui.View.prototype.m_initTitle = function(){
-    document.title = window.sessionStorage.name; //@TODO "Birka" or project name?
+    document.title = window.sessionStorage.name; 
 };

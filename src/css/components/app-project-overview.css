@@ -1,0 +1,17 @@
+.app-project-sdk-btn {
+    margin-top: 20px;
+    padding: 14px;
+    padding-left: var(--double-padding);
+    padding-right: var(--double-padding);
+    cursor: pointer;
+    background-color: var(--dark-cyan);
+    border-radius: 20px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    border: 1px solid var(--dark-cyan);
+}
+
+.app-project-sdk-btn:hover {
+    background-color: var(--light-cyan);
+}

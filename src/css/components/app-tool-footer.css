@@ -1,0 +1,30 @@
+.app-tool-footer {
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    padding-top: 12px;
+    background-color: #FFF;
+    border-top: 1px solid #ececec;
+}
+
+.app-tool-footer img{
+    width: 16px;
+    margin-top: 15px;
+}
+
+.app-tool-footer span{
+    padding-top: 5px;
+}
+
+.app-tool-footer p {
+    display: inline;
+    padding: 0;
+}
+
+.app-tool-footer div {
+    display: inline;
+}

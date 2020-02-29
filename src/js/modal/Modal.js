@@ -34,7 +34,7 @@ birka.project.Modal = function() {
 // Public methods
 //------------------------------------------------------------------------------
 birka.project.Modal.prototype.openDialog = function(options, parent) {
-    this.element = Elem.appendNewClassElem(document.body, 'div', 'dialog');
+    this.element = Elem.appendNewClassElem(document.body, 'div', 'app-dialog');
     this.m_parent = parent;
     this.m_options = options;
     this.init();
@@ -42,15 +42,15 @@ birka.project.Modal.prototype.openDialog = function(options, parent) {
 
 birka.project.Modal.prototype.init = function() {
     var m_this = this;
-    var container = Elem.appendNewClassElem(this.element, 'div', 'dialog-container');
-    var header = Elem.appendNewClassElem(container, 'div', 'dialog-header');
+    var container = Elem.appendNewClassElem(this.element, 'div', 'app-dialog-container');
+    var header = Elem.appendNewClassElem(container, 'div', 'app-dialog-header');
     var h1 = Elem.appendNewElem(header, 'h1');
     if(this.m_options.title.length > 0) {
         h1.innerHTML = this.m_options.title;
     }
     var form = Elem.appendNewElem(container, 'form');
-    this.m_content = Elem.appendNewClassElem(form, 'div', 'dialog-content');
-    this.m_footer = Elem.appendNewClassElem(form, 'div', 'dialog-footer');
+    this.m_content = Elem.appendNewClassElem(form, 'div', 'app-dialog-content');
+    this.m_footer = Elem.appendNewClassElem(form, 'div', 'app-dialog-footer');
     this.m_initFooterButtons();
 
     if(this.m_options.type === 'error'){
@@ -62,7 +62,7 @@ birka.project.Modal.prototype.init = function() {
     }
 
     this.element.addEventListener('click', function(event){
-        if(event.target.className === 'dialog'){
+        if(event.target.className === 'app-dialog'){
             m_this.m_close();
         }
     });
@@ -74,7 +74,7 @@ birka.project.Modal.prototype.init = function() {
 birka.project.Modal.prototype.m_initMessage = function(type) {
     var message = "";
     if(this.m_options.message.length > 0) {
-        message = Elem.appendNewClassElem(this.m_content, 'p', ('dialog-' + type));
+        message = Elem.appendNewClassElem(this.m_content, 'p', ('app-' + type + '-dialog'));
         message.innerHTML = this.m_options.message;
     }
 };
@@ -101,7 +101,7 @@ birka.project.Modal.prototype.m_initFooterButtons = function() {
 
 birka.project.Modal.prototype.m_close = function(event) {
     var m_this = this;
-    var modal = document.querySelector('.dialog');
+    var modal = document.querySelector('.app-dialog');
     if(modal){
         modal.parentNode.removeChild(this.element);
     }

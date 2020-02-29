@@ -85,7 +85,7 @@ birka.project.Project.prototype.m_initUI = function() {
     for (var i = 0; i < this.m_tabs.length; i++) {
         this.m_tabs[i].addEventListener('click',function(event){m_this.changeTool(event, this)});
     }
-    this.m_toolWrapper = Elem.appendNewIdElem(this.m_appContent, 'div', 'tool-wrapper');
+    this.m_toolWrapper = Elem.appendNewClassElem(this.m_appContent, 'div', 'app-tool-wrapper');
     this.m_initProjectDetails();
     this.m_initTitle();
 
@@ -94,11 +94,11 @@ birka.project.Project.prototype.m_initUI = function() {
 //@TODO TEMPORARY
 birka.project.Project.prototype.m_initProjectDetails = function() {
     var projectname = Elem.appendNewElem(this.m_toolWrapper, 'h2');
-    var toolHeader = Elem.appendNewClassElem(this.m_toolWrapper, 'div', 'tool-header');
+    var toolHeader = Elem.appendNewClassElem(this.m_toolWrapper, 'div', 'app-tool-header');
     var toolName = Elem.appendNewElem(toolHeader,'h2');
     Elem.setText(toolName, 'Project name: ' + window.sessionStorage.name);
 
-    var updateSDK =  Elem.appendNewClassElem(toolHeader, 'input', 'project-update-sdk-btn');
+    var updateSDK =  Elem.appendNewClassElem(toolHeader, 'input', 'app-project-sdk-btn');
     updateSDK.setAttribute('type', 'button');
     updateSDK.setAttribute('value', 'Uppdatera SDK version');
     this.m_addListeners();
@@ -119,10 +119,8 @@ birka.project.Project.prototype.m_initTitle = function(){
  * @returns undefined
  */
 birka.project.Project.prototype.m_addListeners = function(){
-    var sdkBtn = document.querySelector('.project-update-sdk-btn');
+    var sdkBtn = document.querySelector('.app-project-sdk-btn');
     sdkBtn.addEventListener('click', function(){
-        // @TODO REPLACE WITH CALL TO SOME OTHER METHOD
-        //alert('Ersätt denna alert med anrop till annan metod i: birka.project.Project.prototype.m_addListeners')
         //OBS! Det här är en fullösning så länge, tror inte det är smart att skapa nytt objekt vid varje klick...
         var sdk = new birka.project.ProjectSDK();
         sdk.updateToLatestVersion();
@@ -136,13 +134,13 @@ birka.project.Project.prototype.m_addListeners = function(){
  * @returns {undefined}
  */
 birka.project.Project.prototype.changeTool = function(e, elem) {
-    if (elem.classList.contains('active')) {
+    if (elem.classList.contains('is-active')) {
         return;
     } else {
         for (var i = 0; i < this.m_tabs.length; i++) {
-            this.m_tabs[i].classList.remove('active');
+            this.m_tabs[i].classList.remove('is-active');
         }
-        elem.classList.toggle("active");
+        elem.classList.toggle("is-active");
         this.startTool(e.target.id);
     }
 };

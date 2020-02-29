@@ -1,0 +1,17 @@
+.app-tool-wrapper {
+    border: 0 solid #ececec;
+    margin-top: 50px;
+}
+
+.app-tool-header {
+    margin: 10px;
+    padding: 20px;
+    background-color: #FFFFFF;
+    width: calc(100vw - 20px);
+    min-height: 150px;
+}
+
+.app-tool-header h2{
+    font-weight: 200;
+    font-size: 26px;
+}

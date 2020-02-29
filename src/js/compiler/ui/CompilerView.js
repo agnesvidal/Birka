@@ -158,15 +158,15 @@ birka.compiler.CompilerView.prototype.m_renderForm = function() {
     var filepathBoxes = [];
 
     for(var i=0; i<2; i++){
-        inputFields.push(Elem.appendNewClassElem(this.form, 'div', 'input-field'));
-        divs.push(Elem.appendNewClassElem(inputFields[i], 'div', 'output-row'));
+        inputFields.push(Elem.appendNewClassElem(this.form, 'div', 'app-input-field'));
+        divs.push(Elem.appendNewClassElem(inputFields[i], 'div', 'app-compiler-path-container'));
         labels.push(Elem.appendNewElem(divs[i], 'label'));
         filepathBoxes.push(Elem.appendNewElem(divs[i], 'div'));
-        filepathBoxes[i].setAttribute('class', 'filepath');
+        filepathBoxes[i].setAttribute('class', 'app-input-filepath');
     }
 
     // Browse button
-    this.inputBtn = Elem.prependNewClassElem(inputFields[0], 'input', 'browse');
+    this.inputBtn = Elem.prependNewClassElem(inputFields[0], 'input', 'app-compiler-browse-btn');
     this.inputBtn.setAttribute('type', 'button');
     this.inputBtn.setAttribute('value', 'Browse...');
     this.inputBtn.id = 'selectInputBtn';
@@ -174,9 +174,9 @@ birka.compiler.CompilerView.prototype.m_renderForm = function() {
     // Labels
     labels[0].setAttribute('for', 'selectInputBtn');
     labels[0].innerText = 'Select input folder';
-    labels[1].innerText = 'Output path';
+    labels[1].innerText = 'Output folder';
 
-    this.refreshBtn = Elem.appendNewClassElem(inputFields[0], 'input', 'refresh');
+    this.refreshBtn = Elem.appendNewClassElem(inputFields[0], 'input', 'app-compiler-refresh-btn');
     this.refreshBtn.setAttribute('type', 'button');
 
     // Path containers
@@ -196,11 +196,11 @@ birka.compiler.CompilerView.prototype.m_renderForm = function() {
  * @returns {undefined}
  */
 birka.compiler.CompilerView.prototype.m_renderFileList = function() {
-    this.fileList = Elem.appendNewClassElem(this.element, 'div', 'fileIndex');
+    this.fileList = Elem.appendNewClassElem(this.element, 'div', 'app-compiler-resources');
 
     // FileIndex-div
     var h3 = Elem.appendNewElem(this.fileList,'h3');
-    Elem.setText(h3, 'Files');
+    Elem.setText(h3, 'Resources');
 
     // Table
     this.tableElem =  Elem.appendNewElem(this.fileList, 'table');
@@ -230,23 +230,23 @@ birka.compiler.CompilerView.prototype.m_renderFileList = function() {
  * @returns {undefined}
  */
 birka.compiler.CompilerView.prototype.m_renderFooter = function() {
-    this.footer = Elem.appendNewClassElem(this.element, 'div', 'footer');
+    this.footer = Elem.appendNewClassElem(this.element, 'div', 'app-tool-footer');
 
     // Errors/Warnings
-    var problems = Elem.appendNewClassElem(this.footer, 'div', 'problems-container');
+    var exceptions = Elem.appendNewClassElem(this.footer, 'div', 'app-compiler-exceptions-container');
 
-    var problemsError = Elem.appendNewClassElem(problems, 'div', 'problems-error');
-    this.m_errorsElem = problemsError.appendChild(Elem.p('0'));
-    problemsError.appendChild(Elem.p(' error(s) '));
+    var exceptionsError = Elem.appendNewClassElem(exceptions, 'div', 'app-compiler-exceptions-error');
+    this.m_errorsElem = exceptionsError.appendChild(Elem.p('0'));
+    exceptionsError.appendChild(Elem.p(' error(s) '));
 
-    var problemsWarning = Elem.appendNewClassElem(problems, 'div', 'problems-warning');
-    this.m_warningsElem = problemsWarning.appendChild(Elem.p('0'));
-    problemsWarning.appendChild(Elem.p(' warning(s)'));
+    var exceptionsWarning = Elem.appendNewClassElem(exceptions, 'div', 'app-compiler-exceptions-warning');
+    this.m_warningsElem = exceptionsWarning.appendChild(Elem.p('0'));
+    exceptionsWarning.appendChild(Elem.p(' warning(s)'));
 
     // CompileBtn
     this.compileBtn = Elem.appendNewElem(this.footer, 'input');
     this.compileBtn.setAttribute('type', 'submit');
     this.compileBtn.setAttribute('value', 'Compile');
-    this.compileBtn.setAttribute('id','compileBtn');
+    this.compileBtn.setAttribute('class','app-compiler-compile-btn');
 };
 

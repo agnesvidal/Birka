@@ -1,0 +1,48 @@
+.app-toolbar-wrapper {
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    padding: 0;
+    border-bottom: 1px solid #dadada;
+    background-color: var(--white);
+    font-family: Montserrat, sans-serif;
+}
+
+.app-toolbar {
+    margin-right: 0%;
+    font-size: 12px;
+}
+
+.app-toolbar ul {
+    display: inline-flex;
+    list-style: none;
+}
+
+.app-toolbar li {
+    padding-top: var(--half-padding);
+    padding-bottom: var(--half-padding);
+    padding-right: var(--quarter-padding);
+}
+
+.app-toolbar a {
+    padding: var(--half-padding);
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-left: var(--quarter-padding);
+    margin-right: var(--quarter-padding);
+    color: var(--greyLight);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+}
+
+.app-toolbar a:hover {
+    color: var(--greyDark);
+    box-shadow: inset 0px 0 0 white, inset 0 0px 0 white, inset 0px 0 0 #ececec, inset 0 -1px 0 var(--dark-cyan);
+}
+
+.app-toolbar a.is-active {
+    color: var(--greyDark);
+    font-weight: 400;
+    box-shadow: inset 0px 0 0 white, inset 0 0px 0 white, inset 0px 0 0 #ececec, inset 0 -1px 0 var(--dark-cyan);
+}

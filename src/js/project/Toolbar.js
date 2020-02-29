@@ -48,9 +48,11 @@ Object.defineProperty(birka.project.Toolbar.prototype, "tabs", {
  */
 birka.project.Toolbar.prototype.m_init = function(){
     var appContainer = document.getElementById('app-content');
-    var navWrapper = Elem.appendNewIdElem(appContainer, 'div', 'nav-wrapper');
+    var navWrapper = Elem.appendNewClassElem(appContainer, 'div', 'app-toolbar-wrapper');
     var navElem = Elem.appendNewElem(navWrapper, 'nav');
+    navElem.className = 'app-toolbar';
     var ul = Elem.appendNewElem(navElem, 'ul');
+    ul.className = 'app-toolbar-list';
     var liElems = [];
     this.m_tabs = [];
     for(var i = 0; i<2; i++){
@@ -60,7 +62,7 @@ birka.project.Toolbar.prototype.m_init = function(){
     }
     this.m_tabs[0].innerHTML = 'Overview';
     this.m_tabs[0].id = 'overview';
-    this.m_tabs[0].setAttribute('class', 'active');
+    this.m_tabs[0].setAttribute('class', 'is-active');
     this.m_tabs[1].innerHTML = 'Compiler';
     this.m_tabs[1].id = 'compiler';
 };

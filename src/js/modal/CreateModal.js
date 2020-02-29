@@ -125,7 +125,7 @@ birka.project.CreateModal.prototype.m_initFooterButtons = function() {
 
 birka.project.CreateModal.prototype.m_close = function(event) {
     var m_this = this;
-    var modal = document.querySelector('.dialog');
+    var modal = document.querySelector('.app-dialog');
     if(modal){
         while (modal.hasChildNodes()) {
             modal.removeChild(modal.firstChild);
@@ -198,8 +198,8 @@ birka.project.CreateModal.prototype.m_initNameField = function(field) {
  */
 birka.project.CreateModal.prototype.m_initLocationField = function(field) {
     var m_this = this;
-    var locationField = Elem.appendNewClassElem(field,'div','input-field');
-    this.locationpath = Elem.appendNewClassElem(locationField,'p','filepath');
+    var locationField = Elem.appendNewClassElem(field,'div','app-input-field');
+    this.locationpath = Elem.appendNewClassElem(locationField,'p','app-input-filepath');
     this.browseBtn = Elem.appendNewClassElem(locationField,'input','project-browse');
     this.browseBtn.setAttribute('type','button');
     field.appendChild(this.spans[1]);
@@ -240,7 +240,6 @@ birka.project.CreateModal.prototype.m_initConfigField = function(field) {
  */
 birka.project.CreateModal.prototype.m_addListeners = function() {
     var m_this = this;
-    //this.inputs[0].addEventListener("input", m_this.m_checkValid(event), false);
 
     this.inputs[0].addEventListener("input", function (event) {
         m_this.m_checkValidTextInput(m_this.inputs[0],  m_this.spans[0]);
@@ -333,22 +332,6 @@ birka.project.CreateModal.prototype.m_checkValidFields = function() {
     m_this.m_checkValidTextInput(m_this.inputs[0],  m_this.spans[0]);
     m_this.m_checkValidTextInput(m_this.inputs[2],  m_this.spans[3]);
 
-    /*
-    var input = m_this.inputs[0].value;
-    var regex = /^[a-zåäöA-ZÅÄÖ0-9]+$/;
-    if (regex.test(input)) {
-        m_this.spans[0].innerHTML = "";
-        m_this.spans[0].className = "spanerror ";
-    } else {
-        m_this.spans[0].innerHTML = "Name should only contain characters: A-Ö, 0-9";
-        m_this.spans[0].className = "spanerror active";
-    }
-
-    if (!m_this.inputs[0].validity.valid) {
-        m_this.spans[0].innerHTML = "Fill in a project name.";
-        m_this.spans[0].className = "spanerror active";
-    }
-    */
     if (!m_this.inputs[1].validity.valid) {                                               
         m_this.spans[2].innerHTML = "Fill in an id for your project.";                    
         m_this.spans[2].className = "spanerror active";                                   
@@ -527,7 +510,6 @@ birka.project.CreateModal.prototype.m_chooseLocation = function(){
                 m_this.spans[1].innerHTML = "";
                 m_this.spans[1].className = "spanerror";
             }
-            // m_this.m_loadProject(folderPaths[0]);
             m_this.locationpath.innerHTML = folderPaths[0];
         }
     });

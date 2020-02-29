@@ -33,7 +33,7 @@ birka.compiler.Message = function(table){
  * @returns {undefined}
  */
 birka.compiler.Message.prototype.create = function(table, pos) {
-    this.tbody = Elem.createClassElem('tbody', 'message');
+    this.tbody = Elem.createClassElem('tbody', 'app-compiler-resource-messages');
 
     table.insertBefore(this.tbody, table.children[pos+1]);
 };

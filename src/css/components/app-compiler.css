@@ -1,0 +1,335 @@
+.app-compiler-browse-btn{
+    display: inline-block;
+    padding: 16px 20px 16px 25px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border: 1px solid var(--dark-cyan);
+    border-radius: 20px; /*4,0,0,4*/
+    background: var(--light-cyan);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.2em; 
+}
+
+.app-compiler-browse-btn:hover {
+    background-color: var(--dark-cyan); /*#8d5dca*/
+    color: #FFF;
+}
+
+.app-compiler-refresh-btn {
+    display: inline;
+    float: right;
+    width: 55px;
+    padding: 12px 0;
+    border: 1px solid #ffffff;
+    border-radius: 0;
+    border-bottom: 1px solid var(--dark-cyan);
+    background: #FFFFFF url("../../img/refresh.png") no-repeat 11px 12px;
+    background-size: 20px;
+    cursor: pointer;
+}
+
+.app-compiler-path-container {
+    display: inline-block;
+    width: 100%;
+    margin-left: 10px;
+    border-bottom: 1px solid #d6d6d6;
+}
+
+.app-compiler-path-container label {
+   display: inline;
+   padding-left: 2px;
+   font-weight: 400;
+   font-size: 12px;
+   color: var(--dark-cyan);
+}
+
+.app-input-field:nth-of-type(2) {
+    padding-left: 120px;
+}
+
+.app-compiler-path-container .app-input-filepath {
+    padding-bottom: 10px;
+} 
+
+/* * * * * * RESOURCES LIST * * * * * */
+.app-compiler-resources {
+    position: absolute;
+    top: 275px;
+    bottom: 60px;
+    width: calc(100vw - 20px);
+    max-height: 100vh;
+    margin: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 0px solid #dedede;
+    overflow-y: auto;
+    color: #393939;
+    background-color: #FFFFFF;
+}
+
+.app-compiler-resources h3 {
+    padding-bottom: 6px;
+}
+
+.app-compiler-resources input {
+    margin: 4px;
+}
+
+.app-compiler-resources input[type=text]{
+    width: 90%;
+    border-radius: 0;
+    background-color: rgba(255,255,255,0.9);
+}
+
+.app-compiler-resources input:required:invalid{
+    border-bottom: 1px solid red;
+}
+
+.app-compiler-resources table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.app-compiler-resources th {
+    height: 30px;
+    padding: 2px;
+    padding-left: 4px;
+    border-bottom: 1px solid #ececec;
+    background-color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+}
+
+.app-compiler-resources th:last-of-type{
+    border-right: 0 solid #cdcdcd;
+}
+
+.app-compiler-resources-item {
+    border-bottom: 1px solid #dedede;
+}
+
+.app-compiler-resources-item:hover {
+    background-color: #ececec;
+}
+
+.app-compiler-resources-item tr {
+    padding: 8px;
+}
+
+.app-compiler-resources-item td:nth-child(1) {
+    width: 10px;
+    padding-left: 14px;
+}
+
+.app-compiler-resources-item td:nth-child(2){
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    direction: rtl;
+    text-align: left;
+}
+
+.app-compiler-resources-item td:nth-child(3) {
+    min-width: 60px;
+    width: 20%;
+}
+
+.app-compiler-resources-item td:nth-child(4) {
+    min-width: 60px;
+    max-width: 100px;
+    text-align: right;
+}
+
+.app-compiler-resources-item img {
+    cursor: pointer;
+}
+
+.app-compiler-resources-item-toggle {
+    width: 40px;
+    cursor: pointer;
+    color: #FFFFFF;
+}
+
+.app-compiler-resources-item-toggle:after {
+    font-family: 'FontAwesome', sans-serif;
+    content: '\f067';
+    font-size: 10px;
+    color: #333;
+    margin-left: 16px;
+}
+
+.app-compiler-resources-item-toggle span {
+    font-size: 18px;
+    color: #FFFFFF;
+    padding: 20px;
+}
+
+.app-compiler-resources-item-toggle-active:after {
+    content: '\f068';
+}
+
+/* * * * * * RESOURCE ERROR/WARNING * * * * * */
+.app-compiler-resource-messages {
+    border-top: 1px solid #FFF;
+}
+
+.app-compiler-resource-message {
+    padding-left: 20px;
+}
+
+.app-compiler-resource-message.error td {
+    padding: 10px;
+    padding-left: 40px;
+    color: #ff000d;
+    background: url('../../img/error.png') no-repeat left;
+    background-position: 13px 10px;
+    background-size: 18px;
+    background-color: var(--light-red);
+}
+
+.app-compiler-resource-message.warning td {
+    padding: 10px;
+    padding-left: 40px;
+    color: var(--orange);
+    background: url('../../img/warning.png') no-repeat left;
+    background-position: 13px 10px;
+    background-size: 18px;
+    background-color: var(--light-yellow);
+
+}
+
+.app-compiler-resources-item tr.error {
+    box-shadow: inset 0px 0 0 red, inset 0 0px 0 red, inset 6px 0 0 var(--lighter-red), inset 0 0px 0 red;
+}
+
+.app-compiler-resources-item tr.error .app-compiler-resources-item-toggle:after {
+    color: var(--grey); 
+}
+
+.app-compiler-resources-item tr.warning {
+    box-shadow: inset 0px 0 0 red, inset 0 0px 0 red, inset 6px 0 0 var(--orange), inset 0 0px 0 red;
+}
+
+.app-compiler-resources-item tr.warning .app-compiler-resources-item-toggle:after {
+    color: var(--grey); 
+}
+
+/* tr .coll-cell:after {
+    color: #ffffff;
+} */
+
+/* * * * * * * * * IGNORE * * * * * * * * */
+.app-compiler-resources-item .is-ignored {
+    color: #bbbbbb !important;
+    font-style: italic;
+}
+
+.app-compiler-resources-item .is-ignored input[type=text] {
+    color: #bbbbbb;
+    font-style: italic;
+}
+
+/* * * * * * * * * CHECKBOX * * * * * * * * */
+.check-container {
+    position: relative;
+    display: block;
+    padding-left: 35px;
+    margin: 5% 0 6%;
+    padding-top: 1%;
+    cursor: pointer;
+}
+
+.check-container input, .container-food-type input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+}
+
+.checkmark {
+    position: absolute;
+    top: -6px;
+    left: 0;
+    height: 14px;
+    width: 14px;
+    border: 1px solid #dedede;
+    border-radius: 2px;
+    background-color: #fff;
+}
+
+.check-container:hover input ~ .checkmark {
+    background-color: #666;
+}
+
+.check-container input:checked ~ .checkmark {
+    background-color: #FFFFFF;
+    color: #999999;
+    border: 1px solid #cccccc;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.check-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.check-container .checkmark:after {
+    left: 4px;
+    top: 2px;
+    width: 3px;
+    height: 5px;
+    border: solid #333;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* * * * * * EXCEPTIONS FEEDBACK * * * * * */
+.app-compiler-exceptions-container {
+    padding: 10px;
+}
+
+.app-compiler-exceptions-error{
+    background: url("../../img/error.png") no-repeat;
+    background-size: 18px;
+    padding-left: 20px;
+}
+
+.app-compiler-exceptions-warning{
+    background: url("../../img/warning.png") no-repeat;
+    background-size: 18px;
+    padding-left: 20px;
+}
+
+/* * * * * * * * * COMPILE BUTTON * * * * * * * * */
+.app-compiler-compile-btn {
+    padding: 14px;
+    padding-left: 40px;
+    padding-right: 40px;
+    background-color: var(--dark-cyan); /*#8d5dca*/
+    color: #FFF;
+    border: none;
+    margin-right: 20px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    border: 1px solid var(--dark-cyan);
+}
+
+.app-compiler-compile-btn:hover{
+    background-color: var(--light-cyan);
+}
