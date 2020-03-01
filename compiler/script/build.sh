@@ -10,8 +10,8 @@ java -jar ./../bin/compiler.jar \
 --js "./../../src/js/ui/View.js" \
 --js "./../../src/js/ui/Elem.js" \
 --js "./../../src/js/project/Toolbar.js" \
---js "./../../src/js/modal/Modal.js" \
---js "./../../src/js/modal/CreateModal.js" \
+--js "./../../src/js/dialog/Dialog.js" \
+--js "./../../src/js/project/NewProjectDialog.js" \
 --js "./../../src/js/project/Projectdirectory.js" \
 --js "./../../src/js/project/ProjectManagerView.js" \
 --js "./../../src/js/project/Project.js" \

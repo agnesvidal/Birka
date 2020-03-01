@@ -10,7 +10,7 @@
  * @class
  * @classdesc
  */
-birka.project.Modal = function() {
+birka.dialog.Dialog = function() {
     //--------------------------------------------------------------------------
     // Public properties
     //--------------------------------------------------------------------------
@@ -33,14 +33,14 @@ birka.project.Modal = function() {
 //------------------------------------------------------------------------------
 // Public methods
 //------------------------------------------------------------------------------
-birka.project.Modal.prototype.openDialog = function(options, parent) {
+birka.dialog.Dialog.prototype.open = function(options, parent) {
     this.element = Elem.appendNewClassElem(document.body, 'div', 'app-dialog');
     this.m_parent = parent;
     this.m_options = options;
     this.init();
 };
 
-birka.project.Modal.prototype.init = function() {
+birka.dialog.Dialog.prototype.init = function() {
     var m_this = this;
     var container = Elem.appendNewClassElem(this.element, 'div', 'app-dialog-container');
     var header = Elem.appendNewClassElem(container, 'div', 'app-dialog-header');
@@ -71,7 +71,7 @@ birka.project.Modal.prototype.init = function() {
 //------------------------------------------------------------------------------
 // Private methods
 //------------------------------------------------------------------------------
-birka.project.Modal.prototype.m_initMessage = function(type) {
+birka.dialog.Dialog.prototype.m_initMessage = function(type) {
     var message = "";
     if(this.m_options.message.length > 0) {
         message = Elem.appendNewClassElem(this.m_content, 'p', ('app-' + type + '-dialog'));
@@ -80,11 +80,11 @@ birka.project.Modal.prototype.m_initMessage = function(type) {
 };
 
 // Override in child class
-birka.project.Modal.prototype.m_initCustom = function() {
+birka.dialog.Dialog.prototype.m_initCustom = function() {
 
 };
 
-birka.project.Modal.prototype.m_initFooterButtons = function() {
+birka.dialog.Dialog.prototype.m_initFooterButtons = function() {
     var m_this = this;
     this.m_buttons = [];
     for(var i=0; i<1; i++){
@@ -99,11 +99,11 @@ birka.project.Modal.prototype.m_initFooterButtons = function() {
 };
 
 
-birka.project.Modal.prototype.m_close = function(event) {
+birka.dialog.Dialog.prototype.m_close = function(event) {
     var m_this = this;
-    var modal = document.querySelector('.app-dialog');
-    if(modal){
-        modal.parentNode.removeChild(this.element);
+    var dialog = document.querySelector('.app-dialog');
+    if(dialog){
+        dialog.parentNode.removeChild(this.element);
     }
     if(this.m_options.callback)
     if(this.m_options.callback.func){

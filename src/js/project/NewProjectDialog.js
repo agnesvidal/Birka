@@ -11,11 +11,11 @@
  * @classdesc
  */
 //@TODO Fix inheritance
-birka.project.CreateModal = function() {
+birka.project.NewProjectDialog = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    //birka.project.Modal.call(modal, options);
+    //birka.dialog.Dialog.call(dialog, options);
 
     //--------------------------------------------------------------------------
     // Public properties
@@ -52,7 +52,7 @@ birka.project.CreateModal = function() {
  * @default
  * @suppress {undefinedVars}
  */
-birka.project.CreateModal.dialog = require('electron').remote.dialog;
+birka.project.NewProjectDialog.dialog = require('electron').remote.dialog;
 
 /**
  * Reference to Node.js FileSystem module
@@ -61,7 +61,7 @@ birka.project.CreateModal.dialog = require('electron').remote.dialog;
  * @constant
  * @default
  */
-birka.project.CreateModal.fs = require('fs');
+birka.project.NewProjectDialog.fs = require('fs');
 
 /**
  * Reference to Node.js Path module
@@ -70,22 +70,22 @@ birka.project.CreateModal.fs = require('fs');
  * @constant
  * @default
  */
-//birka.project.CreateModal.path = require('path');
+//birka.project.NewProjectDialog.path = require('path');
 
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
-birka.project.CreateModal.prototype = Object.create(birka.project.Modal.prototype);
-birka.project.CreateModal.prototype.constructor = birka.project.CreateModal;
+birka.project.NewProjectDialog.prototype = Object.create(birka.dialog.Dialog.prototype);
+birka.project.NewProjectDialog.prototype.constructor = birka.project.NewProjectDialog;
 
 //------------------------------------------------------------------------------
 // Public getter and setter methods
 //------------------------------------------------------------------------------
 /**
  * @member {string} path
- * @memberof birka.project.CreateModal
+ * @memberof birka.project.NewProjectDialog
  */
-Object.defineProperty(birka.project.CreateModal.prototype, "path", {
+Object.defineProperty(birka.project.NewProjectDialog.prototype, "path", {
     get: function () {
         return this.locationpath.innerHTML;
     },
@@ -103,13 +103,13 @@ Object.defineProperty(birka.project.CreateModal.prototype, "path", {
  *
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_initCustom = function() {
+birka.project.NewProjectDialog.prototype.m_initCustom = function() {
     this.callback = this.m_options.callback;
     this.m_initFields();
 };
 
 // Overrides method
-birka.project.CreateModal.prototype.m_initFooterButtons = function() {
+birka.project.NewProjectDialog.prototype.m_initFooterButtons = function() {
     var m_this = this;
     for(var i=0; i<2; i++){
         this.m_buttons.push(Elem.createClassElem('input', 'button'));
@@ -123,14 +123,14 @@ birka.project.CreateModal.prototype.m_initFooterButtons = function() {
     this.m_buttons[1].addEventListener('click', function(){m_this.m_checkValidFields()});
 };
 
-birka.project.CreateModal.prototype.m_close = function(event) {
+birka.project.NewProjectDialog.prototype.m_close = function(event) {
     var m_this = this;
-    var modal = document.querySelector('.app-dialog');
-    if(modal){
-        while (modal.hasChildNodes()) {
-            modal.removeChild(modal.firstChild);
+    var dialog = document.querySelector('.app-dialog');
+    if(dialog){
+        while (dialog.hasChildNodes()) {
+            dialog.removeChild(dialog.firstChild);
         }
-        modal.parentNode.removeChild(this.element);
+        dialog.parentNode.removeChild(this.element);
     }
     this.inputs = [];
     this.paths = [];
@@ -145,7 +145,7 @@ birka.project.CreateModal.prototype.m_close = function(event) {
  *
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_initFields = function() {
+birka.project.NewProjectDialog.prototype.m_initFields = function() {
     // Fieldsets and Legends
     var fields = [];
     var legends = [];
@@ -169,7 +169,7 @@ birka.project.CreateModal.prototype.m_initFields = function() {
  *
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_initErrorSpans = function() {
+birka.project.NewProjectDialog.prototype.m_initErrorSpans = function() {
     for(var j=0; j<4; j++){
         this.spans.push(Elem.createClassElem('span','spanerror'));
     }
@@ -181,7 +181,7 @@ birka.project.CreateModal.prototype.m_initErrorSpans = function() {
  * @param field
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_initNameField = function(field) {
+birka.project.NewProjectDialog.prototype.m_initNameField = function(field) {
     var projectName = Elem.appendNewClassElem(field,'input','game-name');
     projectName.setAttribute('type', 'text');
     projectName.setAttribute('placeholder', 'Write your project name...');
@@ -196,7 +196,7 @@ birka.project.CreateModal.prototype.m_initNameField = function(field) {
  * @param field
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_initLocationField = function(field) {
+birka.project.NewProjectDialog.prototype.m_initLocationField = function(field) {
     var m_this = this;
     var locationField = Elem.appendNewClassElem(field,'div','app-input-field');
     this.locationpath = Elem.appendNewClassElem(locationField,'p','app-input-filepath');
@@ -212,7 +212,7 @@ birka.project.CreateModal.prototype.m_initLocationField = function(field) {
  * @param field
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_initConfigField = function(field) {
+birka.project.NewProjectDialog.prototype.m_initConfigField = function(field) {
     var labels = [];
     for(var i=0; i<2; i++){
         labels.push(Elem.appendNewElem(field,'label'));
@@ -238,7 +238,7 @@ birka.project.CreateModal.prototype.m_initConfigField = function(field) {
  *
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_addListeners = function() {
+birka.project.NewProjectDialog.prototype.m_addListeners = function() {
     var m_this = this;
 
     this.inputs[0].addEventListener("input", function (event) {
@@ -282,7 +282,7 @@ birka.project.CreateModal.prototype.m_addListeners = function() {
     }, false);
 };
 
-birka.project.CreateModal.prototype.m_checkValidTextInput = function(textInput, span) {
+birka.project.NewProjectDialog.prototype.m_checkValidTextInput = function(textInput, span) {
     if (textInput.value === "") {
          span.innerHTML = "Fill in field.";
          span.className = "spanerror active";
@@ -303,7 +303,7 @@ birka.project.CreateModal.prototype.m_checkValidTextInput = function(textInput, 
      }
 };
 
-birka.project.CreateModal.prototype.m_compareInputs = function(thisField, thatField) {
+birka.project.NewProjectDialog.prototype.m_compareInputs = function(thisField, thatField) {
     var m_this = this;
     if(thisField.value !== "" &&  thatField.value !== "") {
         if (thisField.value === thatField.value) {
@@ -326,7 +326,7 @@ birka.project.CreateModal.prototype.m_compareInputs = function(thisField, thatFi
  *
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_checkValidFields = function() {
+birka.project.NewProjectDialog.prototype.m_checkValidFields = function() {
     var m_this = this;
 
     m_this.m_checkValidTextInput(m_this.inputs[0],  m_this.spans[0]);
@@ -356,11 +356,11 @@ birka.project.CreateModal.prototype.m_checkValidFields = function() {
  *
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_checkIfFolderExists = function() {
+birka.project.NewProjectDialog.prototype.m_checkIfFolderExists = function() {
     var m_this = this;
         if(m_this.m_walkDir(m_this.path, m_this.path + "/" + m_this.inputs[0].value) === false){
             var filename = m_this.path.replace(/^.*[\\\/]/, '');
-            birka.project.CreateModal.dialog.showMessageBox({
+            birka.project.NewProjectDialog.dialog.showMessageBox({
                 title: "Warning",
                 type: "warning",
                 message: "A file or folder with this name already exists in the folder " + filename + ". Replacing it will overwrite its current contents.",
@@ -387,7 +387,7 @@ birka.project.CreateModal.prototype.m_checkIfFolderExists = function() {
  * @param overwrite
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_saveRecent = function(overwrite) {
+birka.project.NewProjectDialog.prototype.m_saveRecent = function(overwrite) {
     var m_this = this;
     if(window.localStorage.getItem('recentProjects') !== null) {
         this.m_saveRecentUnshift(overwrite);
@@ -405,7 +405,7 @@ birka.project.CreateModal.prototype.m_saveRecent = function(overwrite) {
  * @param overwrite
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_saveRecentUnshift = function(overwrite) {
+birka.project.NewProjectDialog.prototype.m_saveRecentUnshift = function(overwrite) {
     var m_this = this;
     var recent = JSON.parse(window.localStorage.getItem('recentProjects'));
     if (overwrite === false) {
@@ -435,7 +435,7 @@ birka.project.CreateModal.prototype.m_saveRecentUnshift = function(overwrite) {
  *
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_save = function() {
+birka.project.NewProjectDialog.prototype.m_save = function() {
     var m_this = this;
 
     var projectObj = {
@@ -464,13 +464,13 @@ birka.project.CreateModal.prototype.m_save = function() {
  * @param newPath
  * @returns {boolean}
  */
-birka.project.CreateModal.prototype.m_walkDir = function(dir, newPath) {
+birka.project.NewProjectDialog.prototype.m_walkDir = function(dir, newPath) {
     var m_this = this;
     var paths = [];
     var replace = true;
     var newPath = newPath.toLowerCase();
 
-    birka.project.CreateModal.fs.readdirSync(dir).forEach(function(file) {
+    birka.project.NewProjectDialog.fs.readdirSync(dir).forEach(function(file) {
         var fullPath = birka.project.ProjectManager.path.join(dir, file);
             if(!fullPath.match(/(^|\/)\.[^\/\.]/g)){
                 paths.push(fullPath);
@@ -491,10 +491,10 @@ birka.project.CreateModal.prototype.m_walkDir = function(dir, newPath) {
  *
  * @returns undefined
  */
-birka.project.CreateModal.prototype.m_chooseLocation = function(){
+birka.project.NewProjectDialog.prototype.m_chooseLocation = function(){
     var m_this = this;
 
-    birka.project.CreateModal.dialog.showOpenDialog({
+    birka.project.NewProjectDialog.dialog.showOpenDialog({
         title: "Select a folder",
         properties: ['openDirectory']
     }, function(folderPaths) {

@@ -68,9 +68,9 @@ function createWindow () {
     })
 }
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-
+/**
+ * Creates custom native menu.
+ */
 function createMenu () {
     var template = [
         {
@@ -134,7 +134,7 @@ function createMenu () {
                 {
                     label: 'Learn More',
                     click() {
-                        require('electron').shell.openExternal('http://electron.atom.io')
+                        require('electron').shell.openExternal('https://github.com/agnesvidal/Birka')
                     }
                 }
             ]

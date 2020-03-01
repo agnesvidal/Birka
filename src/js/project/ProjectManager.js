@@ -63,8 +63,8 @@ birka.project.ProjectManager.fs = require('fs');
  */
 birka.project.ProjectManager.path = require('path');
 
-birka.project.ProjectManager.CModal =  new birka.project.CreateModal();
-birka.project.ProjectManager.Modal =  new birka.project.Modal();
+birka.project.ProjectManager.newProjectDialog =  new birka.project.NewProjectDialog();
+birka.project.ProjectManager.customDialog =  new birka.dialog.Dialog();
 
 //------------------------------------------------------------------------------
 // Public methods
@@ -126,7 +126,7 @@ birka.project.ProjectManager.prototype.m_addListeners = function(){
  */
 birka.project.ProjectManager.prototype.m_createProject = function(){
     var m_this = this;
-    birka.project.ProjectManager.CModal.openDialog({
+    birka.project.ProjectManager.newProjectDialog.open({
         type: 'custom',
         title: 'Create project',
         callback: m_this.m_saveProject
@@ -166,6 +166,7 @@ birka.project.ProjectManager.prototype.m_openProject = function(){
  * @returns {undefined}
  */
 birka.project.ProjectManager.prototype.m_loadProject = function(path){
+    console.log(this.m_checkIfFolder(path))
     if(this.m_checkIfFolder(path) !== false){
         if(this.m_checkProjectValidity(path, this.m_walkDir(path))){
 
@@ -243,9 +244,10 @@ birka.project.ProjectManager.prototype.m_checkIfFolder = function(dir) {
     var m_this = this;
     try{
         birka.project.ProjectManager.fs.readdirSync(dir)
+        return true
     } catch(err){
         if(err.code === "ENOENT"){
-            birka.project.ProjectManager.Modal.openDialog({
+            birka.project.ProjectManager.customDialog.open({
                 type: "error",
                 title: "Missing project folder",
                 message: "The project folder has either been removed, or moved to a new location.",
@@ -303,7 +305,7 @@ birka.project.ProjectManager.prototype.m_checkProjectValidity = function(path) {
  * @returns undefined
  */
 birka.project.ProjectManager.prototype.m_showError = function(title, msg) {
-    birka.project.ProjectManager.Modal.openDialog({
+    birka.project.ProjectManager.customDialog.open({
         type: 'error',
         title: title,
         message: [msg]

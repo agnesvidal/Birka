@@ -61,11 +61,11 @@ var birka = function(){
     /**
      * ...
      *
-     * @namespace modal
+     * @namespace dialog
      * @memberof birka
      * @since 1.0
      */
-    m_this.modal = {};
+    m_this.dialog = {};
 
 
     //--------------------------------------------------------------------------

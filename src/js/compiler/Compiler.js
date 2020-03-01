@@ -42,9 +42,9 @@ birka.compiler.Compiler = function() {
     /**
      * ...
      *
-     * @type {birka.project.Modal}
+     * @type {birka.project.Dialog}
      */
-    this.modal = null; // private?
+    // this.customDialog = null; // private?
 };
 //------------------------------------------------------------------------------
 // Public Static constants
@@ -76,7 +76,7 @@ birka.compiler.Compiler.fs = require('fs');
  */
 birka.compiler.Compiler.path = require('path');
 
-birka.project.ProjectManager.Modal =  new birka.project.Modal();
+birka.project.ProjectManager.customDialog =  new birka.dialog.Dialog();
 
 
 
@@ -138,7 +138,7 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
     }
    
     if(temp.length === 0){     
-        birka.project.ProjectManager.Modal.openDialog({
+        birka.project.ProjectManager.customDialog.open({
             type: 'error',
             title: 'Can\'t compile',
             message: 'Select a folder first.'
@@ -156,7 +156,7 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
                 if((temp[i].status[j] === 1) || (temp[i].status[j] === 2)){
                     //console.log(temp);
                     //console.log("Error. Can't compile.");
-                    birka.project.ProjectManager.Modal.openDialog({
+                    birka.project.ProjectManager.customDialog.open({
                         type: 'error',
                         title: 'Can\'t compile',
                         message: 'Your selected folder contains errors.'
@@ -165,7 +165,7 @@ birka.compiler.Compiler.prototype.m_compile = function(e) {
                 }
             }
         } else if(temp[i].name === ""){
-            birka.project.ProjectManager.Modal.openDialog({
+            birka.project.ProjectManager.customDialog.openDialog({
                 type: 'error',
                 title: 'Can\'t compile',
                 message: 'One or more resources is not named.'

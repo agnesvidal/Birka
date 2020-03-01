@@ -91,7 +91,7 @@ birka.project.ProjectManagerView.prototype.m_initHeader = function() {
 
     var col1 = Elem.appendNewClassElem(this.m_element,'div','app-project-manager-col-1');
     var h2 = Elem.appendNewElem(col1,'h2');
-    Elem.setText(h2, "Let's get started!");
+    Elem.setText(h2, "Let's get started");
     var pElem = Elem.appendNewElem(col1,'p');
     Elem.setText(pElem, "Start by selecting an existing project or create a new project.");
 };

@@ -13,12 +13,17 @@
     padding: 1em;
 }
 
+.app-project-manager-col-1 h2 {
+    font-weight: 400;
+    font-size: 36px;
+}
+
 .app-project-manager-col-1 {
     width: 45%;
     height: calc(100vh - 140px);
     padding: var(--padding);
     margin: 20px;
-    margin-top: calc(50vh - (250px));
+    margin-top: 15vh;
 }
 
 .app-project-manager-col-1 h2, .app-project-manager-col-1 h3, .app-project-manager-col-1 p {
@@ -27,6 +32,16 @@
 
 .app-project-manager-col-1 p{
     padding: var(--quarter-padding);
+}
+
+.app-project-manager-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-height: 300px;
+    min-height: 200px;
+    height: 100%;
 }
 
 .app-project-manager-buttons input[type=button]{
@@ -53,7 +68,8 @@
     height: calc(100vh - 70px);
     padding: var(--padding);
     margin-right: 40px;
-    margin-top: calc(50vh - (250px));
+    /* margin-top: calc(50vh - (250px)); */
+    margin-top: 15vh;
 }
 
 .app-project-manager-recent h3 {
