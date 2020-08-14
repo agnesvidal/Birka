@@ -17,7 +17,7 @@ npm start
 
 ### Build
 ```
-npm build
+npm run build
 ```
 
 ## Authors
